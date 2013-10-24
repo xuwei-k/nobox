@@ -34,7 +34,7 @@ s"""
     val flatMap: String => String = { b =>
 s"""
   def flatMap$b(f: $a => Array[$b]): of$b = {
-    val builder = collection.mutable.ArrayBuilder.make[$b]
+    val builder = new ArrayBuilder.of$b()
     var i = 0
     while(i < self.length){
       builder ++= f(self(i))
@@ -48,7 +48,7 @@ s"""
     val collect: String => String = { b =>
 s"""
   def collect$b(f: PartialFunction[$a, $b]): of$b = {
-    val builder = collection.mutable.ArrayBuilder.make[$b]
+    val builder = new ArrayBuilder.of$b()
     var i = 0
     while(i < self.length){
       if(f isDefinedAt self(i)){
@@ -68,12 +68,13 @@ s"""
 s"""package nobox
 
 import java.util.Arrays
+import scala.collection.mutable.ArrayBuilder
 
 final class $clazz (val self: Array[$a]) extends AnyVal {
   $methods
 
   def filter(f: $a => Boolean): $clazz = {
-    val builder = collection.mutable.ArrayBuilder.make[$a]
+    val builder = new ArrayBuilder.of$a()
     var i = 0
     while(i < self.length){
       if(f(self(i))){
