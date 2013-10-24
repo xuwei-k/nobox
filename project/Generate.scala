@@ -88,6 +88,18 @@ s"""
 """
     }
 
+    val sorted: String = a match {
+      case "Boolean" => ""
+      case _ =>
+s"""
+  def sorted: $clazz = {
+    val array = self.clone
+    Arrays.sort(array)
+    new $clazz(array)
+  }
+"""
+    }
+
     val methods: String = List(map, flatMap, collect).map{ method =>
       list map method mkString "\n"
     }.mkString("\n\n")
@@ -101,6 +113,8 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
   $methods
 
   $sum
+
+  $sorted
 
   def filter(f: $a => Boolean): $clazz = {
     val builder = new ArrayBuilder.of$a()

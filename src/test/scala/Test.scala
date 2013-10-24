@@ -157,4 +157,8 @@ object Test extends Properties("nobox"){
   property("sum ofFloat") = forAll { a: ofFloat =>
     a.sum == a.self.sum
   }
+
+  property("sorted") = forAll { a: ofFloat =>
+    a.sorted.self === a.self.sorted
+  }
 }
