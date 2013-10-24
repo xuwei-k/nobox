@@ -4,7 +4,7 @@ import org.scalacheck._
 import Prop.forAll
 
 object Test extends Properties("nobox"){
-  
+
   implicit class ArrayOps[A](val self: Array[A]) extends AnyVal {
     def ===(that: Array[A]): Boolean = {
       if(self sameElements that) true
@@ -109,5 +109,12 @@ object Test extends Properties("nobox"){
 
   property("++") = forAll { (a: ofInt, b: ofInt) =>
     (a ++ b).self === (a.self ++ b.self)
+  }
+
+  property("partition") = forAll { a: ofInt =>
+    val f = {i: Int => i > 0}
+    val (x1, x2) = a.partition(f)
+    val (y1, y2) = a.self.partition(f)
+    (x1.self === y1) && (x2.self === y2)
   }
 }

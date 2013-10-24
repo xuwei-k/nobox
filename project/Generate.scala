@@ -235,6 +235,20 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     new $clazz(array)
   }
 
+  def partition(f: $a => Boolean): ($clazz, $clazz) = {
+    val l, r = new ArrayBuilder.of$a()
+    var i = 0
+    while(i < self.length){
+      if(f(self(i))){
+        l += self(i)
+      }else{
+        r += self(i)
+      }
+      i += 1
+    }
+    (new $clazz(l.result), new $clazz(r.result))
+  }
+
   def length: Int = self.length
 
   def size: Int = self.length
