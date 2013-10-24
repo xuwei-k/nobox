@@ -161,4 +161,8 @@ object Test extends Properties("nobox"){
   property("sorted") = forAll { a: ofFloat =>
     a.sorted.self === a.self.sorted
   }
+
+  property("slice") = forAll { (a: ofInt, from: Int, until: Int) =>
+    a.slice(from, until).self === a.self.slice(from, until)
+  }
 }

@@ -314,6 +314,16 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     new $clazz(array)
   }
 
+  def slice(from: Int, until: Int): $clazz = {
+    if(until <= from || until <= 0 || from >= self.length){
+      $clazz.empty
+    }else if(from <= 0 && self.length <= until){
+      this
+    }else{
+      new $clazz(Arrays.copyOfRange(self, from max 0, until min self.length))
+    }
+  }
+
   def length: Int = self.length
 
   def size: Int = self.length
