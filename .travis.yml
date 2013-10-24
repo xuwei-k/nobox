@@ -7,3 +7,6 @@ scala:
 jdk:
   - oraclejdk7
 
+script:
+  - sh travis.sh
+
