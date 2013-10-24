@@ -61,6 +61,33 @@ s"""
 """
     }
 
+    val sum: String = a match {
+      case "Byte" | "Char" | "Short" | "Int" =>
+s"""
+  def sum: Int = {
+    var i, n = 0
+    while(i < self.length){
+      n += self(i)
+      i += 1
+    }
+    n
+  }
+"""
+      case "Boolean" => ""
+      case "Double" | "Float" | "Long" => ""
+s"""
+  def sum: $a = {
+    var i = 0
+    var n: $a = 0
+    while(i < self.length){
+      n += self(i)
+      i += 1
+    }
+    n
+  }
+"""
+    }
+
     val methods: String = List(map, flatMap, collect).map{ method =>
       list map method mkString "\n"
     }.mkString("\n\n")
@@ -72,6 +99,8 @@ import scala.collection.mutable.ArrayBuilder
 
 final class $clazz (val self: Array[$a]) extends AnyVal {
   $methods
+
+  $sum
 
   def filter(f: $a => Boolean): $clazz = {
     val builder = new ArrayBuilder.of$a()

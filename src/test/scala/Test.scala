@@ -36,6 +36,9 @@ object Test extends Properties("nobox"){
   implicit val ofIntArb: Arbitrary[ofInt] =
     Arbitrary(implicitly[Arbitrary[Array[Int]]].arbitrary.map(array => ofInt(array: _*)))
 
+  implicit val ofFloatArb: Arbitrary[ofFloat] =
+    Arbitrary(implicitly[Arbitrary[Array[Float]]].arbitrary.map(array => ofFloat(array: _*)))
+
   val pf: PartialFunction[Int, Long] = {case i: Int if i % 3 == 0 => i + 1}
   val f: Int => Boolean = {i: Int => 5 < i && i < 10 }
 
@@ -145,5 +148,13 @@ object Test extends Properties("nobox"){
       a.updated(index, elem).self === a.self.updated(index, elem)
     else
       a.updated(index, elem).mustThrowA[IndexOutOfBoundsException]
+  }
+
+  property("sum ofInt") = forAll { a: ofInt =>
+    a.sum == a.self.sum
+  }
+
+  property("sum ofFloat") = forAll { a: ofFloat =>
+    a.sum == a.self.sum
   }
 }
