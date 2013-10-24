@@ -291,12 +291,18 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
   }
 
   def ++(that: $clazz): $clazz = {
-    val size1 = self.length
-    val size2 = that.length
-    val array = new Array[$a](size1 + size2)
-    System.arraycopy(self, 0, array, 0, size1)
-    System.arraycopy(that.self, 0, array, size1, size2)
-    new $clazz(array)
+    if(self.length == 0){
+      that
+    }else if(that.length == 0){
+      this
+    }else{
+      val size1 = self.length
+      val size2 = that.length
+      val array = new Array[$a](size1 + size2)
+      System.arraycopy(self, 0, array, 0, size1)
+      System.arraycopy(that.self, 0, array, size1, size2)
+      new $clazz(array)
+    }
   }
 
   def partition(f: $a => Boolean): ($clazz, $clazz) = {
