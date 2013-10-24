@@ -74,7 +74,7 @@ s"""
   }
 """
       case "Boolean" => ""
-      case "Double" | "Float" | "Long" => ""
+      case "Double" | "Float" | "Long" =>
 s"""
   def sum: $a = {
     var i = 0
