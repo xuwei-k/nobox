@@ -37,7 +37,12 @@ s"""
     val builder = new ArrayBuilder.of$b()
     var i = 0
     while(i < self.length){
-      builder ++= f(self(i))
+      val x = f(self(i))
+      var j = 0
+      while(j < x.length){
+        builder += x(j)
+        j += 1
+      }
       i += 1
     }
     new of$b(builder.result)
