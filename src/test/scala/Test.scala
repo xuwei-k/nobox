@@ -4,13 +4,31 @@ import org.scalacheck._
 import Prop.forAll
 
 object Test extends Properties("nobox"){
+  def fail(message: String) =
+    throw new AssertionError(message)
+
+  implicit class AnyOps(actual: => Any) {
+    def mustThrowA[T <: Throwable](implicit man: reflect.ClassTag[T]): Boolean = {
+      val erasedClass = man.runtimeClass
+      try {
+        actual
+        fail("no exception thrown, expected " + erasedClass)
+      } catch {
+        case ex: Throwable =>
+          if (!erasedClass.isInstance(ex))
+            fail("wrong exception thrown, expected: " + erasedClass + " got: " + ex)
+          else
+            true
+      }
+    }
+  }
 
   implicit class ArrayOps[A](val self: Array[A]) extends AnyVal {
     def ===(that: Array[A]): Boolean = {
       if(self sameElements that) true
       else {
         val msg = self.mkString("Array(",",",")") + " is not equal " + that.mkString("Array(",",",")")
-        throw new AssertionError(msg)
+        fail(msg)
       }
     }
   }
@@ -120,5 +138,12 @@ object Test extends Properties("nobox"){
 
   property("reverse_:::") = forAll { (a: ofInt, b: ofInt) =>
     (a reverse_::: b).self === (a.self.toList reverse_::: b.self.toList).toArray
+  }
+
+  property("updated") = forAll { (a: ofInt, index: Int, elem: Int) =>
+    if(0 <= index && index < a.size)
+      a.updated(index, elem).self === a.self.updated(index, elem)
+    else
+      a.updated(index, elem).mustThrowA[IndexOutOfBoundsException]
   }
 }

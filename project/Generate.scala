@@ -265,6 +265,12 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     (new $clazz(l.result), new $clazz(r.result))
   }
 
+  def updated(index: Int, elem: $a): $clazz = {
+    val array = self.clone
+    array(index) = elem
+    new $clazz(array)
+  }
+
   def length: Int = self.length
 
   def size: Int = self.length
