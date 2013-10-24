@@ -117,4 +117,8 @@ object Test extends Properties("nobox"){
     val (y1, y2) = a.self.partition(f)
     (x1.self === y1) && (x2.self === y2)
   }
+
+  property("reverse_:::") = forAll { (a: ofInt, b: ofInt) =>
+    (a reverse_::: b).self === (a.self.toList reverse_::: b.self.toList).toArray
+  }
 }

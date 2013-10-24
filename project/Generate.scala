@@ -151,6 +151,22 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     new $clazz(array)
   }
 
+  def reverse_:::(prefix: $clazz): $clazz = {
+    if(prefix.length == 0){
+      this
+    }else{
+      val array = new Array[$a](self.length + prefix.length)
+      var i = 0
+      val len = prefix.length
+      while(i < len){
+        array(i) = prefix.self(len - i - 1)
+        i += 1
+      }
+      System.arraycopy(self, 0, array, prefix.length, self.length)
+      new $clazz(array)
+    }
+  }
+
   def count(f: $a => Boolean): Int = {
     var i = 0
     var n = 0
