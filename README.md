@@ -5,6 +5,6 @@ immutable primitive array wrapper for Scala
 ```scala
 resolvers += "bintray" at "http://dl.bintray.com/xuwei-k/maven"
 
-libraryDependencies += "com.github.xuwei-k" %% "nobox" % "0.1.0"
+libraryDependencies += "com.github.xuwei-k" %% "nobox" % "0.1.1"
 ```
 
