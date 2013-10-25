@@ -1,6 +1,6 @@
 package nobox
 
-trait Benchmark {
+class Benchmark {
   def time[A](action: => A): Long = {
     System.gc()
     System.runFinalization()
