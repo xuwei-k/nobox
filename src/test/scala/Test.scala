@@ -167,6 +167,10 @@ object Test extends Properties("nobox"){
     a.sum == a.self.sum
   }
 
+  property("sumLong") = forAll { a: ofInt =>
+    a.sumLong == a.self.map(_.toLong).sum
+  }
+
   property("product ofInt") = forAll { a: ofInt =>
     a.product == a.self.product
   }
@@ -175,6 +179,14 @@ object Test extends Properties("nobox"){
     val x = a.product
     val y = a.self.product
     (x == y) || (x.isNaN && y.isNaN)
+  }
+
+  property("productLong") = forAll { a: ofInt =>
+    a.productLong == a.self.map(_.toLong).product
+  }
+
+  property("productDouble") = forAll { a: ofInt =>
+    a.productDouble == a.self.map(_.toDouble).product
   }
 
   property("sorted") = forAll { a: ofFloat =>

@@ -70,7 +70,25 @@ object Benchmark {
 
     benchmark("sum")(_.sum, _.sum)
 
+    benchmark("sumLong 1")(_.sum, _.sumLong)
+
+    benchmark("sumLong 2")(_.foldLeft(0L)(_ + _), _.sumLong)
+
+    benchmark("sumLong 3")(_.map(_.toLong).sum, _.sumLong)
+
     benchmark("product")(_.product, _.product)
+
+    benchmark("productLong 1")(_.product, _.productLong)
+
+    benchmark("productLong 2")(_.foldLeft(1L)(_ * _), _.productLong)
+
+    benchmark("productLong 3")(_.map(_.toLong).product, _.productLong)
+
+    benchmark("productDouble 1")(_.product, _.productDouble)
+
+    benchmark("productDouble 2")(_.foldLeft(1: Double)(_ * _), _.productDouble)
+
+    benchmark("productDouble 3")(_.map(_.toDouble).product, _.productDouble)
 
     benchmark("++")(a => a ++ a, a => a ++ a)
 

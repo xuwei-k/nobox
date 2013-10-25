@@ -153,6 +153,22 @@ s"""
 """
     }
 
+    val sumLong: String = a match {
+      case "Int" =>
+s"""
+  def sumLong: Long = {
+    var i = 0
+    var n: Long = 0L
+    while(i < self.length){
+      n += self(i)
+      i += 1
+    }
+    n
+  }
+"""
+      case _ => ""
+    }
+
     val product: String = a match {
       case "Byte" | "Char" | "Short" | "Int" =>
 s"""
@@ -179,6 +195,38 @@ s"""
     n
   }
 """
+    }
+
+    val productLong: String = a match {
+      case "Byte" | "Char" | "Short" | "Int" =>
+s"""
+  def productLong: Long = {
+    var i = 0
+    var n: Long = 1L
+    while(i < self.length){
+      n *= self(i)
+      i += 1
+    }
+    n
+  }
+"""
+      case _ => ""
+    }
+
+    val productDouble: String = a match {
+      case "Byte" | "Char" | "Short" | "Int" | "Long" | "Float" =>
+s"""
+  def productDouble: Double = {
+    var i = 0
+    var n: Double = 1.0
+    while(i < self.length){
+      n *= self(i)
+      i += 1
+    }
+    n
+  }
+"""
+      case _ => ""
     }
 
     val sorted: String = a match {
@@ -209,7 +257,13 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
 
   $sum
 
+  $sumLong
+
   $product
+
+  $productLong
+
+  $productDouble
 
   $sorted
 
