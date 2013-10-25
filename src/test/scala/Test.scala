@@ -177,4 +177,9 @@ object Test extends Properties("nobox"){
   property("reduceRightOption") = forAll { a: ofInt =>
     a.reduceRightOption(_ - _) == a.self.reduceRightOption(_ - _)
   }
+
+  property("foldLeft") = forAll { (a: ofInt, z: Int) =>
+    a.foldLeftInt(z)(_ - _) == a.self.foldLeft(z)(_ - _)
+  }
+
 }
