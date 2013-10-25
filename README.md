@@ -2,6 +2,8 @@
 
 immutable primitive array wrapper for Scala
 
+https://bintray.com/xuwei-k/maven/nobox
+
 ```scala
 resolvers += "bintray" at "http://dl.bintray.com/xuwei-k/maven"
 
