@@ -77,6 +77,11 @@ object Test extends Properties("nobox"){
     a.mapInt(f).self === a.self.map(f)
   }
 
+  property("reverseMap") = forAll { a: ofInt =>
+    val f = {i: Int => i * 2 }
+    a.reverseMapInt(f).self === a.self.reverseMap(f)
+  }
+
   property("reverse.reverse") = forAll { a: ofInt =>
     a.reverse.reverse === a
   }

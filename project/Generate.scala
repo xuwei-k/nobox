@@ -31,6 +31,21 @@ s"""
 """
     }
 
+    val reverseMap: String => String = { b =>
+s"""
+  def reverseMap$b(f: $a => $b): of$b = {
+    val len = self.length
+    val array = new Array[$b](len)
+    var i = 0
+    while(i < len){
+      array(len - i - 1) = f(self(i))
+      i += 1
+    }
+    new of$b(array)
+  }
+"""
+    }
+
     val flatMap: String => String = { b =>
 s"""
   def flatMap$b(f: $a => Array[$b]): of$b = {
@@ -151,7 +166,7 @@ s"""
     }
 
     val methods: String = List(
-      map, flatMap, collect, collectFirst, foldLeft, foldRight
+      map, reverseMap, flatMap, collect, collectFirst, foldLeft, foldRight
     ).map{ method =>
       list map method mkString "\n"
     }.mkString("\n\n")
