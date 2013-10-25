@@ -66,6 +66,21 @@ s"""
 """
     }
 
+    val collectFirst: String => String = { b =>
+s"""
+  def collectFirst$b(f: PartialFunction[$a, $b]): Option[$b] = {
+    var i = 0
+    while(i < self.length){
+      if(f isDefinedAt self(i)){
+        return Some(f(self(i)))
+      }
+      i += 1
+    }
+    None
+  }
+"""
+    }
+
     val sum: String = a match {
       case "Byte" | "Char" | "Short" | "Int" =>
 s"""
@@ -105,7 +120,7 @@ s"""
 """
     }
 
-    val methods: String = List(map, flatMap, collect).map{ method =>
+    val methods: String = List(map, flatMap, collect, collectFirst).map{ method =>
       list map method mkString "\n"
     }.mkString("\n\n")
 

@@ -46,6 +46,10 @@ object Test extends Properties("nobox"){
     a.collectLong(pf).self === a.self.collect(pf)
   }
 
+  property("collectFirst") = forAll { a: ofInt =>
+    a.collectFirstLong(pf) == a.self.collectFirst(pf)
+  }
+
   property("exists") = forAll { a: ofInt =>
     a.exists(f) == a.self.exists(f)
   }

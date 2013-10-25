@@ -53,6 +53,11 @@ object Benchmark {
       _.collectInt{case n if n > 10 => n + 1}
     )
 
+    benchmark("collectFirst")(
+      _.collect{case 1 => 2},
+      _.collectInt{case 1 => 2}
+    )
+
     benchmark("takeWhile")(_.takeWhile(_ > 1), _.takeWhile(_ > 1))
 
     benchmark("take")(_.take(size / 2), _.take(size / 2))
