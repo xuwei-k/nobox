@@ -350,6 +350,30 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     }
   }
 
+  def reduceLeftOption(f: ($a, $a) => $a): Option[$a] = {
+    if(self.length == 0) return None
+
+    var i = 1
+    var acc = self(0)
+    while(i < self.length){
+      acc = f(acc, self(i))
+      i += 1
+    }
+    Some(acc)
+  }
+
+  def reduceRightOption(f: ($a, $a) => $a): Option[$a] = {
+    if(self.length == 0) return None
+
+    var i = self.length - 2
+    var acc = self(self.length - 1)
+    while(i >= 0){
+      acc = f(self(i), acc)
+      i -= 1
+    }
+    Some(acc)
+  }
+
   def length: Int = self.length
 
   def size: Int = self.length

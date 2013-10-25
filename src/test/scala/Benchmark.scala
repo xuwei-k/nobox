@@ -82,6 +82,8 @@ object Benchmark {
 
     benchmark("partition")(_.partition(_ > (size / 4)), _.partition(_ > (size / 4)))
 
+    benchmark("reduceLeftOption")(_.reduceLeftOption(_ + _), _.reduceLeftOption(_ + _))
+
     exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 

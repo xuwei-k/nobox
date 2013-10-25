@@ -169,4 +169,12 @@ object Test extends Properties("nobox"){
   property("slice") = forAll { (a: ofInt, from: Int, until: Int) =>
     a.slice(from, until).self === a.self.slice(from, until)
   }
+
+  property("reduceLeftOption") = forAll { a: ofInt =>
+    a.reduceLeftOption(_ - _) == a.self.reduceLeftOption(_ - _)
+  }
+
+  property("reduceRightOption") = forAll { a: ofInt =>
+    a.reduceRightOption(_ - _) == a.self.reduceRightOption(_ - _)
+  }
 }
