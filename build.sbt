@@ -8,6 +8,8 @@ libraryDependencies ++= Seq(
 
 scalaVersion := "2.10.3"
 
+crossScalaVersions := List("2.10.3")
+
 scalacOptions ++= Seq("-optimize", "-deprecation", "-unchecked", "-Xlint")
 
 name := "nobox"
