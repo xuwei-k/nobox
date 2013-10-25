@@ -1,3 +1,5 @@
+package nobox
+
 import sbt._
 
 object Generate{
@@ -7,7 +9,6 @@ object Generate{
   def apply(dir: File): Seq[File] = {
     list.map{ t =>
       val f = dir / ("of" + t + ".scala")
-      //println(src(t))
       IO.write(f, src(t))
       f
     }

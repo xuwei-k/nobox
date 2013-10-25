@@ -1,6 +1,6 @@
 package nobox
 
-object Benchmark {
+trait Benchmark {
   def time[A](action: => A): Long = {
     System.gc()
     System.runFinalization()
@@ -9,24 +9,44 @@ object Benchmark {
     System.nanoTime - start
   }
 
+  def exec[A](name: String, f1: => A, f2: => A){
+    println(name)
+    val x = time(f1)
+    val y = time(f2)
+    println((x / 1000000.0, y / 1000000.0))
+    val n = x.toDouble / y.toDouble
+    if(n > 1){
+      println(n)
+    }else{
+      println(Console.RED + n + Console.RESET)
+    }
+    println()
+  }
+
+}
+
+object Benchmark {
   def main(args: Array[String]){
-    val size = args.headOption.flatMap(n => util.Try(n.toInt).toOption) getOrElse 40000000
+    BenchmarkArray.run()
+    BenchmarkList.run()
+  }
+}
+
+object BenchmarkArray extends Benchmark{
+
+  val defaultSize = 40000000
+
+  def main(args: Array[String]){
+    val size = args.headOption.flatMap(n => util.Try(n.toInt).toOption) getOrElse defaultSize
+
+    run(size)
+  }
+
+  def run(size: Int = defaultSize){
     val array1 = util.Random.shuffle(1 to size).toArray
     val array2 = new ofInt(array1)
 
-    def exec[A](name: String, f1: => A, f2: => A){
-      println(name)
-      val x = time(f1)
-      val y = time(f2)
-      println((x / 1000000.0, y / 1000000.0))
-      val n = x.toDouble / y.toDouble
-      if(n > 1){
-        println(n)
-      }else{
-        println(Console.RED + n + Console.RESET)
-      }
-      println()
-    }
+    val list1 = array1.toList
 
     def benchmark(name: String)(f1: Array[Int] => Unit, f2: ofInt => Unit){
       exec(name, f1(array1), f2(array2))
@@ -96,5 +116,38 @@ object Benchmark {
 
     exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
+  
+}
 
+object BenchmarkList extends Benchmark{
+
+  val defaultSize = 40000000
+
+  def main(args: Array[String]){
+    val size = args.headOption.flatMap(n => util.Try(n.toInt).toOption) getOrElse defaultSize
+    run(size)
+  }
+
+  def run(size: Int = defaultSize){
+    val list1 = util.Random.shuffle(1 to size).toList
+    val list2 = IntList(list1: _*)
+
+    def benchmarkList(name: String)(f1: List[Int] => Unit, f2: IntList => Unit){
+      exec(name, f1(list1), f2(list2))
+    }
+
+    benchmarkList("map")(_.map(_ + 1), _.mapInt(_ + 1))
+
+    benchmarkList("mapLong")(_.map[Long, List[Long]](_ + 1L), _.mapLong(_ + 1L))
+
+    benchmarkList("reverse")(_.reverse, _.reverse)
+
+    benchmarkList("foldLeft")(_.foldLeft(0)(_ + _), _.foldLeft(0)(_ + _))
+
+    benchmarkList("foldRight")(_.foldRight(0)(_ + _), _.foldRight(0)(_ + _))
+
+    benchmarkList("length")(_.length, _.length)
+
+    benchmarkList("toArray")(_.toArray, _.toArray)
+  }
 }

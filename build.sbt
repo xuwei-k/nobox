@@ -1,5 +1,9 @@
 sourceGenerators in Compile += task{
-  Generate(sourceManaged.value)
+  nobox.Generate(sourceManaged.value)
+}
+
+sourceGenerators in Compile += task{
+  nobox.GenerateList(sourceManaged.value)
 }
 
 libraryDependencies ++= Seq(
