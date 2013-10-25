@@ -6,8 +6,6 @@ libraryDependencies ++= Seq(
   "org.scalacheck" %% "scalacheck" % "1.10.1" % "test"
 )
 
-version := "0.1.1-SNAPSHOT"
-
 scalaVersion := "2.10.3"
 
 scalacOptions ++= Seq("-optimize", "-deprecation", "-unchecked", "-Xlint")
