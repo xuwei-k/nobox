@@ -16,7 +16,7 @@ name := "nobox"
 
 licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
-initialCommands := "import nobox._"
+initialCommands in console := "import nobox._"
 
 startYear := Some(2013)
 
