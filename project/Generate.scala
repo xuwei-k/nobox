@@ -97,6 +97,20 @@ s"""
 """
     }
 
+    val foldRight: String => String = { b =>
+s"""
+  def foldRight$b(z: $b)(f: ($a, $b) => $b): $b = {
+    var i = self.length - 1
+    var acc = z
+    while(i >= 0){
+      acc = f(self(i), acc)
+      i -= 1
+    }
+    acc
+  }
+"""
+    }
+
     val sum: String = a match {
       case "Byte" | "Char" | "Short" | "Int" =>
 s"""
@@ -136,7 +150,9 @@ s"""
 """
     }
 
-    val methods: String = List(map, flatMap, collect, collectFirst, foldLeft).map{ method =>
+    val methods: String = List(
+      map, flatMap, collect, collectFirst, foldLeft, foldRight
+    ).map{ method =>
       list map method mkString "\n"
     }.mkString("\n\n")
 
