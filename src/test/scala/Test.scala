@@ -167,6 +167,16 @@ object Test extends Properties("nobox"){
     a.sum == a.self.sum
   }
 
+  property("product ofInt") = forAll { a: ofInt =>
+    a.product == a.self.product
+  }
+
+  property("product ofFloat") = forAll { a: ofFloat =>
+    val x = a.product
+    val y = a.self.product
+    (x == y) || (x.isNaN && y.isNaN)
+  }
+
   property("sorted") = forAll { a: ofFloat =>
     a.sorted.self === a.self.sorted
   }

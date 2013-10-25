@@ -70,6 +70,8 @@ object Benchmark {
 
     benchmark("sum")(_.sum, _.sum)
 
+    benchmark("product")(_.product, _.product)
+
     benchmark("++")(a => a ++ a, a => a ++ a)
 
     benchmark("count")(_.count(_ % 10 != 0), _.count(_ % 10 != 0))

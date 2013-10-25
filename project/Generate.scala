@@ -153,6 +153,34 @@ s"""
 """
     }
 
+    val product: String = a match {
+      case "Byte" | "Char" | "Short" | "Int" =>
+s"""
+  def product: Int = {
+    var i = 0
+    var n = 1
+    while(i < self.length){
+      n *= self(i)
+      i += 1
+    }
+    n
+  }
+"""
+      case "Boolean" => ""
+      case "Double" | "Float" | "Long" =>
+s"""
+  def product: $a = {
+    var i = 0
+    var n: $a = 1
+    while(i < self.length){
+      n *= self(i)
+      i += 1
+    }
+    n
+  }
+"""
+    }
+
     val sorted: String = a match {
       case "Boolean" => ""
       case _ =>
@@ -180,6 +208,8 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
   $methods
 
   $sum
+
+  $product
 
   $sorted
 
