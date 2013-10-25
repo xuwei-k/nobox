@@ -81,6 +81,8 @@ s"""
 """
     }
 
+    // could not use @specialized annotation with value class
+    // https://gist.github.com/xuwei-k/7153650
     val foldLeft: String => String = { b =>
 s"""
   def foldLeft$b(z: $b)(f: ($b, $a) => $b): $b = {
@@ -386,6 +388,16 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
       i -= 1
     }
     Some(acc)
+  }
+
+  def foldLeft[A](z: A)(f: (A, $a) => A): A = {
+    var i = 0
+    var acc = z
+    while(i < self.length){
+      acc = f(acc, self(i))
+      i += 1
+    }
+    acc
   }
 
   def length: Int = self.length

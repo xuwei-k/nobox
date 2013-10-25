@@ -178,8 +178,12 @@ object Test extends Properties("nobox"){
     a.reduceRightOption(_ - _) == a.self.reduceRightOption(_ - _)
   }
 
-  property("foldLeft") = forAll { (a: ofInt, z: Int) =>
+  property("foldLeftInt") = forAll { (a: ofInt, z: Int) =>
     a.foldLeftInt(z)(_ - _) == a.self.foldLeft(z)(_ - _)
+  }
+
+  property("foldLeft") = forAll { (a: ofInt, z: Vector[Int]) =>
+    a.foldLeft(z)(_ :+ _) == a.self.foldLeft(z)(_ :+ _)
   }
 
 }
