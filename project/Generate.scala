@@ -416,6 +416,16 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     acc
   }
 
+  def foldRight[A](z: A)(f: ($a, A) => A): A = {
+    var i = self.length - 1
+    var acc = z
+    while(i >= 0){
+      acc = f(self(i), acc)
+      i -= 1
+    }
+    acc
+  }
+
   def length: Int = self.length
 
   def size: Int = self.length

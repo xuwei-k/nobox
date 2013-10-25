@@ -190,4 +190,8 @@ object Test extends Properties("nobox"){
     a.foldRightLong(z)(_ - _) == a.self.foldRight(z)(_ - _)
   }
 
+  property("foldRight") = forAll { (a: ofInt, z: List[Int]) =>
+    a.foldRight(z)(_ :: _) == a.self.foldRight(z)(_ :: _)
+  }
+
 }

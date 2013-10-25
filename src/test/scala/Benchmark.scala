@@ -92,6 +92,8 @@ object Benchmark {
 
     benchmark("foldRightInt")(_.foldRight(0)(_ + _), _.foldRightInt(0)(_ + _))
 
+    benchmark("foldRight")(_.foldRight(0)(_ + _), _.foldRight(0)(_ + _))
+
     exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 
