@@ -151,6 +151,8 @@ object Benchmark {
 
     benchmark("min")(_.min, _.min)
 
+    benchmark("scanLeft")(_.scanLeft(0)(_ + _), _.scanLeft(0)(_ + _))
+
     exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 
