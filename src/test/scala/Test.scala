@@ -186,7 +186,9 @@ object Test extends Properties("nobox"){
   }
 
   property("productDouble") = forAll { a: ofInt =>
-    a.productDouble == a.self.map(_.toDouble).product
+    val x = a.productDouble
+    val y = a.self.map(_.toDouble).product
+    (x == y) || (x.isNaN && y.isNaN)
   }
 
   property("sorted") = forAll { a: ofFloat =>
