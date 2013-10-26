@@ -38,17 +38,20 @@ pomExtra := (
 
 val benchmark = inputKey[Unit]("benchmark")
 
+val seqMethods: Set[String] = classOf[Seq[_]].getMethods.map(_.getName).filterNot(_ contains '$').toSet
+
 val sizeParser = {
   import sbt.complete.Parser._
   import sbt.complete.Parsers._
-  val examples = List.iterate(10000, 6)(_ * 8).map(_.toString)
   val msg = "invalid input. please input benchmark array size"
-  (Space ~> NatBasic.examples(examples: _*)).? !!! msg
+  val names = (Space ~> ScalaID.examples(seqMethods)).*
+  val size = (Space ~> NatBasic.examples().map(_.toString)).?
+  (names ~ size).map{case (n, s) => s.toList ++ n} !!! msg
 }
 
 benchmark := {
-  val size = sizeParser.parsed.map(_.toString).toList
+  val args = sizeParser.parsed
   val cp = (fullClasspath in Test).value
-  (runner in Test).value.run("nobox.Benchmark", Build.data(cp), size, streams.value.log)
+  (runner in Test).value.run("nobox.Benchmark", Build.data(cp), args, streams.value.log)
 }
 
