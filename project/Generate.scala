@@ -637,6 +637,40 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
       }
     }
   }
+
+  def max: Option[$a] = {
+    if(self.length == 0){
+      None
+    }else{
+      var i = 1
+      var n = self(0)
+      while(i < self.length){
+        val x = self(i)
+        if(n < x){
+          n = x
+        }
+        i += 1
+      }
+      Some(n)
+    }
+  }
+
+  def min: Option[$a] = {
+    if(self.length == 0){
+      None
+    }else{
+      var i = 1
+      var n = self(0)
+      while(i < self.length){
+        val x = self(i)
+        if(n > x){
+          n = x
+        }
+        i += 1
+      }
+      Some(n)
+    }
+  }
 }
 
 object $clazz {

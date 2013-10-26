@@ -269,4 +269,20 @@ object Test extends Properties("nobox"){
     }
   }
 
+  property("max") = forAll { a: ofInt =>
+    if(a.self.isEmpty){
+      a.max must_== None
+    }else{
+      a.max must_== Some(a.self.max)
+    }
+  }
+
+  property("min") = forAll { a: ofInt =>
+    if(a.self.isEmpty){
+      a.min must_== None
+    }else{
+      a.min must_== Some(a.self.min)
+    }
+  }
+
 }

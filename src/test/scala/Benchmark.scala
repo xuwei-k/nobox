@@ -147,6 +147,10 @@ object Benchmark {
       benchmark("grouped " + n, 0.2)(_.grouped(n).size, _.grouped(n).size)
     }
 
+    benchmark("max")(_.max, _.max)
+
+    benchmark("min")(_.min, _.min)
+
     exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 
