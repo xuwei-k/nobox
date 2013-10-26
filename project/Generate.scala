@@ -467,6 +467,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     (new $clazz(l.result), new $clazz(r.result))
   }
 
+  @throws[IndexOutOfBoundsException]
   def updated(index: Int, elem: $a): $clazz = {
     val array = self.clone
     array(index) = elem
@@ -618,8 +619,10 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
 
   def ===(that: $clazz): Boolean = Arrays.equals(self, that.self)
 
+  @throws[IllegalArgumentException]
   def grouped(n: Int): Iterator[$clazz] = sliding(n, n)
 
+  @throws[IllegalArgumentException]
   def sliding(_size: Int, step: Int = 1): Iterator[$clazz] = {
     require(_size > 0, "size must be positive number")
     require(step > 0, "step must be positive number")
