@@ -1,7 +1,3 @@
-sourceGenerators in Compile += task{
-  nobox.Generate(sourceManaged.value)
-}
-
 libraryDependencies ++= Seq(
   // https://github.com/rickynils/scalacheck/pull/64#issuecomment-26704597
   "org.scalacheck" %% "scalacheck" % "1.10.1" % "test" exclude("org.scala-lang", "scala-compiler")
