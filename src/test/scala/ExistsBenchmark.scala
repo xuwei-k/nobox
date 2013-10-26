@@ -3,7 +3,7 @@ package benchmark
 
 import org.scalameter.api._
 
-object ExistsBenchmark extends NoboxBenchmark {
+object ExistsBenchmark extends NoBoxBenchmark {
   performance of "scala.Array[Int]" in {
     measure method "exists" in {
       using(arInts) curve("exists") in {

@@ -3,7 +3,7 @@ package benchmark
 
 import org.scalameter.api._
 
-object ReverseBenchmark extends NoboxBenchmark {
+object ReverseBenchmark extends NoBoxBenchmark {
   performance of "scala.Array[Int]" in {
     measure method "reverse.map" in {
       using(arInts) curve("map") in {

@@ -3,7 +3,7 @@ package benchmark
 
 import org.scalameter.api._
 
-object MapBenchmark extends NoboxBenchmark {
+object MapBenchmark extends NoBoxBenchmark {
   performance of "scala.Array[Int]" in {
     measure method "map" in {
       using(arInts) curve("map") in {

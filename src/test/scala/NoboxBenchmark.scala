@@ -3,7 +3,7 @@ package benchmark
 
 import org.scalameter.api._
 
-trait NoboxBenchmark extends PerformanceTest {
+trait NoBoxBenchmark extends PerformanceTest {
   lazy val executor = LocalExecutor(new Executor.Warmer.Default, Aggregator.min, new Measurer.Default)
   lazy val reporter = new LoggingReporter
 //  lazy val reporter = ChartReporter(ChartFactory.XYLine())
