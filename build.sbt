@@ -52,3 +52,12 @@ benchmark := {
   (runner in Test).value.run("nobox.Benchmark", Build.data(cp), size, streams.value.log)
 }
 
+// scalameter configuration
+
+fork in test := true
+
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+
+libraryDependencies += "com.github.axel22" %% "scalameter" % "0.4-SNAPSHOT"
+
+testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework")
