@@ -40,7 +40,7 @@ val benchmark = inputKey[Unit]("benchmark")
 
 val seqMethods: Set[String] = classOf[Seq[_]].getMethods.map(_.getName).filterNot(_ contains '$').toSet
 
-val sizeParser = {
+val benchmarkArgsParser = {
   import sbt.complete.Parser._
   import sbt.complete.Parsers._
   val msg = "invalid input. please input benchmark array size"
@@ -50,7 +50,7 @@ val sizeParser = {
 }
 
 benchmark := {
-  val args = sizeParser.parsed
+  val args = benchmarkArgsParser.parsed
   val cp = (fullClasspath in Test).value
   (runner in Test).value.run("nobox.Benchmark", Build.data(cp), args, streams.value.log)
 }
