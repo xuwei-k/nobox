@@ -3,7 +3,8 @@ sourceGenerators in Compile += task{
 }
 
 libraryDependencies ++= Seq(
-  "org.scalacheck" %% "scalacheck" % "1.10.1" % "test"
+  // https://github.com/rickynils/scalacheck/pull/64#issuecomment-26704597
+  "org.scalacheck" %% "scalacheck" % "1.10.1" % "test" exclude("org.scala-lang", "scala-compiler")
 )
 
 scalaVersion := "2.10.3"
