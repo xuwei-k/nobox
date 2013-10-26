@@ -300,4 +300,19 @@ object Test extends Properties("nobox"){
   property("scanRight") = forAll { (a: ofInt, z: List[Int]) =>
     a.scanRight(z)(_ :: _).self.toList must_== a.self.scanRight(z)(_ :: _).toList
   }
+
+  property("scanLeft1") = forAll { a: ofInt =>
+    a.scanLeft1(_ - _).self.toList must_== (
+      if(a.self.isEmpty) List()
+      else a.self.tail.scanLeft(a.self.head)(_ - _).toList
+    )
+  }
+
+  property("scanRight1") = forAll { a: ofInt =>
+    a.scanRight1(_ - _).self.toList must_== (
+      if(a.self.isEmpty) List()
+      else a.self.init.scanRight(a.self.last)(_ - _).toList
+    )
+  }
+
 }

@@ -732,6 +732,36 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     array
   }
 
+  def scanLeft1(f: ($a, $a) => $a): $clazz = {
+    if(self.length != 0){
+      val array = new Array[$a](self.length)
+      array(0) = self(0)
+      var i = 0
+      while(i < self.length - 1){
+        array(i + 1) = f(array(i), self(i + 1))
+        i += 1
+      }
+      new $clazz(array)
+    }else{
+      $clazz.empty
+    }
+  }
+
+  def scanRight1(f: ($a, $a) => $a): $clazz = {
+    if(self.length != 0){
+      val array = new Array[$a](self.length)
+      array(self.length - 1) = self(self.length - 1)
+      var i = self.length - 1
+      while(i > 0){
+        array(i - 1) = f(self(i - 1), array(i))
+        i -= 1
+      }
+      new $clazz(array)
+    }else{
+      $clazz.empty
+    }
+  }
+
 }
 
 object $clazz {
