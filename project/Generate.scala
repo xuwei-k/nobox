@@ -618,16 +618,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
 
   def ===(that: $clazz): Boolean = Arrays.equals(self, that.self)
 
-  def grouped(n: Int): Iterator[$clazz] = new Iterator[$clazz]{
-    private[this] var i = 0
-    var hasNext = self.length != 0
-    def next = {
-      val r = new $clazz(Arrays.copyOfRange(self, i, math.min(i + n, self.length)))
-      i += n
-      if(i >= self.length) hasNext = false
-      r
-    }
-  }
+  def grouped(n: Int): Iterator[$clazz] = sliding(n, n)
 
   def sliding(_size: Int, step: Int = 1): Iterator[$clazz] = {
     require(_size > 0, "size must be positive number")

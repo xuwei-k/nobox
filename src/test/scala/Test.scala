@@ -255,7 +255,7 @@ object Test extends Properties("nobox"){
     if(n > 0){
       a.grouped(n).map(_.self.toSeq).toList must_== a.self.grouped(n).map(_.toSeq).toList
     }else{
-      a.grouped(n).mustThrowA[Throwable]
+      a.grouped(n).mustThrowA[IllegalArgumentException]
     }
   }
 
@@ -267,6 +267,6 @@ object Test extends Properties("nobox"){
     }else{
       a.sliding(size, step).mustThrowA[IllegalArgumentException]
     }
-
   }
+
 }
