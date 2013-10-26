@@ -9,7 +9,6 @@ object Benchmark {
     System.nanoTime - start
   }
 
-
   def exec[A](name: String, f1: => A, f2: => A){
     println(name)
     val x = time(f1)
@@ -26,9 +25,17 @@ object Benchmark {
   }
 
   def main(args: Array[String]){
-    val size = args.headOption.flatMap(n => util.Try(n.toInt).toOption) getOrElse 40000000
+    val sizeOpt = args.headOption.flatMap(n => util.Try(n.toInt).toOption)
+    val size = sizeOpt getOrElse 40000000
     val array1 = util.Random.shuffle(1 to size).toArray
     val array2 = new ofInt(array1)
+
+    def _exec[A](name: String, f1: => A, f2: => A){
+      val testAll = (args.size == 1 && sizeOpt.isDefined) || args.isEmpty
+      if(args.contains(name) || testAll){
+        exec(name, f1, f2)
+      }
+    }
 
     def benchmark(name: String, n: Double = 1.0)(f1: Array[Int] => Unit, f2: ofInt => Unit){
       val (a1, a2) = if(n != 1.0){
@@ -37,7 +44,7 @@ object Benchmark {
       }else{
         (array1, array2)
       }
-      exec(name, f1(a1), f2(a2))
+      _exec(name, f1(a1), f2(a2))
     }
 
     benchmark("map")(_.map(_ + 1), _.mapInt(_ + 1))
@@ -46,7 +53,7 @@ object Benchmark {
 
     benchmark("reverseMap 2")(_.reverse.map(_ + 1), _.reverseMapInt(_ + 1))
 
-    exec("reverseMap 3", array2.reverse.mapInt(_ + 1), array2.reverseMapInt(_ + 1))
+    _exec("reverseMap 3", array2.reverse.mapInt(_ + 1), array2.reverseMapInt(_ + 1))
 
     benchmark("exists")(_.exists(_ == -1), _.exists(_ == -1))
 
@@ -153,9 +160,9 @@ object Benchmark {
 
     benchmark("scanLeft")(_.scanLeft(0)(_ + _), _.scanLeft(0)(_ + _))
 
-    benchmark("scanRight")(_.scanRight(0)(_ + _), _.scanRight(0)(_ + _))
+    benchmark("scanRight", 0.2)(_.scanRight(0)(_ + _), _.scanRight(0)(_ + _))
 
-    exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
+    _exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 
 }
