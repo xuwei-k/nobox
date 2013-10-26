@@ -626,7 +626,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     new Iterator[$clazz]{
       private[this] var i = 0
       var hasNext = self.length != 0
-      def next = try{
+      def next = {
         // n is negative, if `i + _size` overflow
         val n = i + _size
         val until = if(n > 0) math.min(n, self.length) else self.length
