@@ -21,6 +21,14 @@ object Test extends Properties("nobox"){
             true
       }
     }
+
+    def must_==(that: Any): Boolean = {
+      val self = actual
+      if(self == that) true
+      else {
+        fail(self + " is not equal to " + that)
+      }
+    }
   }
 
   implicit class ArrayOps[A](val self: Array[A]) extends AnyVal {
@@ -241,5 +249,13 @@ object Test extends Properties("nobox"){
 
   property("inits") = forAll { (a: ofInt) =>
     a.inits.map(_.self.toSeq).toList == a.self.inits.map(_.toSeq).toList
+  }
+
+  property("grouped") = forAll { (a: ofInt, n: Int) =>
+    if(n > 0){
+      a.grouped(n).map(_.self.toSeq).toList must_== a.self.grouped(n).map(_.toSeq).toList
+    }else{
+      a.grouped(n).mustThrowA[Throwable]
+    }
   }
 }

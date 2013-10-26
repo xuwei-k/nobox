@@ -143,6 +143,10 @@ object Benchmark {
 
     benchmark("inits", 0.0005)(_.inits.size, _.inits.size)
 
+    List(50, 10000, 2000000).foreach{ n =>
+      benchmark("grouped " + n, 0.2)(_.grouped(n).size, _.grouped(n).size)
+    }
+
     exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 
