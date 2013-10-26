@@ -290,4 +290,9 @@ object Test extends Properties("nobox"){
     a.scanLeft(z)(_ - _).self.toList must_== a.self.scanLeft(z)(_ - _).toList
   }
 
+  property("scanRight") = forAll { (a: ofInt, z: Int) =>
+    a.scanRight(z)(_ + _).self.toList must_== a.self.scanRight(z)(_ + _).toList
+    a.scanRight(z)(_ - _).self.toList must_== a.self.scanRight(z)(_ - _).toList
+  }
+
 }
