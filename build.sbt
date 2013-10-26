@@ -26,6 +26,16 @@ scmInfo := Some(ScmInfo(
 
 description := "immutable primitive array wrapper for Scala"
 
+pomExtra := (
+<developers>
+  <developer>
+    <id>xuwei-k</id>
+    <name>Kenji Yoshida</name>
+    <url>https://github.com/xuwei-k</url>
+  </developer>
+</developers>
+)
+
 val benchmark = inputKey[Unit]("benchmark")
 
 val sizeParser = {
