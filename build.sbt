@@ -5,7 +5,7 @@ libraryDependencies ++= Seq(
 
 scalaVersion := "2.10.3"
 
-crossScalaVersions := List("2.10.3")
+crossScalaVersions := List("2.10.3", "2.11.0-M6")
 
 scalacOptions ++= Seq("-optimize", "-deprecation", "-unchecked", "-Xlint")
 
