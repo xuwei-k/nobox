@@ -527,6 +527,17 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     acc
   }
 
+  def indexOf(elem: $a): Option[Int] = {
+    var i = 0
+    while(i < self.length){
+      if(self(i) == elem){
+        return Some(i)
+      }
+      i += 1
+    }
+    None
+  }
+
   def length: Int = self.length
 
   def size: Int = self.length

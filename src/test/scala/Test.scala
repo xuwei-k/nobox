@@ -223,4 +223,8 @@ object Test extends Properties("nobox"){
     a.foldRight(z)(_ :: _) == a.self.foldRight(z)(_ :: _)
   }
 
+  property("indexOf") = forAll { (a: ofInt, z: Int) =>
+    a.indexOf(z) == Option(a.self.indexOf(z)).filter(_ >= 0)
+  }
+
 }
