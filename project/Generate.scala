@@ -340,8 +340,13 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
   def forall(f: $a => Boolean): Boolean = !exists(!f(_))
 
   def take(n: Int): $clazz = {
-    val len = (self.length min n) max 0
-    new $clazz(Arrays.copyOf(self, len))
+    if(n >= self.length){
+      this
+    }else if(n <= 0){
+      $clazz.empty
+    }else{
+      new $clazz(Arrays.copyOf(self, n))
+    }
   }
 
   def takeWhile(f: $a => Boolean): $clazz = {
