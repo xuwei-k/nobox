@@ -566,7 +566,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
 
   override def toString = self.mkString("$clazz(", ", ", ")")
 
-  def ===(that: $clazz): Boolean = self sameElements that.self
+  def ===(that: $clazz): Boolean = Arrays.equals(self, that.self)
 }
 
 object $clazz {

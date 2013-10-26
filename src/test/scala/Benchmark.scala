@@ -126,6 +126,11 @@ object Benchmark {
 
     benchmark("lastIndexOf")(_.lastIndexOf(-1), _.lastIndexOf(-1))
 
+    val array3 = array1.clone
+    val array4 = new ofInt(array2.self.clone)
+
+    benchmark("===")(_ sameElements array3, _ === array4)
+
     exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 
