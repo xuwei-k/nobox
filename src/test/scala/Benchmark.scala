@@ -141,6 +141,8 @@ object Benchmark {
 
     benchmark("tails", 0.0005)(_.tails.size, _.tails.size)
 
+    benchmark("inits", 0.0005)(_.inits.size, _.inits.size)
+
     exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 

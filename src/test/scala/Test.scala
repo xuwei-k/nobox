@@ -238,4 +238,8 @@ object Test extends Properties("nobox"){
   property("tails") = forAll { (a: ofInt) =>
     a.tails.map(_.self.toSeq).toList == a.self.tails.map(_.toSeq).toList
   }
+
+  property("inits") = forAll { (a: ofInt) =>
+    a.inits.map(_.self.toSeq).toList == a.self.inits.map(_.toSeq).toList
+  }
 }
