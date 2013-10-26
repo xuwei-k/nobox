@@ -30,8 +30,14 @@ object Benchmark {
     val array1 = util.Random.shuffle(1 to size).toArray
     val array2 = new ofInt(array1)
 
-    def benchmark(name: String)(f1: Array[Int] => Unit, f2: ofInt => Unit){
-      exec(name, f1(array1), f2(array2))
+    def benchmark(name: String, n: Double = 1.0)(f1: Array[Int] => Unit, f2: ofInt => Unit){
+      val (a1, a2) = if(n != 1.0){
+        val nn = (size * n).toInt
+        (array1.take(nn), array2.take(nn))
+      }else{
+        (array1, array2)
+      }
+      exec(name, f1(a1), f2(a2))
     }
 
     benchmark("map")(_.map(_ + 1), _.mapInt(_ + 1))
@@ -96,7 +102,7 @@ object Benchmark {
 
     benchmark("productDouble 3")(_.map(_.toDouble).product, _.productDouble)
 
-    benchmark("++")(a => a ++ a, a => a ++ a)
+    benchmark("++")(a => a ++ a ++ a ++ a, a => a ++ a ++ a ++ a)
 
     benchmark("count")(_.count(_ % 10 != 0), _.count(_ % 10 != 0))
 
@@ -131,7 +137,9 @@ object Benchmark {
 
     benchmark("===")(_ sameElements array3, _ === array4)
 
-    benchmark("mkString")(_ mkString ",", _ mkString ",")
+    benchmark("mkString", 0.2)(_ mkString ",", _ mkString ",")
+
+    benchmark("tails", 0.0005)(_.tails.size, _.tails.size)
 
     exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }

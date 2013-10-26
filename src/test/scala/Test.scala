@@ -235,4 +235,7 @@ object Test extends Properties("nobox"){
     a.mkString(start, sep, end) == a.self.mkString(start, sep, end)
   }
 
+  property("tails") = forAll { (a: ofInt) =>
+    a.tails.map(_.self.toSeq).toList == a.self.tails.map(_.toSeq).toList
+  }
 }

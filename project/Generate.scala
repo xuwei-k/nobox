@@ -549,6 +549,17 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     None
   }
 
+  def tails: Iterator[$clazz] = new Iterator[$clazz]{
+    private[this] var i = 0
+    var hasNext = true
+    def next: $clazz = {
+      val r = new $clazz(Arrays.copyOfRange(self, i, self.length))
+      i += 1
+      if(i > self.length) hasNext = false
+      r
+    }
+  }
+
   def length: Int = self.length
 
   def size: Int = self.length
