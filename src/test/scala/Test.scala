@@ -227,4 +227,7 @@ object Test extends Properties("nobox"){
     a.indexOf(z) == Option(a.self.indexOf(z)).filter(_ >= 0)
   }
 
+  property("lastIndexOf") = forAll { (a: ofInt, z: Int) =>
+    a.lastIndexOf(z) == Option(a.self.lastIndexOf(z)).filter(_ >= 0)
+  }
 }

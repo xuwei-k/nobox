@@ -124,6 +124,8 @@ object Benchmark {
 
     benchmark("indexOf")(_.indexOf(-1), _.indexOf(-1))
 
+    benchmark("lastIndexOf")(_.lastIndexOf(-1), _.lastIndexOf(-1))
+
     exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 

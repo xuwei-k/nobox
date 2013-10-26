@@ -538,6 +538,17 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     None
   }
 
+  def lastIndexOf(elem: $a): Option[Int] = {
+    var i = self.length - 1
+    while(i >= 0){
+      if(self(i) == elem){
+        return Some(i)
+      }
+      i -= 1
+    }
+    None
+  }
+
   def length: Int = self.length
 
   def size: Int = self.length
