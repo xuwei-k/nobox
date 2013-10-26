@@ -564,7 +564,35 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     -1
   }
 
-  override def toString = self.mkString("$clazz(", ", ", ")")
+  override def toString = mkString("$clazz(", ", ", ")")
+
+  def mkString(start: String, sep: String, end: String): String =
+    addString(new StringBuilder(), start, sep, end).toString
+
+  def mkString(sep: String): String = mkString("", sep, "")
+
+  def mkString: String = mkString("")
+
+  def addString(b: StringBuilder, start: String, sep: String, end: String): StringBuilder = {
+    var first = true
+
+    b append start
+    var i = 0
+    while(i < self.length){
+      if (first) {
+        b append self(i)
+        first = false
+      }
+      else {
+        b append sep
+        b append self(i)
+      }
+      i += 1
+    }
+    b append end
+
+    b
+  }
 
   def ===(that: $clazz): Boolean = Arrays.equals(self, that.self)
 }

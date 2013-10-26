@@ -131,6 +131,8 @@ object Benchmark {
 
     benchmark("===")(_ sameElements array3, _ === array4)
 
+    benchmark("mkString")(_ mkString ",", _ mkString ",")
+
     exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 

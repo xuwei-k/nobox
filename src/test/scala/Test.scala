@@ -230,4 +230,9 @@ object Test extends Properties("nobox"){
   property("lastIndexOf") = forAll { (a: ofInt, z: Int) =>
     a.lastIndexOf(z) == Option(a.self.lastIndexOf(z)).filter(_ >= 0)
   }
+
+  property("mkString") = forAll { (a: ofInt, start: String, sep: String, end: String) =>
+    a.mkString(start, sep, end) == a.self.mkString(start, sep, end)
+  }
+
 }
