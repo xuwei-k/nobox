@@ -1,19 +1,21 @@
+package nobox
+
 import sbt._
+import nobox.Type._
 
 object Generate{
 
-  val list = "Boolean Byte Char Short Int Long Float Double".split(' ').toList
+  val list = List(BOOL, BYTE, CHAR, SHORT, INT, LONG, FLOAT, DOUBLE)
 
   def apply(dir: File): Seq[File] = {
     list.map{ t =>
       val f = dir / ("of" + t + ".scala")
-      //println(src(t))
       IO.write(f, src(t))
       f
     }
   }
 
-  def src(a: String): String = {
+  def src(a: Type): String = {
 
     val clazz = "of" + a
 
@@ -127,7 +129,7 @@ s"""
     }
 
     val sum: String = a match {
-      case "Byte" | "Char" | "Short" | "Int" =>
+      case BYTE | CHAR | SHORT | INT =>
 s"""
   def sum: Int = {
     var i, n = 0
@@ -138,8 +140,8 @@ s"""
     n
   }
 """
-      case "Boolean" => ""
-      case "Double" | "Float" | "Long" =>
+      case BOOL => ""
+      case DOUBLE | FLOAT | LONG =>
 s"""
   def sum: $a = {
     var i = 0
@@ -154,7 +156,7 @@ s"""
     }
 
     val sumLong: String = a match {
-      case "Int" =>
+      case INT =>
 s"""
   def sumLong: Long = {
     var i = 0
@@ -170,7 +172,7 @@ s"""
     }
 
     val product: String = a match {
-      case "Byte" | "Char" | "Short" | "Int" =>
+      case BYTE | CHAR | SHORT | INT =>
 s"""
   def product: Int = {
     var i = 0
@@ -182,8 +184,8 @@ s"""
     n
   }
 """
-      case "Boolean" => ""
-      case "Double" | "Float" | "Long" =>
+      case BOOL => ""
+      case DOUBLE | FLOAT | LONG =>
 s"""
   def product: $a = {
     var i = 0
@@ -198,7 +200,7 @@ s"""
     }
 
     val productLong: String = a match {
-      case "Byte" | "Char" | "Short" | "Int" =>
+      case BYTE | CHAR | SHORT | INT =>
 s"""
   def productLong: Long = {
     var i = 0
@@ -214,7 +216,7 @@ s"""
     }
 
     val productDouble: String = a match {
-      case "Byte" | "Char" | "Short" | "Int" | "Long" | "Float" =>
+      case BYTE | CHAR | SHORT | INT | LONG | FLOAT =>
 s"""
   def productDouble: Double = {
     var i = 0
@@ -230,7 +232,7 @@ s"""
     }
 
     val sorted: String = a match {
-      case "Boolean" => ""
+      case BOOL => ""
       case _ =>
 s"""
   def sorted: $clazz = {
@@ -244,7 +246,7 @@ s"""
     val methods: String = List(
       map, reverseMap, flatMap, collect, collectFirst, foldLeft, foldRight
     ).map{ method =>
-      list map method mkString "\n"
+      list.map(_.toString) map method mkString "\n"
     }.mkString("\n\n")
 
 s"""package nobox
