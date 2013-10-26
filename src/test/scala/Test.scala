@@ -258,4 +258,15 @@ object Test extends Properties("nobox"){
       a.grouped(n).mustThrowA[Throwable]
     }
   }
+
+  property("sliding") = forAll { (a: ofInt, size: Int, step: Int) =>
+    if(size > 0 && step > 0){
+      a.sliding(size, step).map(_.self.toSeq).toList must_== (
+        a.self.sliding(size, step).map(_.toSeq).toList
+      )
+    }else{
+      a.sliding(size, step).mustThrowA[IllegalArgumentException]
+    }
+
+  }
 }

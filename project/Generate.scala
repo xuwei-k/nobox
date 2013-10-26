@@ -628,6 +628,24 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
       r
     }
   }
+
+  def sliding(_size: Int, step: Int = 1): Iterator[$clazz] = {
+    require(_size > 0, "size must be positive number")
+    require(step > 0, "step must be positive number")
+    new Iterator[$clazz]{
+      private[this] var i = 0
+      var hasNext = self.length != 0
+      def next = try{
+        // n is negative, if `i + _size` overflow
+        val n = i + _size
+        val until = if(n > 0) math.min(n, self.length) else self.length
+        val r = new $clazz(Arrays.copyOfRange(self, i, until))
+        i += step
+        if(i >= self.length || n > self.length || n < 0) hasNext = false
+        r
+      }
+    }
+  }
 }
 
 object $clazz {
