@@ -9,24 +9,26 @@ object Benchmark {
     System.nanoTime - start
   }
 
+
+  def exec[A](name: String, f1: => A, f2: => A){
+    println(name)
+    val x = time(f1)
+    val y = time(f2)
+    val a = 1000000.0
+    println((x / a, y / a))
+    val n = x.toDouble / y.toDouble
+    if(n > 1){
+      println(n)
+    }else{
+      println(Console.RED + n + Console.RESET)
+    }
+    println()
+  }
+
   def main(args: Array[String]){
     val size = args.headOption.flatMap(n => util.Try(n.toInt).toOption) getOrElse 40000000
     val array1 = util.Random.shuffle(1 to size).toArray
     val array2 = new ofInt(array1)
-
-    def exec[A](name: String, f1: => A, f2: => A){
-      println(name)
-      val x = time(f1)
-      val y = time(f2)
-      println((x / 1000000.0, y / 1000000.0))
-      val n = x.toDouble / y.toDouble
-      if(n > 1){
-        println(n)
-      }else{
-        println(Console.RED + n + Console.RESET)
-      }
-      println()
-    }
 
     def benchmark(name: String)(f1: Array[Int] => Unit, f2: ofInt => Unit){
       exec(name, f1(array1), f2(array2))
