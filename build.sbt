@@ -29,3 +29,20 @@ scmInfo := Some(ScmInfo(
 ))
 
 description := "immutable primitive array wrapper for Scala"
+
+val benchmark = inputKey[Unit]("benchmark")
+
+val sizeParser = {
+  import sbt.complete.Parser._
+  import sbt.complete.Parsers._
+  val examples = List.iterate(10000, 6)(_ * 8).map(_.toString)
+  val msg = "invalid input. please input benchmark array size"
+  (Space ~> NatBasic.examples(examples: _*)).? !!! msg
+}
+
+benchmark := {
+  val size = sizeParser.parsed.map(_.toString).toList
+  val cp = (fullClasspath in Test).value
+  (runner in Test).value.run("nobox.Benchmark", Build.data(cp), size, streams.value.log)
+}
+
