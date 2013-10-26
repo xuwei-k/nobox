@@ -162,6 +162,10 @@ object Benchmark {
 
     benchmark("scanRight", 0.2)(_.scanRight(0)(_ + _), _.scanRight(0)(_ + _))
 
+    benchmark("scanLeftInt")(_.scanLeft(0)(_ + _), _.scanLeftInt(0)(_ + _))
+
+    benchmark("scanRightInt", 0.2)(_.scanRight(0)(_ + _), _.scanRightInt(0)(_ + _))
+
     _exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 

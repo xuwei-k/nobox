@@ -285,14 +285,19 @@ object Test extends Properties("nobox"){
     }
   }
 
-  property("scanLeft") = forAll { (a: ofInt, z: Int) =>
-    a.scanLeft(z)(_ + _).self.toList must_== a.self.scanLeft(z)(_ + _).toList
-    a.scanLeft(z)(_ - _).self.toList must_== a.self.scanLeft(z)(_ - _).toList
+  property("scanLeftInt") = forAll { (a: ofInt, z: Int) =>
+    a.scanLeftInt(z)(_ - _).self.toList must_== a.self.scanLeft(z)(_ - _).toList
   }
 
-  property("scanRight") = forAll { (a: ofInt, z: Int) =>
-    a.scanRight(z)(_ + _).self.toList must_== a.self.scanRight(z)(_ + _).toList
-    a.scanRight(z)(_ - _).self.toList must_== a.self.scanRight(z)(_ - _).toList
+  property("scanRightInt") = forAll { (a: ofInt, z: Int) =>
+    a.scanRightInt(z)(_ - _).self.toList must_== a.self.scanRight(z)(_ - _).toList
   }
 
+  property("scanLeft") = forAll { (a: ofInt, z: List[Int]) =>
+    a.scanLeft(z)(_ :+ _).self.toList must_== a.self.scanLeft(z)(_ :+ _).toList
+  }
+
+  property("scanRight") = forAll { (a: ofInt, z: List[Int]) =>
+    a.scanRight(z)(_ :: _).self.toList must_== a.self.scanRight(z)(_ :: _).toList
+  }
 }

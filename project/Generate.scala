@@ -243,8 +243,38 @@ s"""
 """
     }
 
+    val scanLeft: String => String = { b =>
+s"""
+  def scanLeft$b(z: $b)(f: ($b, $a) => $b): of$b = {
+    val array = new Array[$b](self.length + 1)
+    array(0) = z
+    var i = 0
+    while(i < self.length){
+      array(i + 1) = f(array(i), self(i))
+      i += 1
+    }
+    new of$b(array)
+  }
+"""
+}
+
+    val scanRight: String => String = { b =>
+s"""
+  def scanRight$b(z: $b)(f: ($a, $b) => $b): of$b = {
+    val array = new Array[$b](self.length + 1)
+    array(self.length) = z
+    var i = self.length
+    while(i > 0){
+      array(i - 1) = f(self(i - 1), array(i))
+      i -= 1
+    }
+    new of$b(array)
+  }
+"""
+}
+
     val methods: String = List(
-      map, reverseMap, flatMap, collect, collectFirst, foldLeft, foldRight
+      map, reverseMap, flatMap, collect, collectFirst, foldLeft, foldRight, scanLeft, scanRight
     ).map{ method =>
       list.map(_.toString) map method mkString "\n"
     }.mkString("\n\n")
@@ -675,26 +705,26 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     }
   }
 
-  def scanLeft(z: $a)(f: ($a, $a) => $a): $clazz = {
-    val array = new Array[$a](self.length + 1)
+  def scanLeft[A: reflect.ClassTag](z: A)(f: (A, $a) => A): Array[A] = {
+    val array = new Array[A](self.length + 1)
     array(0) = z
     var i = 0
     while(i < self.length){
       array(i + 1) = f(array(i), self(i))
       i += 1
     }
-    new $clazz(array)
+    array
   }
 
-  def scanRight(z: $a)(f: ($a, $a) => $a): $clazz = {
-    val array = new Array[$a](self.length + 1)
+  def scanRight[A: reflect.ClassTag](z: A)(f: ($a, A) => A): Array[A] = {
+    val array = new Array[A](self.length + 1)
     array(self.length) = z
     var i = self.length
     while(i > 0){
       array(i - 1) = f(self(i - 1), array(i))
       i -= 1
     }
-    new $clazz(array)
+    array
   }
 
 }
