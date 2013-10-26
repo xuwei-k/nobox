@@ -34,7 +34,11 @@ object Benchmark {
 
     benchmark("map")(_.map(_ + 1), _.mapInt(_ + 1))
 
-    benchmark("reverseMap")(_.reverseMap(_ + 1), _.reverseMapInt(_ + 1))
+    benchmark("reverseMap 1")(_.reverseMap(_ + 1), _.reverseMapInt(_ + 1))
+
+    benchmark("reverseMap 2")(_.reverse.map(_ + 1), _.reverseMapInt(_ + 1))
+
+    exec("reverseMap 3", array2.reverse.mapInt(_ + 1), array2.reverseMapInt(_ + 1))
 
     benchmark("exists")(_.exists(_ == -1), _.exists(_ == -1))
 
