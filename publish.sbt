@@ -20,6 +20,7 @@ val updateReadme = { (state: State, v: String) =>
   IO.write(readmeFile, newReadme)
   Git.add(readme) ! state.log
   Git.commit("update " + readme) ! state.log
+  "git diff HEAD^" ! state.log
   state
 }
 
