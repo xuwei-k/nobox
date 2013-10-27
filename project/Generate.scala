@@ -585,6 +585,14 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     None
   }
 
+  def tailOption: Option[$clazz] = {
+    if(self.length != 0){
+      Some(drop(1))
+    }else{
+      None
+    }
+  }
+
   def tails: Iterator[$clazz] = new Iterator[$clazz]{
     private[this] var i = 0
     var hasNext = true
@@ -604,6 +612,14 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
       i -= 1
       if(i < 0) hasNext = false
       r
+    }
+  }
+
+  def initOption: Option[$clazz] = {
+    if(self.length != 0){
+      Some(dropRight(1))
+    }else{
+      None
     }
   }
 

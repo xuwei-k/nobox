@@ -251,6 +251,20 @@ object Test extends Properties("nobox"){
     a.inits.map(_.self.toSeq).toList must_== a.self.inits.map(_.toSeq).toList
   }
 
+  property("tailOption") = forAll { a: ofInt =>
+    a.tailOption.map(_.self.toSeq) must_== (
+      if(a.self.isEmpty) None
+      else Some(a.self.tail.toSeq)
+    )
+  }
+
+  property("initOption") = forAll { a: ofInt =>
+    a.initOption.map(_.self.toSeq) must_== (
+      if(a.self.isEmpty) None
+      else Some(a.self.init.toSeq)
+    )
+  }
+
   property("grouped") = forAll { (a: ofInt, n: Int) =>
     if(n > 0){
       a.grouped(n).map(_.self.toSeq).toList must_== a.self.grouped(n).map(_.toSeq).toList

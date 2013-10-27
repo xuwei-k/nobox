@@ -150,6 +150,10 @@ object Benchmark {
 
     benchmark("inits", 0.0005)(_.inits.size, _.inits.size)
 
+    benchmark("tailOption")(_.tail, _.tailOption)
+
+    benchmark("initOption")(_.init, _.initOption)
+
     List(50, 10000, 2000000).foreach{ n =>
       benchmark("grouped " + n, 0.2)(_.grouped(n).size, _.grouped(n).size)
     }
