@@ -732,6 +732,12 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     array
   }
 
+  def sortBy[B](f: $a => B)(implicit ord: Ordering[B]): $clazz = {
+    val arr = self.clone
+    scala.util.Sorting.quickSort[$a](arr)(ord on f)
+    new $clazz(arr)
+  }
+
 }
 
 object $clazz {

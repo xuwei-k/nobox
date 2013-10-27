@@ -166,6 +166,8 @@ object Benchmark {
 
     benchmark("scanRightInt", 0.2)(_.scanRight(0)(_ + _), _.scanRightInt(0)(_ + _))
 
+    benchmark("sortBy", 0.01)(_.sortBy(x => -x), _.sortBy(x => -x))
+
     _exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 
