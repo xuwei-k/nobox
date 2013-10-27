@@ -829,6 +829,16 @@ object $clazz {
     }
   }
 
+  def tabulate(n: Int)(f: Int => $a): $clazz = {
+    val array = new Array[$a](n)
+    var i = 0
+    while (i < n) {
+      array(i) = f(i)
+      i += 1
+    }
+    new $clazz(array)
+  }
+
 }
 """
   }

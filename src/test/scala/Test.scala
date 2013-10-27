@@ -344,4 +344,8 @@ object Test extends Properties("nobox"){
   property("iterate") = forAll { (start: Int, size: Byte) =>
     ofInt.iterate(start, size.toInt.abs)(_ + 1).self must_=== Array.iterate(start, size.toInt.abs)(_ + 1)
   }
+
+  property("tabulate") = forAll { size: Byte =>
+    ofInt.tabulate(size.toInt.abs)(_ + 1).self must_=== Array.tabulate(size.toInt.abs)(_ + 1)
+  }
 }

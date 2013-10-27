@@ -176,6 +176,8 @@ object Benchmark {
 
     benchmark("iterate")(_ => Array.iterate(0, size)(_ + 1), _ => ofInt.iterate(0, size)(_ + 1))
 
+    benchmark("tabulate")(_ => Array.tabulate(size)(_ + 1), _ => ofInt.tabulate(size)(_ + 1))
+
     _exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 
