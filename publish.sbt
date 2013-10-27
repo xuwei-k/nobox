@@ -1,7 +1,7 @@
 import sbtrelease._
 import ReleaseStateTransformations._
 
-bintraySettings
+bintrayPublishSettings
 
 bintray.Keys.packageLabels in bintray.Keys.bintray := Seq("array", "collection")
 
