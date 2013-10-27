@@ -8,10 +8,12 @@ object Generate{
   val list = List(BOOL, BYTE, CHAR, SHORT, INT, LONG, FLOAT, DOUBLE)
 
   def apply(dir: File): Seq[File] = {
-    list.map{ t =>
-      val f = dir / ("of" + t + ".scala")
-      IO.write(f, src(t))
-      f
+    list.flatMap{ t =>
+      val f1 = dir / ("of" + t + ".scala")
+      IO.write(f1, src(t))
+      val f2 = dir / (t + "ArrayBuilder.scala")
+      IO.write(f2, ArrayBuilder(t.toString))
+      Seq(f1, f2)
     }
   }
 
@@ -51,18 +53,13 @@ s"""
     val flatMap: String => String = { b =>
 s"""
   def flatMap$b(f: $a => Array[$b]): of$b = {
-    val builder = new ArrayBuilder.of$b()
+    val builder = new ArrayBuilder$b
     var i = 0
     while(i < self.length){
-      val x = f(self(i))
-      var j = 0
-      while(j < x.length){
-        builder += x(j)
-        j += 1
-      }
+      builder ++= f(self(i))
       i += 1
     }
-    new of$b(builder.result)
+    builder.result()
   }
 """
     }
@@ -70,7 +67,7 @@ s"""
     val collect: String => String = { b =>
 s"""
   def collect$b(f: PartialFunction[$a, $b]): of$b = {
-    val builder = new ArrayBuilder.of$b()
+    val builder = new ArrayBuilder$b
     var i = 0
     while(i < self.length){
       if(f isDefinedAt self(i)){
@@ -78,7 +75,7 @@ s"""
       }
       i += 1
     }
-    new of$b(builder.result)
+    builder.result()
   }
 """
     }
@@ -282,7 +279,6 @@ s"""
 s"""package nobox
 
 import java.util.Arrays
-import scala.collection.mutable.ArrayBuilder
 
 final class $clazz (val self: Array[$a]) extends AnyVal {
   $methods
@@ -300,7 +296,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
   $sorted
 
   def filter(f: $a => Boolean): $clazz = {
-    val builder = new ArrayBuilder.of$a()
+    val builder = new ArrayBuilder$a
     var i = 0
     while(i < self.length){
       if(f(self(i))){
@@ -308,7 +304,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
       }
       i += 1
     }
-    new $clazz(builder.result)
+    builder.result()
   }
 
   def filterNot(f: $a => Boolean): $clazz = filter(!f(_))
@@ -489,7 +485,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
   }
 
   def partition(f: $a => Boolean): ($clazz, $clazz) = {
-    val l, r = new ArrayBuilder.of$a()
+    val l, r = new ArrayBuilder$a
     var i = 0
     while(i < self.length){
       if(f(self(i))){
@@ -499,7 +495,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
       }
       i += 1
     }
-    (new $clazz(l.result), new $clazz(r.result))
+    (l.result, r.result)
   }
 
   @throws[IndexOutOfBoundsException]
