@@ -813,6 +813,22 @@ object $clazz {
   def apply(elems: $a *): $clazz = new $clazz(elems.toArray)
 
   val empty: $clazz = new $clazz(new Array[$a](0))
+
+  def iterate(start: $a, len: Int)(f: $a => $a): of$a = {
+    if(len == 0){
+      empty
+    }else{
+      val array = new Array[$a](len)
+      var i = 1
+      array(0) = start
+      while (i < len) {
+        array(i) = f(array(i - 1))
+        i += 1
+      }
+      new $clazz(array)
+    }
+  }
+
 }
 """
   }

@@ -340,4 +340,8 @@ object Test extends Properties("nobox"){
   property("endsWith") = forAll { (a: ofInt, b: ofInt) =>
     a.endsWith(b.self) must_== a.self.endsWith(b.self)
   }
+
+  property("iterate") = forAll { (start: Int, size: Byte) =>
+    ofInt.iterate(start, size.toInt.abs)(_ + 1).self must_=== Array.iterate(start, size.toInt.abs)(_ + 1)
+  }
 }

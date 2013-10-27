@@ -174,6 +174,8 @@ object Benchmark {
 
     benchmark("endsWith")(a => a.endsWith(a), a => a.endsWith(a.self))
 
+    benchmark("iterate")(_ => Array.iterate(0, size)(_ + 1), _ => ofInt.iterate(0, size)(_ + 1))
+
     _exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 
