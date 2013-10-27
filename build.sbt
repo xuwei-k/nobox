@@ -43,7 +43,7 @@ val seqMethods: Set[String] = classOf[Seq[_]].getMethods.map(_.getName).filterNo
 val benchmarkArgsParser = {
   import sbt.complete.Parser._
   import sbt.complete.Parsers._
-  val msg = "invalid input. please input benchmark array size"
+  val msg = "invalid input. please input benchmark method names and/or array size"
   val names = (Space ~> ScalaID.examples(seqMethods)).*
   val size = (Space ~> NatBasic.examples().map(_.toString)).?
   (names ~ size).map{case (n, s) => s.toList ++ n} !!! msg
