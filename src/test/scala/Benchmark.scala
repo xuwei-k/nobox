@@ -67,7 +67,15 @@ object Benchmark {
 
     benchmark("sorted")(_.sorted, _.sorted)
 
-    benchmark("flatMap")(_.flatMap(n => Array(n, n, n)), _.flatMapInt(n => Array(n, n, n)))
+    {
+      val z = 2
+      (0 to 5).map(n => Array.fill(n)(1.0 / z).product -> Array.fill(n)(z).product).foreach{
+        case (x, y) =>
+        println(((size * x).toInt, y))
+        val array = new Array[Int](y)
+        benchmark("flatMap", x)(_.flatMap(n => array), _.flatMapInt(n => array))
+      }
+    }
 
     benchmark("collect")(
       _.collect{case n if n > 10 => n + 1},
