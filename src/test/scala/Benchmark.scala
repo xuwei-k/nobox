@@ -170,6 +170,8 @@ object Benchmark {
 
     benchmark("scanRightInt", 0.2)(_.scanRight(0)(_ + _), _.scanRightInt(0)(_ + _))
 
+    benchmark("startsWith")(a => a.startsWith(a), a => a.startsWith(a.self))
+
     _exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 

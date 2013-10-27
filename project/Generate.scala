@@ -778,6 +778,18 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     }
   }
 
+  def startsWith(that: Array[$a], offset: Int = 0): Boolean = {
+    require(offset >= 0, "offset = " + offset  + " is invalid. offset must be positive")
+    var i = offset
+    var j = 0
+    val thisLen = self.length
+    val thatLen = that.length
+    while (i < thisLen && j < thatLen && self(i) == that(j)) {
+      i += 1
+      j += 1
+    }
+    j == thatLen
+  }
 }
 
 object $clazz {
