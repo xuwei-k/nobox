@@ -790,6 +790,22 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     }
     j == thatLen
   }
+
+  def endsWith(that: Array[$a]): Boolean = {
+    var i = length - 1
+    var j = that.length - 1
+
+    (j <= i) && {
+      while (j >= 0){
+        if(self(i) != that(j)){
+          return false
+        }
+        i -= 1
+        j -= 1
+      }
+      true
+    }
+  }
 }
 
 object $clazz {

@@ -336,4 +336,8 @@ object Test extends Properties("nobox"){
       a.startsWith(b.self, n).mustThrowA[IllegalArgumentException]
     }
   }
+
+  property("endsWith") = forAll { (a: ofInt, b: ofInt) =>
+    a.endsWith(b.self) must_== a.self.endsWith(b.self)
+  }
 }

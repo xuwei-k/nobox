@@ -172,6 +172,8 @@ object Benchmark {
 
     benchmark("startsWith")(a => a.startsWith(a), a => a.startsWith(a.self))
 
+    benchmark("endsWith")(a => a.endsWith(a), a => a.endsWith(a.self))
+
     _exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
 
