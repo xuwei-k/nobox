@@ -142,11 +142,15 @@ object Benchmark {
 
     benchmark("foldLeftInt")(_.foldLeft(0)(_ + _), _.foldLeftInt(0)(_ + _))
 
-    benchmark("foldLeft")(_.foldLeft(0)(_ + _), _.foldLeftAny(0)(_ + _))
+    benchmark("foldLeftAny")(_.foldLeft(0)(_ + _), _.foldLeftAny(0)(_ + _))
+
+    benchmark("foldLeft")(_.foldLeft(0)(_ + _), _.foldLeft(0)(_ + _))
 
     benchmark("foldRightInt")(_.foldRight(0)(_ + _), _.foldRightInt(0)(_ + _))
 
-    benchmark("foldRight")(_.foldRight(0)(_ + _), _.foldRightAny(0)(_ + _))
+    benchmark("foldRightAny")(_.foldRight(0)(_ + _), _.foldRightAny(0)(_ + _))
+
+    benchmark("foldRight")(_.foldRight(0)(_ + _), _.foldRight(0)(_ + _))
 
     benchmark("indexOf")(_.indexOf(-1), _.indexOf(-1))
 

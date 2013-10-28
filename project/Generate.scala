@@ -82,6 +82,36 @@ $cases
 """
     }
 
+    val foldLeft0: String = {
+      val cases: String = list.map{ b =>
+        s"      case ClassTag.$b => foldLeft$b(z.asInstanceOf[$b])(f.asInstanceOf[($b, $a) => $b])"
+      }.mkString("\n")
+
+s"""
+  def foldLeft[A](z: A)(f: (A, $a) => A)(implicit A: ClassTag[A]): A = {
+    (A match {
+$cases
+      case _ => self.foldLeft(z)(f)
+    }).asInstanceOf[A]
+  }
+"""
+    }
+
+    val foldRight0: String = {
+      val cases: String = list.map{ b =>
+        s"      case ClassTag.$b => foldRight$b(z.asInstanceOf[$b])(f.asInstanceOf[($a, $b) => $b])"
+      }.mkString("\n")
+
+s"""
+  def foldRight[A](z: A)(f: ($a, A) => A)(implicit A: ClassTag[A]): A = {
+    (A match {
+$cases
+      case _ => self.foldRight(z)(f)
+    }).asInstanceOf[A]
+  }
+"""
+    }
+
     val map: String => String = { b =>
 s"""
   def map$b(f: $a => $b): of$b = {
@@ -370,6 +400,10 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
   $reverseMap0
 
   $collect0
+
+  $foldLeft0
+
+  $foldRight0
 
   def foreach[U](f: $a => U): Unit = {
     var i = 0
