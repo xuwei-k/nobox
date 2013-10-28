@@ -44,6 +44,9 @@ object Test extends Properties("nobox"){
   implicit val ofIntArb: Arbitrary[ofInt] =
     Arbitrary(implicitly[Arbitrary[Array[Int]]].arbitrary.map(array => ofInt(array: _*)))
 
+  implicit val ofByteArb: Arbitrary[ofByte] =
+    Arbitrary(implicitly[Arbitrary[Array[Byte]]].arbitrary.map(array => ofByte(array: _*)))
+
   implicit val ofFloatArb: Arbitrary[ofFloat] =
     Arbitrary(implicitly[Arbitrary[Array[Float]]].arbitrary.map(array => ofFloat(array: _*)))
 
@@ -371,5 +374,24 @@ object Test extends Properties("nobox"){
     a.self.groupBy(_ % x).map{case (k, v) => k -> v.toList} must_== (
       a.groupBy(_ % x).map{case (k, v) => k -> v.self.toList}
     )
+  }
+
+  property("for comprehension") = forAll { (xs: ofInt, ys: ofByte) =>
+    val a = for{ x <- xs.self; if x % 2 == 0; y <- ys.self } yield (x, y)
+    val b = for{ x <- xs; if x % 2 == 0; y <- ys } yield (x, y)
+
+    a must_=== b
+
+    val buf1, buf2 = List.newBuilder[(Int, Byte)]
+
+    for{
+      x <- xs.self; if x % 2 == 0; y <- ys.self
+    }{ buf1 += ((x, y)) }
+
+    for{
+      x <- xs; if x % 2 == 0; y <- ys
+    }{ buf2 += ((x, y)) }
+
+    buf1.result must_== buf2.result
   }
 }
