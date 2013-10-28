@@ -80,14 +80,26 @@ object Test extends Properties("nobox"){
     a.forall(f) must_== a.self.forall(f)
   }
 
-  property("map") = forAll { a: ofInt =>
+  property("mapInt") = forAll { a: ofInt =>
     val f = {i: Int => i - 1 }
     a.mapInt(f).self must_=== a.self.map(f)
   }
 
-  property("reverseMap") = forAll { a: ofInt =>
+  property("map") = forAll { a: ofInt =>
+    val f = (_:Int).toString
+    a.map(f) must_=== a.self.map(f)
+  }
+
+  property("reverseMapInt") = forAll { a: ofInt =>
     val f = {i: Int => i * 2 }
     a.reverseMapInt(f).self must_=== a.self.reverseMap(f)
+  }
+
+  property("reverseMap") = forAll { a: ofInt =>
+    val f1 = (_:Int).toString
+    val f2 = (_:Int).toByte
+    a.reverseMap(f1).self must_=== a.self.reverseMap(f1)
+    a.reverseMap(f2).self must_=== a.self.reverseMap(f2)
   }
 
   property("reverse.reverse") = forAll { a: ofInt =>

@@ -19,6 +19,69 @@ object Generate{
 
     val clazz = "of" + a
 
+    val map0: String = {
+
+      val cases: String = list.map{ b =>
+        s"      case ClassTag.$b => map$b(f.asInstanceOf[$a => $b]).self"
+      }.mkString("\n")
+
+s"""
+  def map[A](f: $a => A)(implicit A: ClassTag[A]): Array[A] = {
+    (A match {
+$cases
+      case _ => self.map(f)
+    }).asInstanceOf[Array[A]]
+  }
+"""
+    }
+
+    val flatMap0: String = {
+
+      val cases: String = list.map{ b =>
+        s"      case ClassTag.$b => flatMap$b(f.asInstanceOf[$a => Array[$b]]).self"
+      }.mkString("\n")
+
+s"""
+  def flatMap[A](f: $a => Array[A])(implicit A: ClassTag[A]): Array[A] = {
+    (A match {
+$cases
+      case _ => self.flatMap(x => f(x))
+    }).asInstanceOf[Array[A]]
+  }
+"""
+    }
+
+    val reverseMap0: String = {
+
+      val cases: String = list.map{ b =>
+        s"      case ClassTag.$b => reverseMap$b(f.asInstanceOf[$a => $b]).self"
+      }.mkString("\n")
+
+s"""
+  def reverseMap[A](f: $a => A)(implicit A: ClassTag[A]): Array[A] = {
+    (A match {
+$cases
+      case _ => self.reverseMap(f)
+    }).asInstanceOf[Array[A]]
+  }
+"""
+    }
+
+    val collect0: String = {
+      val cases: String = list.map{ b =>
+        s"      case ClassTag.$b => collect$b(f.asInstanceOf[PartialFunction[$a, $b]]).self"
+      }.mkString("\n")
+
+s"""
+  def collect[A](f: PartialFunction[$a, A])(implicit A: ClassTag[A]): Array[A] = {
+    (A match {
+$cases
+      case _ => self.collect(f)
+    }).asInstanceOf[Array[A]]
+  }
+"""
+    }
+
     val map: String => String = { b =>
 s"""
   def map$b(f: $a => $b): of$b = {
@@ -282,6 +345,7 @@ s"""
 s"""package nobox
 
 import java.util.Arrays
+import scala.reflect.ClassTag
 import scala.collection.mutable.ArrayBuilder
 
 final class $clazz (val self: Array[$a]) extends AnyVal {
@@ -298,6 +362,22 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
   $productDouble
 
   $sorted
+
+  $map0
+
+  $flatMap0
+
+  $reverseMap0
+
+  $collect0
+
+  def foreach[U](f: $a => U): Unit = {
+    var i = 0
+    while(i < self.length){
+      f(self(i))
+      i += 1
+    }
+  }
 
   def filter(f: $a => Boolean): $clazz = {
     val builder = new ArrayBuilder.of$a()

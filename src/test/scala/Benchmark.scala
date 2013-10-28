@@ -47,13 +47,19 @@ object Benchmark {
       _exec(name, f1(a1), f2(a2))
     }
 
+    benchmark("foreach")(_.foreach(_ + 1), _.foreach(_ + 1))
+
     benchmark("map")(_.map(_ + 1), _.mapInt(_ + 1))
 
-    benchmark("reverseMap 1")(_.reverseMap(_ + 1), _.reverseMapInt(_ + 1))
+    benchmark("map")(_.map(_ + 1), _.map(_ + 1))
 
-    benchmark("reverseMap 2")(_.reverse.map(_ + 1), _.reverseMapInt(_ + 1))
+    benchmark("reverseMap")(_.reverseMap(_ + 1), _.reverseMapInt(_ + 1))
 
-    _exec("reverseMap 3", array2.reverse.mapInt(_ + 1), array2.reverseMapInt(_ + 1))
+    benchmark("reverseMap")(_.reverse.map(_ + 1), _.reverseMapInt(_ + 1))
+
+    benchmark("reverseMap")(_.reverseMap(_ + 1), _.reverseMap(_ + 1))
+
+    _exec("reverseMap", array2.reverse.mapInt(_ + 1), array2.reverseMapInt(_ + 1))
 
     benchmark("exists")(_.exists(_ == -1), _.exists(_ == -1))
 
@@ -69,9 +75,16 @@ object Benchmark {
 
     benchmark("flatMap")(_.flatMap(n => Array(n, n, n)), _.flatMapInt(n => Array(n, n, n)))
 
-    benchmark("collect")(
+    benchmark("flatMap")(_.flatMap(n => Array(n, n, n)), _.flatMap(n => Array(n, n, n)))
+
+    benchmark("collectInt")(
       _.collect{case n if n > 10 => n + 1},
       _.collectInt{case n if n > 10 => n + 1}
+    )
+
+    benchmark("collect")(
+      _.collect{case n if n > 10 => n + 1},
+      _.collect{case n if n > 10 => n + 1}
     )
 
     benchmark("collectFirst")(
