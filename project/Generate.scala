@@ -623,7 +623,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     Some(acc)
   }
 
-  def foldLeft[A](z: A)(f: (A, $a) => A): A = {
+  def foldLeftAny[A](z: A)(f: (A, $a) => A): A = {
     var i = 0
     var acc = z
     while(i < self.length){
@@ -633,7 +633,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     acc
   }
 
-  def foldRight[A](z: A)(f: ($a, A) => A): A = {
+  def foldRightAny[A](z: A)(f: ($a, A) => A): A = {
     var i = self.length - 1
     var acc = z
     while(i >= 0){

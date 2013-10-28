@@ -232,7 +232,7 @@ object Test extends Properties("nobox"){
   }
 
   property("foldLeft") = forAll { (a: ofInt, z: List[Int]) =>
-    a.foldLeft(z.toVector)(_ :+ _) must_== a.self.foldLeft(z.toVector)(_ :+ _)
+    a.foldLeftAny(z.toVector)(_ :+ _) must_== a.self.foldLeft(z.toVector)(_ :+ _)
   }
 
   property("foldRightLong") = forAll { (a: ofInt, z: Long) =>
@@ -240,7 +240,7 @@ object Test extends Properties("nobox"){
   }
 
   property("foldRight") = forAll { (a: ofInt, z: List[Int]) =>
-    a.foldRight(z)(_ :: _) must_== a.self.foldRight(z)(_ :: _)
+    a.foldRightAny(z)(_ :: _) must_== a.self.foldRight(z)(_ :: _)
   }
 
   property("indexOf") = forAll { (a: ofInt, z: Int) =>
