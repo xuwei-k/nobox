@@ -299,6 +299,14 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
 
   $sorted
 
+  def foreach[U](f: $a => U): Unit = {
+    var i = 0
+    while(i < self.length){
+      f(self(i))
+      i += 1
+    }
+  }
+
   def filter(f: $a => Boolean): $clazz = {
     val builder = new ArrayBuilder.of$a()
     var i = 0

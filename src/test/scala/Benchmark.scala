@@ -47,6 +47,8 @@ object Benchmark {
       _exec(name, f1(a1), f2(a2))
     }
 
+    benchmark("foreach")(_.foreach(_ + 1), _.foreach(_ + 1))
+
     benchmark("map")(_.map(_ + 1), _.mapInt(_ + 1))
 
     benchmark("reverseMap 1")(_.reverseMap(_ + 1), _.reverseMapInt(_ + 1))
