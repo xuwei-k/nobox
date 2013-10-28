@@ -52,6 +52,6 @@ val benchmarkArgsParser = {
 benchmark := {
   val args = benchmarkArgsParser.parsed
   val cp = (fullClasspath in Test).value
-  (runner in Test).value.run("nobox.Benchmark", Build.data(cp), args, streams.value.log)
+  (runner in Test).value.run("nobox.IntBenchmark", Build.data(cp), args, streams.value.log)
 }
 
