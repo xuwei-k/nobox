@@ -941,7 +941,10 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
 
 object $clazz {
 
-  def apply(elems: $a *): $clazz = new $clazz(elems.toArray)
+  def apply(elems: $a *): $clazz = elems match{
+    case a: collection.mutable.WrappedArray.of$a => new $clazz(a.array)
+    case _ => new $clazz(elems.toArray)
+  }
 
   val empty: $clazz = new $clazz(new Array[$a](0))
 
