@@ -839,6 +839,26 @@ object $clazz {
     new $clazz(array)
   }
 
+  def flatten(xs: Array[Array[$a]]): $clazz = {
+    var i = 0
+    var n = 0
+    val length = xs.length
+    while(i < length){
+      n += xs(i).length
+      i += 1
+    }
+    val array = new Array[$a](n)
+    i = 0
+    n = 0
+    while(i < length){
+      val elem = xs(i)
+      System.arraycopy(elem, 0, array, n, elem.length)
+      n += elem.length
+      i += 1
+    }
+    new $clazz(array)
+  }
+
 }
 """
   }

@@ -348,4 +348,9 @@ object Test extends Properties("nobox"){
   property("tabulate") = forAll { size: Byte =>
     ofInt.tabulate(size.toInt.abs)(_ + 1).self must_=== Array.tabulate(size.toInt.abs)(_ + 1)
   }
+
+  property("flatten") = forAll { xs: Array[Array[Int]] =>
+    xs.flatten must_=== ofInt.flatten(xs).self
+    Array.concat(xs: _*) must_=== ofInt.flatten(xs).self
+  }
 }

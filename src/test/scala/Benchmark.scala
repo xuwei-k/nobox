@@ -141,7 +141,7 @@ object Benchmark {
 
     val array3 = array1.clone
     val array4 = new ofInt(array2.self.clone)
-
+      
     benchmark("===")(_ sameElements array3, _ === array4)
 
     benchmark("mkString", 0.2)(_ mkString ",", _ mkString ",")
@@ -177,6 +177,13 @@ object Benchmark {
     benchmark("iterate")(_ => Array.iterate(0, size)(_ + 1), _ => ofInt.iterate(0, size)(_ + 1))
 
     benchmark("tabulate")(_ => Array.tabulate(size)(_ + 1), _ => ofInt.tabulate(size)(_ + 1))
+
+    List(50, 10000, 2000000).foreach{ n =>
+      println(n)
+      val x = array2.sliding(n, n).map(_.self).toArray
+      _exec("flatten", x.flatten, ofInt.flatten(x))
+      _exec("flatten", Array.concat(x : _*), ofInt.flatten(x))
+    }
 
     _exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
   }
