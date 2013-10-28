@@ -184,6 +184,12 @@ object Benchmark {
 
     benchmark("scanRight", 0.2)(_.scanRight(0)(_ + _), _.scanRight(0)(_ + _))
 
+    {
+      val array3 = array1.take(array1.length / 100).map(a => a: java.lang.Integer)
+      val array4 = new ofRef(array3)
+      _exec("scanRight-ofRef", array3.scanRight(0)(_ + _), array4.scanRight(0)(_ + _))
+    }
+
     benchmark("scanLeftInt")(_.scanLeft(0)(_ + _), _.scanLeftInt(0)(_ + _))
 
     benchmark("scanRightInt", 0.2)(_.scanRight(0)(_ + _), _.scanRightInt(0)(_ + _))
