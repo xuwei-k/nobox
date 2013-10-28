@@ -353,4 +353,11 @@ object Test extends Properties("nobox"){
     xs.flatten must_=== ofInt.flatten(xs).self
     Array.concat(xs: _*) must_=== ofInt.flatten(xs).self
   }
+
+  property("groupBy") = forAll { (a: ofInt, n: Byte) =>
+    val x = n.toInt.abs + 1
+    a.self.groupBy(_ % x).map{case (k, v) => k -> v.toList} must_== (
+      a.groupBy(_ % x).map{case (k, v) => k -> v.self.toList}
+    )
+  }
 }

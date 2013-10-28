@@ -806,6 +806,23 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
       true
     }
   }
+
+  def groupBy[A](f: $a => A): Map[A, $clazz] = {
+    val m = collection.mutable.Map.empty[A, ArrayBuilder.of$a]
+    var i = 0
+    while(i < self.length){
+      val key = f(self(i))
+      m.getOrElseUpdate(key, new ArrayBuilder.of$a) += self(i)
+      i += 1
+    }
+
+    val b = Map.newBuilder[A, $clazz]
+    m.foreach{ case (k, v) =>
+      b += ((k, new $clazz(v.result)))
+    }
+
+    b.result
+  }
 }
 
 object $clazz {

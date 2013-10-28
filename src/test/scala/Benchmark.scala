@@ -180,7 +180,10 @@ object Benchmark {
     benchmark("tabulate")(_ => Array.tabulate(size)(_ + 1), _ => ofInt.tabulate(size)(_ + 1))
 
     List(50, 10000, 2000000).foreach{ n =>
-      println(n)
+      benchmark("groupBy")(_.groupBy(_ % n), _.groupBy(_ % n))
+    }
+
+    List(50, 10000, 2000000).foreach{ n =>
       lazy val x = array2.sliding(n, n).map(_.self).toArray
       _exec("flatten", x.flatten, ofInt.flatten(x))
       _exec("flatten", Array.concat(x : _*), ofInt.flatten(x))
