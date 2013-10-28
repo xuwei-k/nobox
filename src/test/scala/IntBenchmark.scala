@@ -17,54 +17,54 @@ object IntBenchmark extends Benchmark{
 
     benchmark("foreach")(_.foreach(_ + 1), _.foreach(_ + 1))
 
-    benchmark("map")(_.map(_ + 1), _.mapInt(_ + 1))
+    benchmark("map")(_.map(_ + 1), _.mapInt(_ + 1).self)
 
-    benchmark("map")(_.map(_ + 1), _.map(_ + 1))
+    benchmark("map")(_.map(_ + 1), _.map(_ + 1).self)
 
-    benchmark("reverseMap")(_.reverseMap(_ + 1), _.reverseMapInt(_ + 1))
+    benchmark("reverseMap")(_.reverseMap(_ + 1), _.reverseMapInt(_ + 1).self)
 
-    benchmark("reverseMap")(_.reverse.map(_ + 1), _.reverseMapInt(_ + 1))
+    benchmark("reverseMap")(_.reverse.map(_ + 1), _.reverseMapInt(_ + 1).self)
 
-    benchmark("reverseMap")(_.reverseMap(_ + 1), _.reverseMap(_ + 1))
+    benchmark("reverseMap")(_.reverseMap(_ + 1), _.reverseMap(_ + 1).self)
 
-    _exec("reverseMap", array2.reverse.mapInt(_ + 1), array2.reverseMapInt(_ + 1))
+    _exec("reverseMap", array2.reverse.mapInt(_ + 1), array2.reverseMapInt(_ + 1).self)
 
     benchmark("exists")(_.exists(_ == -1), _.exists(_ == -1))
 
     benchmark("contains")(_.contains(-1), _.contains(-1))
 
-    benchmark("filter")(_.filter(_ % 2 == 0), _.filter(_ % 2 == 0))
+    benchmark("filter")(_.filter(_ % 2 == 0), _.filter(_ % 2 == 0).self)
 
     benchmark("find")(_.find(_ == -1), _.find(_ == -1))
 
-    benchmark("reverse")(_.reverse, _.reverse)
+    benchmark("reverse")(_.reverse, _.reverse.self)
 
-    benchmark("sorted")(_.sorted, _.sorted)
+    benchmark("sorted")(_.sorted, _.sorted.self)
 
-    benchmark("flatMap")(_.flatMap(n => Array(n, n, n)), _.flatMapInt(n => Array(n, n, n)))
+    benchmark("flatMap")(_.flatMap(n => Array(n, n, n)), _.flatMapInt(n => Array(n, n, n)).self)
 
-    benchmark("flatMap")(_.flatMap(n => Array(n, n, n)), _.flatMap(n => Array(n, n, n)))
+    benchmark("flatMap")(_.flatMap(n => Array(n, n, n)), _.flatMap(n => Array(n, n, n)).self)
 
     benchmark("collectInt")(
       _.collect{case n if n > 10 => n + 1},
-      _.collectInt{case n if n > 10 => n + 1}
+      _.collectInt{case n if n > 10 => n + 1}.self
     )
 
     benchmark("collect")(
       _.collect{case n if n > 10 => n + 1},
-      _.collect{case n if n > 10 => n + 1}
+      _.collect{case n if n > 10 => n + 1}.self
     )
 
     benchmark("collectFirst")(
-      _.collect{case 1 => 2},
-      _.collectInt{case 1 => 2}
+      _.collectFirst{case 1 => 2},
+      _.collectFirstInt{case 1 => 2}.self
     )
 
-    benchmark("takeWhile")(_.takeWhile(_ > 1), _.takeWhile(_ > 1))
+    benchmark("takeWhile")(_.takeWhile(_ > 1), _.takeWhile(_ > 1).self)
 
-    benchmark("take")(_.take(size / 2), _.take(size / 2))
+    benchmark("take")(_.take(size / 2), _.take(size / 2).self)
 
-    benchmark("takeRight")(_.takeRight(size / 2), _.takeRight(size / 2))
+    benchmark("takeRight")(_.takeRight(size / 2), _.takeRight(size / 2).self)
 
     benchmark("splitAt")(_.splitAt((size / 1.5).toInt), _.splitAt((size / 1.5).toInt))
 
@@ -90,17 +90,17 @@ object IntBenchmark extends Benchmark{
 
     benchmark("productDouble 3")(_.map(_.toDouble).product, _.productDouble)
 
-    benchmark("++")(a => a ++ a ++ a ++ a, a => a ++ a ++ a ++ a)
+    benchmark("++")(a => a ++ a ++ a ++ a, a => (a ++ a ++ a ++ a).self)
 
     benchmark("count")(_.count(_ % 10 != 0), _.count(_ % 10 != 0))
 
-    benchmark("updated")(_.updated(size / 2, 0), _.updated(size / 2, 0))
+    benchmark("updated")(_.updated(size / 2, 0), _.updated(size / 2, 0).self)
 
-    benchmark("drop")(_.drop(100), _.drop(100))
+    benchmark("drop")(_.drop(100), _.drop(100).self)
 
-    benchmark("dropRight")(_.dropRight(100), _.dropRight(100))
+    benchmark("dropRight")(_.dropRight(100), _.dropRight(100).self)
 
-    benchmark("slice")(_.slice(10, size - 10), _.slice(10, size - 10))
+    benchmark("slice")(_.slice(10, size - 10), _.slice(10, size - 10).self)
 
     benchmark("partition")(_.partition(_ > (size / 4)), _.partition(_ > (size / 4)))
 
@@ -136,9 +136,9 @@ object IntBenchmark extends Benchmark{
 
     benchmark("inits", 0.0005)(_.inits.size, _.inits.size)
 
-    benchmark("tailOption")(_.tail, _.tailOption)
+    benchmark("tailOption")(_.tail, _.tailOption.get)
 
-    benchmark("initOption")(_.init, _.initOption)
+    benchmark("initOption")(_.init, _.initOption.get)
 
     List(50, 10000, 2000000).foreach{ n =>
       benchmark("grouped " + n, 0.2)(_.grouped(n).size, _.grouped(n).size)
@@ -148,21 +148,21 @@ object IntBenchmark extends Benchmark{
 
     benchmark("min")(_.min, _.min)
 
-    benchmark("scanLeft")(_.scanLeft(0)(_ + _), _.scanLeft(0)(_ + _))
+    benchmark("scanLeft")(_.scanLeft(0)(_ + _), _.scanLeft(0)(_ + _).self)
 
-    benchmark("scanRight", 0.2)(_.scanRight(0)(_ + _), _.scanRight(0)(_ + _))
+    benchmark("scanRight", 0.2)(_.scanRight(0)(_ + _), _.scanRight(0)(_ + _).self)
 
-    benchmark("scanLeftInt")(_.scanLeft(0)(_ + _), _.scanLeftInt(0)(_ + _))
+    benchmark("scanLeftInt")(_.scanLeft(0)(_ + _), _.scanLeftInt(0)(_ + _).self)
 
-    benchmark("scanRightInt", 0.2)(_.scanRight(0)(_ + _), _.scanRightInt(0)(_ + _))
+    benchmark("scanRightInt", 0.2)(_.scanRight(0)(_ + _), _.scanRightInt(0)(_ + _).self)
 
     benchmark("startsWith")(a => a.startsWith(a), a => a.startsWith(a.self))
 
     benchmark("endsWith")(a => a.endsWith(a), a => a.endsWith(a.self))
 
-    benchmark("iterate")(_ => Array.iterate(0, size)(_ + 1), _ => ofInt.iterate(0, size)(_ + 1))
+    benchmark("iterate")(_ => Array.iterate(0, size)(_ + 1), _ => ofInt.iterate(0, size)(_ + 1).self)
 
-    benchmark("tabulate")(_ => Array.tabulate(size)(_ + 1), _ => ofInt.tabulate(size)(_ + 1))
+    benchmark("tabulate")(_ => Array.tabulate(size)(_ + 1), _ => ofInt.tabulate(size)(_ + 1).self)
 
     List(50, 10000, 2000000).foreach{ n =>
       benchmark("groupBy")(_.groupBy(_ % n), _.groupBy(_ % n))

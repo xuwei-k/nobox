@@ -25,21 +25,22 @@ trait Benchmark {
     override def toString = (size, names, array1.getClass, array2.getClass).toString
   }
 
-  def time[A](action: => A): Long = {
+  def time[A](action: => A): (A, Long) = {
     System.gc()
     System.runFinalization()
     val start = System.nanoTime
-    val _ = action
-    System.nanoTime - start
+    val result = action
+    (result, System.nanoTime - start)
   }
 
-  def exec[A](name: String, f1: => A, f2: => A){
+  def exec[A](name: String, f1: => A, f2: => A)(implicit A: Eq[A]){
     println(name)
-    val x = time(f1)
-    val y = time(f2)
+    val (r1, x) = time(f1)
+    val (r2, y) = time(f2)
     val a = 1000000.0
     println((x / a, y / a))
     val n = x.toDouble / y.toDouble
+    println((r1.getClass, r2.getClass))
     if(n > 1){
       println(n)
     }else{
@@ -62,14 +63,14 @@ trait Benchmark {
 
   def createSampleArray(size: Int): (Array1, Array2)
 
-  def _exec[A](name: String, f1: => A, f2: => A){
+  def _exec[A](name: String, f1: => A, f2: => A)(implicit E: Eq[A]){
     if(args.test(name)){
       exec(name, f1, f2)
     }
   }
 
-  def benchmark(name: String, n: Double = 1.0)(f1: Array1 => Unit, f2: Array2 => Unit)(
-    implicit A1: Take[Array1], A2: Take[Array2] ){
+  def benchmark[A](name: String, n: Double = 1.0)(f1: Array1 => A, f2: Array2 => A)(
+    implicit A1: Take[Array1], A2: Take[Array2], E: Eq[A]){
     val (a1, a2) = if(n != 1.0){
       val nn = (args.size * n).toInt
       (A1.resize(args.array1, nn), A2.resize(args.array2, nn))
