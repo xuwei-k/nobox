@@ -5,7 +5,7 @@ import nobox.Type._
 
 object Generate{
 
-  val list = List(BOOL, BYTE, CHAR, SHORT, INT, LONG, FLOAT, DOUBLE)
+  val list = List(INT, LONG, FLOAT, DOUBLE, BYTE, CHAR, SHORT, BOOL)
 
   def apply(dir: File): Seq[File] = {
     list.map{ t =>
