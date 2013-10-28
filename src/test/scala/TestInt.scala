@@ -3,52 +3,7 @@ package nobox
 import org.scalacheck._
 import Prop.forAll
 
-object Test extends Properties("nobox"){
-  def fail(message: String) =
-    throw new AssertionError(message)
-
-  implicit class AnyOps[A](actual: => A) {
-    def mustThrowA[T <: Throwable](implicit man: reflect.ClassTag[T]): Boolean = {
-      val erasedClass = man.runtimeClass
-      try {
-        actual
-        fail("no exception thrown, expected " + erasedClass)
-      } catch {
-        case ex: Throwable =>
-          if (!erasedClass.isInstance(ex))
-            fail("wrong exception thrown, expected: " + erasedClass + " got: " + ex)
-          else
-            true
-      }
-    }
-
-    def must_==(that: A): Boolean = {
-      val self = actual
-      if(self == that) true
-      else {
-        fail(self + " is not equal to " + that)
-      }
-    }
-  }
-
-  implicit class ArrayOps[A](val self: Array[A]) extends AnyVal {
-    def must_===(that: Array[A]): Boolean = {
-      if(self sameElements that) true
-      else {
-        val msg = self.mkString("Array(",",",")") + " is not equal " + that.mkString("Array(",",",")")
-        fail(msg)
-      }
-    }
-  }
-
-  implicit val ofIntArb: Arbitrary[ofInt] =
-    Arbitrary(implicitly[Arbitrary[Array[Int]]].arbitrary.map(array => ofInt(array: _*)))
-
-  implicit val ofByteArb: Arbitrary[ofByte] =
-    Arbitrary(implicitly[Arbitrary[Array[Byte]]].arbitrary.map(array => ofByte(array: _*)))
-
-  implicit val ofFloatArb: Arbitrary[ofFloat] =
-    Arbitrary(implicitly[Arbitrary[Array[Float]]].arbitrary.map(array => ofFloat(array: _*)))
+object TestInt extends TestBase("ofInt"){
 
   val pf: PartialFunction[Int, Long] = {case i: Int if i % 3 == 0 => i + 1}
   val f: Int => Boolean = {i: Int => 5 < i && i < 10 }
