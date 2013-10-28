@@ -4,5 +4,6 @@ package benchmark
 import org.scalameter.api._
 
 object ExistsBenchmark extends NoBoxBenchmark {
-  simpleComparison("exists")(_.exists(_ == -1), _.exists(_ == -1))
+  simpleIntComparison("exists")(_.exists(_ == -1), _.exists(_ == -1))
+  simpleLongComparison("exists")(_.exists(_ == -1L), _.exists(_ == -1L))
 }
