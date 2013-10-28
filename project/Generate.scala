@@ -6,10 +6,11 @@ import nobox.Type._
 object Generate{
 
   val list = List(INT, LONG, FLOAT, DOUBLE, BYTE, CHAR, SHORT, BOOL)
+  val withRef = list :+ REF
 
   def apply(dir: File): Seq[File] = {
-    list.map{ t =>
-      val f = dir / ("of" + t + ".scala")
+    withRef.map{ t =>
+      val f = dir / ("of" + t.name + ".scala")
       IO.write(f, src(t))
       f
     }
@@ -17,7 +18,22 @@ object Generate{
 
   def src(a: Type): String = {
 
-    val clazz = "of" + a
+    val clazz = "of" + a.name + a.tparamx
+    val withTag = if(a == REF) "[X <: AnyRef: ClassTag]" else ""
+    val classWithTag = "of" + a.name + withTag
+    val obj = "of" + a.name
+    val parent = if(a == REF) "AnyRef" else "AnyVal"
+    val empty = obj + "." + "empty" + a.tparamx
+    val cast1 = if(a == REF) s".asInstanceOf[Array[$a with AnyRef]]" else ""
+    val cast2 = if(a == REF) s".asInstanceOf[Array[$a]]" else ""
+    val castObj = if(a == REF) s".asInstanceOf[Array[AnyRef]]" else ""
+    def copyOf(n: String) = {
+      s"Arrays.copyOf${a.tparamx}(self$cast1, $n )$cast2"
+    }
+
+    def copyOfRange(start: String, end: String) = {
+      s"Arrays.copyOfRange${a.tparamx}(self$cast1, $start, $end )$cast2"
+    }
 
     val map0: String = {
 
@@ -233,7 +249,7 @@ s"""
     n
   }
 """
-      case BOOL => ""
+      case BOOL | REF => "" // TODO Ref
       case DOUBLE | FLOAT | LONG =>
 s"""
   def sum: $a = {
@@ -277,7 +293,7 @@ s"""
     n
   }
 """
-      case BOOL => ""
+      case BOOL | REF => "" // TODO Ref
       case DOUBLE | FLOAT | LONG =>
 s"""
   def product: $a = {
@@ -325,7 +341,7 @@ s"""
     }
 
     val sorted: String = a match {
-      case BOOL => ""
+      case BOOL | REF => "" // TODO Ref
       case _ =>
 s"""
   def sorted: $clazz = {
@@ -366,6 +382,47 @@ s"""
 """
 }
 
+    val maxAndMin: String = {
+      if(a == REF) ""
+      else {
+s"""
+  def max: Option[$a] = {
+    if(self.length == 0){
+      None
+    }else{
+      var i = 1
+      var n = self(0)
+      while(i < self.length){
+        val x = self(i)
+        if(n < x){
+          n = x
+        }
+        i += 1
+      }
+      Some(n)
+    }
+  }
+
+  def min: Option[$a] = {
+    if(self.length == 0){
+      None
+    }else{
+      var i = 1
+      var n = self(0)
+      while(i < self.length){
+        val x = self(i)
+        if(n > x){
+          n = x
+        }
+        i += 1
+      }
+      Some(n)
+    }
+  }
+"""
+      }
+    }
+
     val methods: String = List(
       map, reverseMap, flatMap, collect, collectFirst, foldLeft, foldRight, scanLeft, scanRight
     ).map{ method =>
@@ -378,7 +435,7 @@ import java.util.Arrays
 import scala.reflect.ClassTag
 import scala.collection.mutable.ArrayBuilder
 
-final class $clazz (val self: Array[$a]) extends AnyVal {
+final class $classWithTag (val self: Array[$a]) extends $parent {
   $methods
 
   $sum
@@ -414,7 +471,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
   }
 
   def filter(f: $a => Boolean): $clazz = {
-    val builder = new ArrayBuilder.of$a()
+    val builder = new ArrayBuilder.$clazz()
     var i = 0
     while(i < self.length){
       if(f(self(i))){
@@ -457,9 +514,9 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     if(n >= self.length){
       this
     }else if(n <= 0){
-      $clazz.empty
+      $empty
     }else{
-      new $clazz(Arrays.copyOf(self, n))
+      new $clazz(${copyOf("n")})
     }
   }
 
@@ -468,20 +525,20 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     if(len < 0){
       this
     }else if(len == 0){
-      $clazz.empty
+      $empty
     }else{
-      new $clazz(Arrays.copyOf(self, len))
+      new $clazz(${copyOf("len")})
     }
   }
 
   def takeRight(n: Int): $clazz = {
     if(n <= 0){
-      $clazz.empty
+      $empty
     }else if(n >= self.length){
       this
     }else{
       val start = self.length - n
-      new $clazz(Arrays.copyOfRange(self, start, self.length))
+      new $clazz(${copyOfRange("start", "self.length")})
     }
   }
 
@@ -528,20 +585,20 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     if(n <= 0){
       this
     }else if(n >= self.length){
-      $clazz.empty
+      $empty
     }else{
-      new $clazz(Arrays.copyOfRange(self, n, self.length))
+      new $clazz(${copyOfRange("n", "self.length")})
     }
   }
 
   def dropWhile(f: $a => Boolean): $clazz = {
     val len = index(!f(_))
     if(len < 0){
-      $clazz.empty
+      $empty
     }else if(len == 0){
       this
     }else{
-      new $clazz(Arrays.copyOfRange(self, len, self.length))
+      new $clazz(${copyOfRange("len", "self.length")})
     }
   }
 
@@ -549,9 +606,9 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     if(n <= 0){
       this
     }else if(n >= self.length){
-      $clazz.empty
+      $empty
     }else{
-      new $clazz(Arrays.copyOf(self, self.length - n))
+      new $clazz(${copyOf("self.length - n")})
     }
   }
 
@@ -568,22 +625,22 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
 
   def splitAt(n: Int): ($clazz, $clazz) = {
     if(n <= 0){
-      ($clazz.empty, this)
+      ($empty, this)
     }else if(n >= self.length){
-      (this, $clazz.empty)
+      (this, $empty)
     }else{
-      (new $clazz(Arrays.copyOf(self, n)), new $clazz(Arrays.copyOfRange(self, n, self.length)))
+      (new $clazz(${copyOf("n")}), new $clazz(${copyOfRange("n", "self.length")}))
     }
   }
 
   def span(f: $a => Boolean): ($clazz, $clazz) = {
     val n = index(!f(_))
     if(n < 0){
-      (this, $clazz.empty)
+      (this, $empty)
     }else if(n >= self.length){
-      ($clazz.empty, this)
+      ($empty, this)
     }else{
-      (new $clazz(Arrays.copyOf(self, n)), new $clazz(Arrays.copyOfRange(self, n, self.length)))
+      (new $clazz(${copyOf("n")}), new $clazz(${copyOfRange("n", "self.length")}))
     }
   }
 
@@ -603,7 +660,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
   }
 
   def partition(f: $a => Boolean): ($clazz, $clazz) = {
-    val l, r = new ArrayBuilder.of$a()
+    val l, r = new ArrayBuilder.$clazz()
     var i = 0
     while(i < self.length){
       if(f(self(i))){
@@ -625,11 +682,11 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
 
   def slice(from: Int, until: Int): $clazz = {
     if(until <= from || until <= 0 || from >= self.length){
-      $clazz.empty
+      $empty
     }else if(from <= 0 && self.length <= until){
       this
     }else{
-      new $clazz(Arrays.copyOfRange(self, from max 0, until min self.length))
+      new $clazz(${copyOfRange("from max 0", "until min self.length")})
     }
   }
 
@@ -711,7 +768,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     private[this] var i = 0
     var hasNext = true
     def next: $clazz = {
-      val r = new $clazz(Arrays.copyOfRange(self, i, self.length))
+      val r = new $clazz(${copyOfRange("i", "self.length")})
       i += 1
       if(i > self.length) hasNext = false
       r
@@ -722,7 +779,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     private[this] var i = self.length
     var hasNext = true
     def next: $clazz = {
-      val r = new $clazz(Arrays.copyOfRange(self, 0, i))
+      val r = new $clazz(${copyOfRange("0", "i")})
       i -= 1
       if(i < 0) hasNext = false
       r
@@ -782,7 +839,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     b
   }
 
-  def ===(that: $clazz): Boolean = Arrays.equals(self, that.self)
+  def ===(that: $clazz): Boolean = Arrays.equals(self$castObj, that.self$castObj)
 
   @throws[IllegalArgumentException]
   def grouped(n: Int): Iterator[$clazz] = sliding(n, n)
@@ -798,7 +855,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
         // n is negative, if `i + _size` overflow
         val n = i + _size
         val until = if(n > 0) math.min(n, self.length) else self.length
-        val r = new $clazz(Arrays.copyOfRange(self, i, until))
+        val r = new $clazz(${copyOfRange("i", "until")})
         i += step
         if(i >= self.length || n > self.length || n < 0) hasNext = false
         r
@@ -806,39 +863,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
     }
   }
 
-  def max: Option[$a] = {
-    if(self.length == 0){
-      None
-    }else{
-      var i = 1
-      var n = self(0)
-      while(i < self.length){
-        val x = self(i)
-        if(n < x){
-          n = x
-        }
-        i += 1
-      }
-      Some(n)
-    }
-  }
-
-  def min: Option[$a] = {
-    if(self.length == 0){
-      None
-    }else{
-      var i = 1
-      var n = self(0)
-      while(i < self.length){
-        val x = self(i)
-        if(n > x){
-          n = x
-        }
-        i += 1
-      }
-      Some(n)
-    }
-  }
+  $maxAndMin
 
   def scanLeft[A: reflect.ClassTag](z: A)(f: (A, $a) => A): Array[A] = {
     val array = new Array[A](self.length + 1)
@@ -873,7 +898,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
       }
       new $clazz(array)
     }else{
-      $clazz.empty
+      $empty
     }
   }
 
@@ -888,7 +913,7 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
       }
       new $clazz(array)
     }else{
-      $clazz.empty
+      $empty
     }
   }
 
@@ -922,11 +947,11 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
   }
 
   def groupBy[A](f: $a => A): Map[A, $clazz] = {
-    val m = collection.mutable.Map.empty[A, ArrayBuilder.of$a]
+    val m = collection.mutable.Map.empty[A, ArrayBuilder.${clazz}]
     var i = 0
     while(i < self.length){
       val key = f(self(i))
-      m.getOrElseUpdate(key, new ArrayBuilder.of$a) += self(i)
+      m.getOrElseUpdate(key, new ArrayBuilder.${clazz}) += self(i)
       i += 1
     }
 
@@ -939,16 +964,22 @@ final class $clazz (val self: Array[$a]) extends AnyVal {
   }
 }
 
-object $clazz {
+object $obj {
 
-  def apply(elems: $a *): $clazz = elems match{
-    case a: collection.mutable.WrappedArray.of$a => new $clazz(a.array)
+  def apply${withTag}(elems: $a *): $clazz = elems match{
+    case a: collection.mutable.WrappedArray.${clazz} => new $clazz(a.array)
     case _ => new $clazz(elems.toArray)
   }
 
-  val empty: $clazz = new $clazz(new Array[$a](0))
+  ${
+    if(a == REF){
+      s"def empty${withTag}: $clazz = new $clazz(new Array[$a](0))"
+    }else{
+      s"val empty: $clazz = new $clazz(new Array[$a](0))"
+    }
+  }
 
-  def iterate(start: $a, len: Int)(f: $a => $a): of$a = {
+  def iterate${withTag}(start: $a, len: Int)(f: $a => $a): $clazz = {
     if(len == 0){
       empty
     }else{
@@ -963,7 +994,7 @@ object $clazz {
     }
   }
 
-  def tabulate(n: Int)(f: Int => $a): $clazz = {
+  def tabulate${withTag}(n: Int)(f: Int => $a): $clazz = {
     val array = new Array[$a](n)
     var i = 0
     while (i < n) {
@@ -973,7 +1004,7 @@ object $clazz {
     new $clazz(array)
   }
 
-  def flatten(xs: Array[Array[$a]]): $clazz = {
+  def flatten${withTag}(xs: Array[Array[$a]]): $clazz = {
     var i = 0
     var n = 0
     val length = xs.length
