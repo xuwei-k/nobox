@@ -3,8 +3,6 @@ package nobox
 sealed abstract class Type(val name: String){
   override def toString = name
   def tparamx = ""
-  def xWithTag = ""
-  def tparamy = ""
 }
 
 object Type {
@@ -18,8 +16,6 @@ object Type {
   object DOUBLE extends Type("Double")
   object REF    extends Type("Ref"){
     override def tparamx = "[X]"
-    override def xWithTag = "[X: reflect.ClassTag]"
-    override def tparamy = "[Y]"
     override def toString = "X"
   }
 }
