@@ -10,5 +10,3 @@ cleanFiles ++= {
 }
 
 packageSrc in Compile <<= (packageSrc in Compile).dependsOn(compile in Compile)
-
-compile in Compile <<= (compile in Compile).dependsOn(clean)
