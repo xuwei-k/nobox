@@ -20,7 +20,19 @@ s"""
     n
   }
 """
-      case BOOL | REF => "" // TODO Ref
+      case BOOL => ""
+      case REF =>
+s"""
+  def sum(implicit X: Numeric[X]): $a = {
+    var i = 0
+    var n = X.zero
+    while(i < self.length){
+      n = X.plus(n, self(i))
+      i += 1
+    }
+    n
+  }
+"""
       case DOUBLE | FLOAT | LONG =>
 s"""
   def sum: $a = {

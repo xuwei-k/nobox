@@ -137,7 +137,11 @@ object TestRef extends TestBase("ofRef"){
       a.updated(index, elem).mustThrowA[IndexOutOfBoundsException]
   }
 
-  // TODO product, sum
+  property("sum") = forAll { a: ofRef[BigInt] =>
+    a.sum must_== a.self.sum
+  }
+
+  // TODO product
 
   property("sorted") = forAll { a: ofRef[Integer] =>
     val o = implicitly[Ordering[Integer]]
