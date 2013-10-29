@@ -82,3 +82,7 @@ printInfo := {
     println(file.getName + " " + lines.size)
   }
 }
+
+javaOptions ++= sys.process.javaVmArguments.filter(
+  a => Seq("-Xmx","-Xms","-XX").exists(a.startsWith)
+)
