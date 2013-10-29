@@ -43,6 +43,7 @@ import scala.reflect.ClassTag
 import scala.collection.mutable.ArrayBuilder
 
 final class $classWithTag (val self: Array[$a]) extends $parent {
+
   ${Methods(a)}
 
   def foreach[U](f: $a => U): Unit = {
@@ -295,26 +296,6 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
       i -= 1
     }
     Some(acc)
-  }
-
-  def foldLeftAny[A](z: A)(f: (A, $a) => A): A = {
-    var i = 0
-    var acc = z
-    while(i < self.length){
-      acc = f(acc, self(i))
-      i += 1
-    }
-    acc
-  }
-
-  def foldRightAny[A](z: A)(f: ($a, A) => A): A = {
-    var i = self.length - 1
-    var acc = z
-    while(i >= 0){
-      acc = f(self(i), acc)
-      i -= 1
-    }
-    acc
   }
 
   def indexOf(elem: $a): Option[Int] = {

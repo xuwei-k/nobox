@@ -1,7 +1,7 @@
 package nobox
 
 import nobox.Type._
-import Generate.list
+import Generate.{list, withRef}
 
 object Methods{
 
@@ -102,39 +102,42 @@ $cases
 """
     }
 
-    val map: String => String = { b =>
+    val map: Type => String = { b =>
+      import b._
 s"""
-  def map$b(f: $a => $b): of$b = {
-    val array = new Array[$b](self.length)
+  def map$yWithTag(f: $a => $y): of$tparamy = {
+    val array = new Array[$y](self.length)
     var i = 0
     while(i < self.length){
       array(i) = f(self(i))
       i += 1
     }
-    new of$b(array)
+    new of$tparamy(array)
   }
 """
     }
 
-    val reverseMap: String => String = { b =>
+    val reverseMap: Type => String = { b =>
+      import b._
 s"""
-  def reverseMap$b(f: $a => $b): of$b = {
+  def reverseMap$yWithTag(f: $a => $y): of$tparamy = {
     val len = self.length
-    val array = new Array[$b](len)
+    val array = new Array[$y](len)
     var i = 0
     while(i < len){
       array(len - i - 1) = f(self(i))
       i += 1
     }
-    new of$b(array)
+    new of$tparamy(array)
   }
 """
     }
 
-    val flatMap: String => String = { b =>
+    val flatMap: Type => String = { b =>
+      import b._
 s"""
-  def flatMap$b(f: $a => Array[$b]): of$b = {
-    val builder = new ArrayBuilder.of$b()
+  def flatMap$yWithTag(f: $a => Array[$y]): of$tparamy = {
+    val builder = new ArrayBuilder.of$tparamy()
     var i = 0
     while(i < self.length){
       val x = f(self(i))
@@ -145,15 +148,16 @@ s"""
       }
       i += 1
     }
-    new of$b(builder.result)
+    new of$tparamy(builder.result)
   }
 """
     }
 
-    val collect: String => String = { b =>
+    val collect: Type => String = { b =>
+      import b._
 s"""
-  def collect$b(f: PartialFunction[$a, $b]): of$b = {
-    val builder = new ArrayBuilder.of$b()
+  def collect$yWithTag(f: PartialFunction[$a, $y]): of$tparamy = {
+    val builder = new ArrayBuilder.of$tparamy()
     var i = 0
     while(i < self.length){
       if(f isDefinedAt self(i)){
@@ -161,14 +165,15 @@ s"""
       }
       i += 1
     }
-    new of$b(builder.result)
+    new of$tparamy(builder.result)
   }
 """
     }
 
-    val collectFirst: String => String = { b =>
+    val collectFirst: Type => String = { b =>
+      import b._
 s"""
-  def collectFirst$b(f: PartialFunction[$a, $b]): Option[$b] = {
+  def collectFirst$yWithTag(f: PartialFunction[$a, $y]): Option[$y] = {
     var i = 0
     while(i < self.length){
       if(f isDefinedAt self(i)){
@@ -183,9 +188,10 @@ s"""
 
     // could not use @specialized annotation with value class
     // https://gist.github.com/xuwei-k/7153650
-    val foldLeft: String => String = { b =>
+    val foldLeft: Type => String = { b =>
+      import b._
 s"""
-  def foldLeft$b(z: $b)(f: ($b, $a) => $b): $b = {
+  def foldLeft$tparamy(z: $y)(f: ($y, $a) => $y): $y = {
     var i = 0
     var acc = z
     while(i < self.length){
@@ -197,9 +203,10 @@ s"""
 """
     }
 
-    val foldRight: String => String = { b =>
+    val foldRight: Type => String = { b =>
+      import b._
 s"""
-  def foldRight$b(z: $b)(f: ($a, $b) => $b): $b = {
+  def foldRight$tparamy(z: $y)(f: ($a, $y) => $y): $y = {
     var i = self.length - 1
     var acc = z
     while(i >= 0){
@@ -326,32 +333,34 @@ s"""
 """
     }
 
-    val scanLeft: String => String = { b =>
+    val scanLeft: Type => String = { b =>
+      import b._
 s"""
-  def scanLeft$b(z: $b)(f: ($b, $a) => $b): of$b = {
-    val array = new Array[$b](self.length + 1)
+  def scanLeft$yWithTag(z: $y)(f: ($y, $a) => $y): of$tparamy = {
+    val array = new Array[$y](self.length + 1)
     array(0) = z
     var i = 0
     while(i < self.length){
       array(i + 1) = f(array(i), self(i))
       i += 1
     }
-    new of$b(array)
+    new of$tparamy(array)
   }
 """
 }
 
-    val scanRight: String => String = { b =>
+    val scanRight: Type => String = { b =>
+      import b._
 s"""
-  def scanRight$b(z: $b)(f: ($a, $b) => $b): of$b = {
-    val array = new Array[$b](self.length + 1)
+  def scanRight$yWithTag(z: $y)(f: ($a, $y) => $y): of$tparamy = {
+    val array = new Array[$y](self.length + 1)
     array(self.length) = z
     var i = self.length
     while(i > 0){
       array(i - 1) = f(self(i - 1), array(i))
       i -= 1
     }
-    new of$b(array)
+    new of$tparamy(array)
   }
 """
 }
@@ -400,7 +409,7 @@ s"""
     (List(
       map, reverseMap, flatMap, collect, collectFirst, foldLeft, foldRight, scanLeft, scanRight
     ).map{ method =>
-      list.map(_.toString) map method mkString "\n"
+      withRef map method mkString "\n"
     } ::: List(
       sum, sumLong, product, productLong, productDouble, sorted, map0, flatMap0,
       reverseMap0, collect0, foldLeft0, foldRight0, maxAndMin

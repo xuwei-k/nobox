@@ -8,12 +8,22 @@ object TestInt extends TestBase("ofInt"){
   val pf: PartialFunction[Int, Long] = {case i: Int if i % 3 == 0 => i + 1}
   val f: Int => Boolean = {i: Int => 5 < i && i < 10 }
 
-  property("collect") = forAll { a: ofInt =>
+  property("collectLong") = forAll { a: ofInt =>
     a.collectLong(pf).self must_=== a.self.collect(pf)
   }
 
-  property("collectFirst") = forAll { a: ofInt =>
+  property("collectRef") = forAll { a: ofInt =>
+    val pf: PartialFunction[Int, String] = {case i if i > 0 => i.toString}
+    a.collectRef(pf).self must_=== a.self.collect(pf)
+  }
+
+  property("collectFirstLong") = forAll { a: ofInt =>
     a.collectFirstLong(pf) must_== a.self.collectFirst(pf)
+  }
+
+  property("collectFirstRef") = forAll { a: ofInt =>
+    val pf: PartialFunction[Int, String] = {case i if i > 0 => i.toString}
+    a.collectFirstRef(pf) must_== a.self.collectFirst(pf)
   }
 
   property("exists") = forAll { a: ofInt =>
@@ -28,9 +38,14 @@ object TestInt extends TestBase("ofInt"){
     a.find(f) must_== a.self.find(f)
   }
 
-  property("flatMap") = forAll { a: ofInt =>
+  property("flatMapInt") = forAll { a: ofInt =>
     val f: Int => Array[Int] = {i: Int => Array(i, i + 10)}
     a.flatMapInt(f).self must_=== a.self.flatMap(x => f(x).toList)
+  }
+  
+  property("flatMapRef") = forAll { a: ofInt =>
+    val f: Int => Array[String] = {i: Int => Array(i.toString)}
+    a.flatMapRef(f).self must_=== a.self.flatMap(x => f(x).toList)
   }
 
   property("forall") = forAll { a: ofInt =>
@@ -43,6 +58,11 @@ object TestInt extends TestBase("ofInt"){
     a.mapInt(f).self must_=== a.self.map(f)
   }
 
+  property("mapRef") = forAll { a: ofInt =>
+    val f = (_:Int).toString
+    a.mapRef(f).self must_=== a.self.map(f)
+  }
+
   property("map") = forAll { a: ofInt =>
     val f = (_:Int).toString
     a.map(f) must_=== a.self.map(f)
@@ -51,6 +71,11 @@ object TestInt extends TestBase("ofInt"){
   property("reverseMapInt") = forAll { a: ofInt =>
     val f = {i: Int => i * 2 }
     a.reverseMapInt(f).self must_=== a.self.reverseMap(f)
+  }
+
+  property("reverseRef") = forAll { a: ofInt =>
+    val f = (_:Int).toString
+    a.reverseMapRef(f).self must_=== a.self.reverseMap(f)
   }
 
   property("reverseMap") = forAll { a: ofInt =>
@@ -189,16 +214,16 @@ object TestInt extends TestBase("ofInt"){
     a.foldLeftInt(z)(_ - _) must_== a.self.foldLeft(z)(_ - _)
   }
 
-  property("foldLeft") = forAll { (a: ofInt, z: List[Int]) =>
-    a.foldLeftAny(z.toVector)(_ :+ _) must_== a.self.foldLeft(z.toVector)(_ :+ _)
+  property("foldLeftRef") = forAll { (a: ofInt, z: List[Int]) =>
+    a.foldLeftRef(z.toVector)(_ :+ _) must_== a.self.foldLeft(z.toVector)(_ :+ _)
   }
 
   property("foldRightLong") = forAll { (a: ofInt, z: Long) =>
     a.foldRightLong(z)(_ - _) must_== a.self.foldRight(z)(_ - _)
   }
 
-  property("foldRight") = forAll { (a: ofInt, z: List[Int]) =>
-    a.foldRightAny(z)(_ :: _) must_== a.self.foldRight(z)(_ :: _)
+  property("foldRightRef") = forAll { (a: ofInt, z: List[Int]) =>
+    a.foldRightRef(z)(_ :: _) must_== a.self.foldRight(z)(_ :: _)
   }
 
   property("indexOf") = forAll { (a: ofInt, z: Int) =>
@@ -283,6 +308,10 @@ object TestInt extends TestBase("ofInt"){
 
   property("scanRight") = forAll { (a: ofInt, z: List[Int]) =>
     a.scanRight(z)(_ :: _).self.toList must_== a.self.scanRight(z)(_ :: _).toList
+  }
+
+  property("scanRightRef") = forAll { (a: ofInt, z: List[Int]) =>
+    a.scanRightRef(z)(_ :: _).self.toList must_== a.self.scanRight(z)(_ :: _).toList
   }
 
   property("scanLeft1") = forAll { a: ofInt =>

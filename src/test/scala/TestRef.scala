@@ -155,16 +155,16 @@ object TestRef extends TestBase("ofRef"){
     a.foldLeftInt(z)(_ - _) must_== a.self.foldLeft(z)(_ - _)
   }
 
-  property("foldLeft") = forAll { (a: ofRef[Integer], z: List[Integer]) =>
-    a.foldLeftAny(z.toVector)(_ :+ _) must_== a.self.foldLeft(z.toVector)(_ :+ _)
+  property("foldLeftRef") = forAll { (a: ofRef[Integer], z: List[Integer]) =>
+    a.foldLeftRef(z.toVector)(_ :+ _) must_== a.self.foldLeft(z.toVector)(_ :+ _)
   }
 
   property("foldRightLong") = forAll { (a: ofRef[Integer], z: Long) =>
     a.foldRightLong(z)(_ - _) must_== a.self.foldRight(z)(_ - _)
   }
 
-  property("foldRight") = forAll { (a: ofRef[Integer], z: List[Integer]) =>
-    a.foldRightAny(z)(_ :: _) must_== a.self.foldRight(z)(_ :: _)
+  property("foldRightRef") = forAll { (a: ofRef[Integer], z: List[Integer]) =>
+    a.foldRightRef(z)(_ :: _) must_== a.self.foldRight(z)(_ :: _)
   }
 
   property("indexOf") = forAll { (a: ofRef[Integer], z: Int) =>
