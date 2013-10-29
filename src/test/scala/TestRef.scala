@@ -139,6 +139,12 @@ object TestRef extends TestBase("ofRef"){
 
   // TODO product, sum
 
+  property("sorted") = forAll { a: ofRef[Integer] =>
+    val o = implicitly[Ordering[Integer]]
+    a.sorted.self must_=== a.self.sorted
+    a.sorted(o.reverse).self must_=== a.self.sorted(o.reverse)
+  }
+
   property("slice") = forAll { (a: ofRef[Integer], from: Int, until: Int) =>
     a.slice(from, until).self must_=== a.self.slice(from, until)
   }

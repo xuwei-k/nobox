@@ -112,7 +112,15 @@ s"""
     }
 
     val sorted: String = a match {
-      case BOOL | REF => "" // TODO Ref
+      case BOOL => ""
+      case REF =>
+s"""
+  def sorted(implicit ord: Ordering[X]): $clazz = {
+    val array = self.clone
+    Arrays.sort(array.asInstanceOf[Array[Object]], ord.asInstanceOf[Ordering[Object]])
+    new $clazz(array)
+  }
+"""
       case _ =>
 s"""
   def sorted: $clazz = {
