@@ -58,7 +58,7 @@ benchmark := {
   val (classes, args) = fullArgs
   val cp = (fullClasspath in Test).value
   classes.foreach{ clazz =>
-    (runner in Test).value.run("nobox." + clazz, Build.data(cp), args, streams.value.log)
+    (runner in Test).value.run("nobox." + clazz, Attributed.data(cp), args, streams.value.log)
   }
 }
 
