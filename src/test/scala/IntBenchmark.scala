@@ -21,11 +21,11 @@ object IntBenchmark extends Benchmark{
 
     benchmark("map")(_.map(_ + 1), _.map(_ + 1))
 
-    benchmark("reverseMap")(_.reverseMap(_ + 1), _.reverseMapInt(_ + 1))
+    benchmark("reverseMap", 0.1)(_.reverseMap(_ + 1), _.reverseMapInt(_ + 1))
 
-    benchmark("reverseMap")(_.reverse.map(_ + 1), _.reverseMapInt(_ + 1))
+    benchmark("reverseMap", 0.1)(_.reverse.map(_ + 1), _.reverseMapInt(_ + 1))
 
-    benchmark("reverseMap")(_.reverseMap(_ + 1), _.reverseMap(_ + 1))
+    benchmark("reverseMap", 0.1)(_.reverseMap(_ + 1), _.reverseMap(_ + 1))
 
     _exec("reverseMap", array2.reverse.mapInt(_ + 1), array2.reverseMapInt(_ + 1))
 
@@ -150,11 +150,11 @@ object IntBenchmark extends Benchmark{
 
     benchmark("scanLeft")(_.scanLeft(0)(_ + _), _.scanLeft(0)(_ + _))
 
-    benchmark("scanRight", 0.2)(_.scanRight(0)(_ + _), _.scanRight(0)(_ + _))
+    benchmark("scanRight", 0.05)(_.scanRight(0)(_ + _), _.scanRight(0)(_ + _))
 
     benchmark("scanLeftInt")(_.scanLeft(0)(_ + _), _.scanLeftInt(0)(_ + _))
 
-    benchmark("scanRightInt", 0.2)(_.scanRight(0)(_ + _), _.scanRightInt(0)(_ + _))
+    benchmark("scanRightInt", 0.05)(_.scanRight(0)(_ + _), _.scanRightInt(0)(_ + _))
 
     benchmark("startsWith")(a => a.startsWith(a), a => a.startsWith(a.self))
 
