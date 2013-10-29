@@ -5,6 +5,12 @@ import nobox.Type._
 
 object Generate{
 
+  def main(args: Array[String]){
+    val dir = file(args.headOption.getOrElse(sys.error("invalid args " + args.mkString(", "))))
+    IO.delete(dir)
+    apply(dir)
+  }
+
   val list = List(INT, LONG, FLOAT, DOUBLE, BYTE, CHAR, SHORT, BOOL)
   val withRef = list :+ REF
 
