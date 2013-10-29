@@ -427,28 +427,6 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
     }
   }
 
-  def scanLeft[A: reflect.ClassTag](z: A)(f: (A, $a) => A): Array[A] = {
-    val array = new Array[A](self.length + 1)
-    array(0) = z
-    var i = 0
-    while(i < self.length){
-      array(i + 1) = f(array(i), self(i))
-      i += 1
-    }
-    array
-  }
-
-  def scanRight[A: reflect.ClassTag](z: A)(f: ($a, A) => A): Array[A] = {
-    val array = new Array[A](self.length + 1)
-    array(self.length) = z
-    var i = self.length
-    while(i > 0){
-      array(i - 1) = f(self(i - 1), array(i))
-      i -= 1
-    }
-    array
-  }
-
   def scanLeft1(f: ($a, $a) => $a): $clazz = {
     if(self.length != 0){
       val array = new Array[$a](self.length)

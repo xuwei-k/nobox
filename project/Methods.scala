@@ -72,6 +72,22 @@ $cases
 """
     }
 
+    val collectFirst0: String = {
+      val cases: String = list.map{ b =>
+        s"      case ClassTag.$b => collectFirst$b(f.asInstanceOf[PartialFunction[$a, $b]])"
+      }.mkString("\n")
+
+s"""
+  def collectFirst[A](f: PartialFunction[$a, A])(implicit A: ClassTag[A]): Option[A] = {
+    (A match {
+$cases
+      case _ => self.collectFirst(f)
+    }).asInstanceOf[Option[A]]
+  }
+"""
+    }
+
+
     val foldLeft0: String = {
       val cases: String = list.map{ b =>
         s"      case ClassTag.$b => foldLeft$b(z.asInstanceOf[$b])(f.asInstanceOf[($b, $a) => $b])"
@@ -101,6 +117,37 @@ $cases
   }
 """
     }
+
+    val scanLeft0: String = {
+      val cases: String = list.map{ b =>
+        s"      case ClassTag.$b => scanLeft$b(z.asInstanceOf[$b])(f.asInstanceOf[($b, $a) => $b]).self"
+      }.mkString("\n")
+
+s"""
+  def scanLeft[A](z: A)(f: (A, $a) => A)(implicit A: ClassTag[A]): Array[A] = {
+    (A match {
+$cases
+      case _ => self.scanLeft(z)(f)
+    }).asInstanceOf[Array[A]]
+  }
+"""
+    }
+
+    val scanRight0: String = {
+      val cases: String = list.map{ b =>
+        s"      case ClassTag.$b => scanRight$b(z.asInstanceOf[$b])(f.asInstanceOf[($a, $b) => $b]).self"
+      }.mkString("\n")
+
+s"""
+  def scanRight[A](z: A)(f: ($a, A) => A)(implicit A: ClassTag[A]): Array[A] = {
+    (A match {
+$cases
+      case _ => self.scanRight(z)(f)
+    }).asInstanceOf[Array[A]]
+  }
+"""
+    }
+
 
     val map: Type => String = { b =>
       import b._
@@ -406,13 +453,14 @@ s"""
       }
     }
 
-    (List(
+    (List[Type => String](
       map, reverseMap, flatMap, collect, collectFirst, foldLeft, foldRight, scanLeft, scanRight
     ).map{ method =>
       withRef map method mkString "\n"
-    } ::: List(
-      sum, sumLong, product, productLong, productDouble, sorted, map0, flatMap0,
-      reverseMap0, collect0, foldLeft0, foldRight0, maxAndMin
+    } ::: List[String](
+      map0,reverseMap0,flatMap0,collect0,collectFirst0,foldLeft0,foldRight0,scanLeft0,scanRight0
+    ) ::: List[String](
+      sum, sumLong, product, productLong, productDouble, sorted, maxAndMin
     )).mkString("\n\n")
 
   }
