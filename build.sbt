@@ -62,3 +62,15 @@ benchmark := {
   }
 }
 
+val printInfo = taskKey[Unit]("print each file line counts")
+
+printInfo <<= printInfo.dependsOn(compile)
+
+printInfo := {
+  val srcs = (scalaSource in Compile).value
+  val files = (srcs ** "*.scala").get.map(f => f -> IO.readLines(f))
+  println("all lines " + files.map(_._2.size).sum)
+  files.foreach{ case (file, lines) =>
+    println(file.getName + " " + lines.size)
+  }
+}
