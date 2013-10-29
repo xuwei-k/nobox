@@ -45,6 +45,7 @@ import scala.collection.mutable.ArrayBuilder
 final class $classWithTag (val self: Array[$a]) extends $parent {
 
   ${Methods(a)}
+  ${SpecializedMethods(a)}
 
   def foreach[U](f: $a => U): Unit = {
     var i = 0
