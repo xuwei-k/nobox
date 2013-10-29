@@ -49,16 +49,24 @@ val benchmarkArgsParser = {
   // run all benchmark when does not specified any benchmark class name
   val classes = classes0.map(c => if(c.isEmpty) benchmarkClasses else c)
   val names = (token(Space) ~> ScalaID.examples(seqMethods)).* !!! "please input method names"
-  val size = (token(Space) ~> NatBasic.examples().map(_.toString)).? !!! "please input array size"
-  classes ~ (names ~ size).map{case (n, s) => s.toList ++ n}
+  val size = (token(Space) ~> NatBasic.examples().map(s => Option(s.toString))).* !!! "please input array size"
+  (classes ~ names ~ size)
 }
 
 benchmark := {
-  val fullArgs = benchmarkArgsParser.parsed
-  val (classes, args) = fullArgs
+  val args = benchmarkArgsParser.parsed
+  val ((classes, names), sizes) = args
   val cp = (fullClasspath in Test).value
+  val r = (runner in Test).value
   classes.foreach{ clazz =>
-    (runner in Test).value.run("nobox." + clazz, Attributed.data(cp), args, streams.value.log)
+    def run(s: Option[String]) = r.run(
+      "nobox."+clazz,
+      Attributed.data(cp),
+      s.toList ++ names,
+      streams.value.log
+    )
+    if(sizes.isEmpty) run(None)
+    else sizes.foreach(run)
   }
 }
 
