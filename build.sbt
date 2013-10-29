@@ -38,24 +38,29 @@ pomExtra := (
 
 val benchmark = inputKey[Unit]("benchmark")
 
-val seqMethods: Set[String] = classOf[Seq[_]].getMethods.map(_.getName).filterNot(_ contains '$').toSet
+val benchmarkClasses = Set("IntBenchmark", "RefBenchmark")
+
+val seqMethods = classOf[Seq[_]].getMethods.map(_.getName).filterNot(_ contains '$').toSet
 
 val benchmarkArgsParser = {
   import sbt.complete.Parser._
   import sbt.complete.Parsers._
-  val msg = "invalid input. please input benchmark method names and/or array size"
-  val names = (Space ~> ScalaID.examples(seqMethods)).*
-  val size = (Space ~> NatBasic.examples().map(_.toString)).?
-  (names ~ size).map{case (n, s) => s.toList ++ n} !!! msg
+  val classes0 = (token(Space) ~> benchmarkClasses.map(token(_)).reduceLeft(_ | _)).* !!! "please input Benchmark classes"
+  // run all benchmark when does not specified any benchmark class name
+  val classes = classes0.map(c => if(c.isEmpty) benchmarkClasses else c)
+  val names = (token(Space) ~> ScalaID.examples(seqMethods)).* !!! "please input method names"
+  val size = (token(Space) ~> NatBasic.examples().map(_.toString)).? !!! "please input array size"
+  classes ~ (names ~ size).map{case (n, s) => s.toList ++ n}
 }
 
 benchmark := {
-  val args = benchmarkArgsParser.parsed
+  val fullArgs = benchmarkArgsParser.parsed
+  val (classes, args) = fullArgs
   val cp = (fullClasspath in Test).value
-  (runner in Test).value.run("nobox.Benchmark", Build.data(cp), args, streams.value.log)
+  classes.foreach{ clazz =>
+    (runner in Test).value.run("nobox." + clazz, Attributed.data(cp), args, streams.value.log)
+  }
 }
-
-// scalameter configuration
 
 fork in test := true
 
@@ -64,3 +69,16 @@ resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repos
 libraryDependencies += "com.github.axel22" %% "scalameter" % "0.4-SNAPSHOT"
 
 testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework")
+
+val printInfo = taskKey[Unit]("print each file line counts")
+
+printInfo <<= printInfo.dependsOn(compile)
+
+printInfo := {
+  val srcs = (scalaSource in Compile).value
+  val files = (srcs ** "*.scala").get.map(f => f -> IO.readLines(f))
+  println("all lines " + files.map(_._2.size).sum)
+  files.foreach{ case (file, lines) =>
+    println(file.getName + " " + lines.size)
+  }
+}

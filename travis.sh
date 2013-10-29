@@ -1,1 +1,1 @@
-sbt test benchmark
+sbt printInfo 'test:runMain nobox.Info all' test benchmark
