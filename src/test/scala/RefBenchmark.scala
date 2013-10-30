@@ -135,6 +135,11 @@ object RefBenchmark extends Benchmark{
     benchmark("max")(_.max, _.max)
 
     benchmark("min")(_.min, _.min)
+
+    {
+      val array: ofRef[BigInt] = new ofRef((BigInt(1) to size).toArray)
+      _exec("sum", array.self.sum, array.sum)
+    }
   }
 
 }
