@@ -184,8 +184,24 @@ s"""
       }
     }
 
+    val flatten: String = {
+      if(a != REF){ ""
+      }else{
+        val cases: String = Generate.list.map{ b =>
+          s"      case Clazz.$b => of$b.flatten(self.asInstanceOf[Array[Array[$b]]]).self"
+        }.mkString("\n")
+s"""
+  def flatten[E](implicit E: X <:< Array[E]): Array[E] =
+    (self.getClass.getComponentType.getComponentType match {
+$cases
+      case c => ofRef.flatten[E with AnyRef](self.asInstanceOf[Array[Array[E with AnyRef]]])(ClassTag(c)).self
+    }).asInstanceOf[Array[E]]
+"""
+      }
+    }
+
     List[String](
-      sum, sumLong, product, productLong, productDouble, sorted, maxAndMin
+      sum, sumLong, product, productLong, productDouble, sorted, maxAndMin, flatten
     ).mkString("\n\n")
 
   }

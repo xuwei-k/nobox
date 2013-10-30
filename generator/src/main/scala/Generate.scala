@@ -14,12 +14,14 @@ object Generate{
   val list = List(INT, LONG, FLOAT, DOUBLE, BYTE, CHAR, SHORT, BOOL)
   val withRef = list :+ REF
 
-  def apply(dir: File): Seq[File] = {
+  def apply(dir: File): Unit = {
     withRef.map{ t =>
       val f = dir / ("of" + t.name + ".scala")
       IO.write(f, src(t))
       f
     }
+    val f = dir / "package.scala"
+    IO.write(f, PackageObject.apply)
   }
 
   def src(a: Type): String = {

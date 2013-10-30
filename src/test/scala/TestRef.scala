@@ -287,6 +287,14 @@ object TestRef extends TestBase("ofRef"){
     Array.concat(xs: _*) must_=== ofRef.flatten(xs).self
   }
 
+  property("flatten") = forAll { xs: ofRef[Array[String]] =>
+    xs.flatten must_=== xs.self.flatten
+  }
+
+  property("flatten") = forAll { xs: ofRef[Array[Int]] =>
+    xs.flatten must_=== xs.self.flatten
+  }
+
   property("groupBy") = forAll { (a: ofRef[Integer], n: Byte) =>
     val x = n.toInt.abs + 1
     a.self.groupBy(_ % x).map{case (k, v) => k -> v.toList} must_== (

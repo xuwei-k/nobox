@@ -122,9 +122,12 @@ object RefBenchmark extends Benchmark{
     }
 
     List(50, 10000, 2000000).foreach{ n =>
-      lazy val x = array2.sliding(n, n).map(_.self).toArray
+      val x: Array[Array[Integer]] = array2.sliding(n, n).map(_.self).toArray
+      val a: ofRef[Array[Int]] = new ofRef(x.map(_.map(_.toInt)))
       _exec("flatten", x.flatten, ofRef.flatten(x))
       _exec("flatten", Array.concat(x : _*), ofRef.flatten(x))
+      _exec("flatten", a.self.flatten, a.flatten)
+      _exec("flatten", x.flatten, new ofRef(x).flatten)
     }
 
     _exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
