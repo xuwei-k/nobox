@@ -74,7 +74,7 @@ fork in test := true
 
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 
-libraryDependencies += "com.github.axel22" %% "scalameter" % "0.4-SNAPSHOT"
+libraryDependencies += "com.github.axel22" %% "scalameter" % "0.4-SNAPSHOT" % "test"
 
 testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework")
 
