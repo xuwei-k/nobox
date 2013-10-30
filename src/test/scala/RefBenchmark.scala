@@ -131,6 +131,10 @@ object RefBenchmark extends Benchmark{
     }
 
     _exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
+
+    benchmark("max")(_.max, _.max)
+
+    benchmark("min")(_.min, _.min)
   }
 
 }

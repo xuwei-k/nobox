@@ -144,8 +144,44 @@ s"""
     }
 
     val maxAndMin: String = {
-      if(a == REF) ""
-      else {
+      if(a == REF){
+s"""
+  def max[B >: X](implicit O: Ordering[B]): Option[$a] = {
+    if(self.length == 0){
+      None
+    }else{
+      var i = 1
+      var n = self(0)
+      while(i < self.length){
+        val x = self(i)
+        if(O.gt(x, n)){
+          n = x
+        }
+        i += 1
+      }
+      Some(n)
+    }
+  }
+
+  def min[B >: X](implicit O: Ordering[B]): Option[$a] = {
+    if(self.length == 0){
+      None
+    }else{
+      var i = 1
+      var n = self(0)
+      while(i < self.length){
+        val x = self(i)
+        if(O.lt(x, n)){
+          n = x
+        }
+        i += 1
+      }
+      Some(n)
+    }
+  }
+
+"""
+      }else{
 s"""
   def max: Option[$a] = {
     if(self.length == 0){
