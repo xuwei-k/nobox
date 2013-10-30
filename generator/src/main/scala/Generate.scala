@@ -380,7 +380,7 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
     -1
   }
 
-  override def toString = mkString("$clazz(", ", ", ")")
+  override def toString = mkString("$obj(", ", ", ")")
 
   def mkString(start: String, sep: String, end: String): String =
     addString(new StringBuilder(), start, sep, end).toString
