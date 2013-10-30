@@ -1,13 +1,11 @@
+Common.commonSettings
+
 libraryDependencies ++= Seq(
   // https://github.com/rickynils/scalacheck/pull/64#issuecomment-26704597
   "org.scalacheck" %% "scalacheck" % "1.10.1" % "test" exclude("org.scala-lang", "scala-compiler")
 )
 
-scalaVersion := "2.10.3"
-
 crossScalaVersions := List("2.10.3", "2.11.0-M6")
-
-scalacOptions ++= Seq("-optimize", "-deprecation", "-unchecked", "-Xlint")
 
 name := "nobox"
 
@@ -70,14 +68,6 @@ benchmark := {
   }
 }
 
-fork in test := true
-
-resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-
-libraryDependencies += "com.github.axel22" %% "scalameter" % "0.4-SNAPSHOT" % "test"
-
-testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework")
-
 val printInfo = taskKey[Unit]("print each file line counts")
 
 printInfo <<= printInfo.dependsOn(compile)
@@ -91,6 +81,3 @@ printInfo := {
   }
 }
 
-javaOptions ++= sys.process.javaVmArguments.filter(
-  a => Seq("-Xmx","-Xms","-XX").exists(a.startsWith)
-)

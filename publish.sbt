@@ -45,3 +45,13 @@ ReleaseKeys.releaseProcess := Seq[ReleaseStep](
   commitNextVersion,
   pushChanges
 )
+
+val checkPackage = taskKey[Unit]("show pom.xml and sources.jar")
+
+checkPackage := {
+  println(IO.read(makePom.value))
+  println()
+  IO.withTemporaryDirectory{ dir =>
+    IO.unzip((packageSrc in Compile).value, dir).map(f => f.getName -> f.length) foreach println
+  }
+}

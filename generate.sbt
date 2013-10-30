@@ -18,6 +18,6 @@ lazy val generator = project in file("generator") settings(
     val cp = (fullClasspath in Compile).value
     (runner in Compile).value.run("nobox.Generate", Attributed.data(cp), Seq(dir), streams.value.log)
   }
-)
+) settings(Common.commonSettings : _*)
 
 compile in Compile <<= (compile in Compile) dependsOn (generateSources in generator)
