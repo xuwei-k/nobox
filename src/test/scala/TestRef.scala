@@ -312,4 +312,13 @@ object TestRef extends TestBase("ofRef"){
 
     buf1.result must_== buf2.result
   }
+
+  property("toString") = forAll { xs: ofRef[Integer] =>
+    xs.toString must_== xs.mkString("ofRef(", ", ", ")")
+  }
+
+  property("mkString") = forAll { (xs: ofRef[Integer], start: String, sep: String, end: String) =>
+    xs.mkString(start, sep, end) must_== xs.mkString(start, sep, end)
+  }
+
 }

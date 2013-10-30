@@ -42,7 +42,7 @@ object TestInt extends TestBase("ofInt"){
     val f: Int => Array[Int] = {i: Int => Array(i, i + 10)}
     a.flatMapInt(f).self must_=== a.self.flatMap(x => f(x).toList)
   }
-  
+
   property("flatMapRef") = forAll { a: ofInt =>
     val f: Int => Array[String] = {i: Int => Array(i.toString)}
     a.flatMapRef(f).self must_=== a.self.flatMap(x => f(x).toList)
@@ -377,5 +377,13 @@ object TestInt extends TestBase("ofInt"){
     }{ buf2 += ((x, y)) }
 
     buf1.result must_== buf2.result
+  }
+
+  property("toString") = forAll { xs: ofInt =>
+    xs.toString must_== xs.mkString("ofInt(", ", ", ")")
+  }
+
+  property("mkString") = forAll { (xs: ofInt, start: String, sep: String, end: String) =>
+    xs.mkString(start, sep, end) must_== xs.mkString(start, sep, end)
   }
 }
