@@ -39,11 +39,11 @@ object IntBenchmark extends Benchmark{
 
     benchmark("reverse")(_.reverse, _.reverse)
 
-    benchmark("sorted")(_.sorted, _.sorted)
+    benchmark("sorted", 0.2)(_.sorted, _.sorted)
 
-    benchmark("flatMap")(_.flatMap(n => Array(n, n, n)), _.flatMapInt(n => Array(n, n, n)))
+    benchmark("flatMap", 0.2)(_.flatMap(n => Array(n, n, n)), _.flatMapInt(n => Array(n, n, n)))
 
-    benchmark("flatMap")(_.flatMap(n => Array(n, n, n)), _.flatMap(n => Array(n, n, n)))
+    benchmark("flatMap", 0.2)(_.flatMap(n => Array(n, n, n)), _.flatMap(n => Array(n, n, n)))
 
     benchmark("collectInt")(
       _.collect{case n if n > 10 => n + 1},
@@ -132,9 +132,9 @@ object IntBenchmark extends Benchmark{
 
     benchmark("mkString", 0.2)(_ mkString ",", _ mkString ",")
 
-    benchmark("tails", 0.0005)(_.tails.size, _.tails.size)
+    benchmark("tails", 0.0002)(_.tails.size, _.tails.size)
 
-    benchmark("inits", 0.0005)(_.inits.size, _.inits.size)
+    benchmark("inits", 0.0002)(_.inits.size, _.inits.size)
 
     benchmark("tailOption")(_.tail, _.tailOption)
 
@@ -171,7 +171,7 @@ object IntBenchmark extends Benchmark{
 
     benchmark("tabulate")(_ => Array.tabulate(size)(_ + 1), _ => ofInt.tabulate(size)(_ + 1))
 
-    List(50, 10000, 2000000).foreach{ n =>
+    List(100, 1000, 10000).foreach{ n =>
       benchmark("groupBy")(_.groupBy(_ % n), _.groupBy(_ % n))
     }
 

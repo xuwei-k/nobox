@@ -117,7 +117,7 @@ object RefBenchmark extends Benchmark{
 
     benchmark("endsWith")(a => a.endsWith(a), a => a.endsWith(a.self))
 
-    List(50, 10000, 2000000).foreach{ n =>
+    List(50, 2000, 50000).foreach{ n =>
       benchmark("groupBy")(_.groupBy(_ % n), _.groupBy(_ % n))
     }
 
