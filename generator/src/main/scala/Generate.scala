@@ -511,6 +511,45 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
 
     b.result
   }
+
+  def maxBy[A](f: $a => A)(implicit A: Ordering[A]): Option[$a] = {
+    if(self.length == 0){
+      None
+    }else{
+      var maxF = f(self(0))
+      var maxElem = self(0)
+      var i = 1
+      while(i < self.length){
+        val fx = f(self(i))
+        if (A.gt(fx, maxF)) {
+          maxElem = self(i)
+          maxF = fx
+        }
+        i += 1
+      }
+      Some(maxElem)
+    }
+  }
+
+  def minBy[A](f: $a => A)(implicit A: Ordering[A]): Option[$a] = {
+    if(self.length == 0){
+      None
+    }else{
+      var minF = f(self(0))
+      var minElem = self(0)
+      var i = 1
+      while(i < self.length){
+        val fx = f(self(i))
+        if (A.lt(fx, minF)) {
+          minElem = self(i)
+          minF = fx
+        }
+        i += 1
+      }
+      Some(minElem)
+    }
+  }
+
 }
 
 object $obj {

@@ -310,6 +310,22 @@ object TestInt extends TestBase("ofInt"){
     }
   }
 
+  property("maxBy") = forAll { a: ofInt =>
+    val f = (_: Int).toHexString
+    a.maxBy(f) must_== (
+      if(a.size == 0) None
+      else Some(a.self.maxBy(f))
+    )
+  }
+
+  property("minBy") = forAll { a: ofInt =>
+    val f = (_: Int).toHexString
+    a.minBy(f) must_== (
+      if(a.size == 0) None
+      else Some(a.self.minBy(f))
+    )
+  }
+
   property("max") = forAll { a: ofInt =>
     if(a.self.isEmpty){
       a.max must_== None

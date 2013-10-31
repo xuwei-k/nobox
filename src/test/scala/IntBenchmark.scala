@@ -144,6 +144,13 @@ object IntBenchmark extends Benchmark{
       benchmark("grouped " + n, 0.2)(_.grouped(n).size, _.grouped(n).size)
     }
 
+    {
+      val f = (_: Int).toString.toInt.toHexString
+      benchmark("maxBy", 0.01)(_.maxBy(f), _.maxBy(f))
+    }
+
+    benchmark("maxBy", 0.1)(_.maxBy(x => x), _.maxBy(x => x))
+
     benchmark("max")(_.max, _.max)
 
     benchmark("min")(_.min, _.min)
