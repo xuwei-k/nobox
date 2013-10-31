@@ -175,6 +175,10 @@ object IntBenchmark extends Benchmark{
     }
 
     _exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)
+
+    benchmark("foldMapLeft1")(_.reduceLeft(_ + _), _.foldMapLeft1Int(x => x)(_ + _))
+
+    _exec("foldMapLeft1", array2.foldMapLeft1Ref(_.toLong)(_ + _), array2.foldMapLeft1Long(_.toLong)(_ + _))
   }
 
 }
