@@ -145,6 +145,37 @@ $cases
 """
     }
 
+    val foldMapLeft10: String = {
+      val cases: String = list.map{ b =>
+        s"      case ClassTag.$b => foldMapLeft1$b(z.asInstanceOf[$a => $b])(f.asInstanceOf[($b, $a) => $b])"
+      }.mkString("\n")
+
+s"""
+  def foldMapLeft1[A](z: $a => A)(f: (A, $a) => A)(implicit A: ClassTag[A]): Option[A] = {
+    (A match {
+$cases
+      case _ => foldMapLeft1Ref(z)(f)
+    }).asInstanceOf[Option[A]]
+  }
+"""
+    }
+
+
+    val foldMapRight10: String = {
+      val cases: String = list.map{ b =>
+        s"      case ClassTag.$b => foldMapRight1$b(z.asInstanceOf[$a => $b])(f.asInstanceOf[($a, $b) => $b])"
+      }.mkString("\n")
+
+s"""
+  def foldMapRight1[A](z: $a => A)(f: ($a, A) => A)(implicit A: ClassTag[A]): Option[A] = {
+    (A match {
+$cases
+      case _ => foldMapRight1Ref(z)(f)
+    }).asInstanceOf[Option[A]]
+  }
+"""
+    }
+
 
     val map: Type => String = { b =>
       import b._
@@ -338,7 +369,8 @@ s"""
     ).map{ method =>
       withRef map method mkString "\n"
     } ::: List[String](
-      map0,reverseMap0,flatMap0,collect0,collectFirst0,foldLeft0,foldRight0,scanLeft0,scanRight0
+      map0,reverseMap0,flatMap0,collect0,collectFirst0,foldLeft0,foldRight0,scanLeft0,scanRight0,
+      foldMapLeft10,foldMapRight10
     )).mkString("\n\n")
 
   }

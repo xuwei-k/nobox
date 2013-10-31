@@ -202,7 +202,7 @@ object TestInt extends TestBase("ofInt"){
     a.slice(from, until).self must_=== a.self.slice(from, until)
   }
 
-  property("foldMapLeft1") = forAll { a: ofInt =>
+  property("foldMapLeft1Long") = forAll { a: ofInt =>
     val z = (_: Int).toLong + 10
     a.foldMapLeft1Long(z)(_ - _) must_== {
       if(a.length == 0) None
@@ -210,9 +210,25 @@ object TestInt extends TestBase("ofInt"){
     }
   }
 
-  property("foldMapRight1") = forAll { a: ofInt =>
+  property("foldMapLeft1") = forAll { a: ofInt =>
+    val z = (_: Int).toString
+    a.foldMapLeft1(z)(_ + _) must_== {
+      if(a.length == 0) None
+      else Some(a.self.tail.foldLeft(z(a.self.head))(_ + _))
+    }
+  }
+
+  property("foldMapRight1Int") = forAll { a: ofInt =>
     val z = (_: Int) + 10
     a.foldMapRight1Int(z)(_ - _) must_== {
+      if(a.length == 0) None
+      else Some(a.self.init.foldRight(z(a.self.last))(_ - _))
+    }
+  }
+
+  property("foldMapRight1") = forAll { a: ofInt =>
+    val z = (_: Int) + 10
+    a.foldMapRight1(z)(_ - _) must_== {
       if(a.length == 0) None
       else Some(a.self.init.foldRight(z(a.self.last))(_ - _))
     }
