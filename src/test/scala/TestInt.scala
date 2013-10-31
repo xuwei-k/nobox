@@ -340,12 +340,12 @@ object TestInt extends TestBase("ofInt"){
     a.endsWith(b.self) must_== a.self.endsWith(b.self)
   }
 
-  property("iterate") = forAll { (start: Int, size: Byte) =>
-    ofInt.iterate(start, size.toInt.abs)(_ + 1).self must_=== Array.iterate(start, size.toInt.abs)(_ + 1)
+  property("iterate") = forAll { (start: Int, size: UInt8) =>
+    ofInt.iterate(start, size)(_ + 1).self must_=== Array.iterate(start, size)(_ + 1)
   }
 
-  property("tabulate") = forAll { size: Byte =>
-    ofInt.tabulate(size.toInt.abs)(_ + 1).self must_=== Array.tabulate(size.toInt.abs)(_ + 1)
+  property("tabulate") = forAll { size: UInt8 =>
+    ofInt.tabulate(size)(_ + 1).self must_=== Array.tabulate(size)(_ + 1)
   }
 
   property("flatten") = forAll { xs: Array[Array[Int]] =>
@@ -353,8 +353,7 @@ object TestInt extends TestBase("ofInt"){
     Array.concat(xs: _*) must_=== ofInt.flatten(xs).self
   }
 
-  property("groupBy") = forAll { (a: ofInt, n: Byte) =>
-    val x = n.toInt.abs + 1
+  property("groupBy") = forAll { (a: ofInt, x: PInt8) =>
     a.self.groupBy(_ % x).map{case (k, v) => k -> v.toList} must_== (
       a.groupBy(_ % x).map{case (k, v) => k -> v.self.toList}
     )

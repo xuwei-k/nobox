@@ -55,4 +55,27 @@ abstract class TestBase(name: String) extends Properties(name){
 
   implicit def javaLangIntegerArb: Arbitrary[Integer] =
     Arbitrary(implicitly[Arbitrary[Int]].arbitrary.map(Integer.valueOf(_)))
+
+  type Tagged[T] = {type Tag = T}
+
+  type @@[+T, Tag] = T with Tagged[Tag]
+
+  object Tag {
+    def apply[A, T](a: A): A @@ T = a.asInstanceOf[A @@ T]
+  }
+
+  sealed trait Unsigned8
+  /** unsigned 8bit integer. 0 to 255 */
+  type UInt8 = Int @@ Unsigned8
+
+  sealed trait Positive8
+  /** positive 8bit integer. 1 to 256 */
+  type PInt8 = Int @@ Positive8
+
+  implicit val UInt8Arb: Arbitrary[UInt8] =
+    Arbitrary(implicitly[Arbitrary[Byte]].arbitrary.map(byte => Tag[Int, Unsigned8](byte + 128)))
+
+  implicit val PInt8Arb: Arbitrary[PInt8] =
+    Arbitrary(implicitly[Arbitrary[Byte]].arbitrary.map(byte => Tag[Int, Positive8](byte + 129)))
 }
+

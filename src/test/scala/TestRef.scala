@@ -287,13 +287,12 @@ object TestRef extends TestBase("ofRef"){
     a.endsWith(b.self) must_== a.self.endsWith(b.self)
   }
 
-  property("iterate") = forAll { size: Byte =>
-    val x = size.toInt.abs
-    ofRef.iterate("0", x)(a => (a.toInt + 1).toString).self must_=== Array.iterate("0", x)(a => (a.toInt + 1).toString)
+  property("iterate") = forAll { size: UInt8 =>
+    ofRef.iterate("0", size)(a => (a.toInt + 1).toString).self must_=== Array.iterate("0", size)(a => (a.toInt + 1).toString)
   }
 
-  property("tabulate") = forAll { size: Byte =>
-    ofRef.tabulate(size.toInt.abs)(_.toString).self must_=== Array.tabulate(size.toInt.abs)(_.toString)
+  property("tabulate") = forAll { size: UInt8 =>
+    ofRef.tabulate(size)(_.toString).self must_=== Array.tabulate(size)(_.toString)
   }
 
   property("flatten") = forAll { xs: Array[Array[Integer]] =>
@@ -309,8 +308,7 @@ object TestRef extends TestBase("ofRef"){
     xs.flatten must_=== xs.self.flatten
   }
 
-  property("groupBy") = forAll { (a: ofRef[Integer], n: Byte) =>
-    val x = n.toInt.abs + 1
+  property("groupBy") = forAll { (a: ofRef[Integer], x: PInt8) =>
     a.self.groupBy(_ % x).map{case (k, v) => k -> v.toList} must_== (
       a.groupBy(_ % x).map{case (k, v) => k -> v.self.toList}
     )
