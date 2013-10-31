@@ -1,8 +1,4 @@
-package nobox
 
-object PackageObject{
-  val apply: String = {
-s"""
 package object nobox {
 
   private[nobox] object Clazz {
@@ -17,9 +13,3 @@ package object nobox {
   }
 
 }
-"""
-  }
-
-}
-
-

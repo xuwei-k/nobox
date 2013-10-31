@@ -20,8 +20,6 @@ object Generate{
       IO.write(f, src(t))
       f
     }
-    val f = dir / "package.scala"
-    IO.write(f, PackageObject.apply)
   }
 
   def src(a: Type): String = {
