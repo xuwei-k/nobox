@@ -236,8 +236,27 @@ $cases
       }
     }
 
+    val diff: String = if(a == REF) "" else{
+s"""
+  def diff(that: $clazz): $clazz = {
+    val occ = $clazz.occCounts(that.self)
+    val builder = new ArrayBuilder.$clazz
+    var i = 0
+    while(i < self.length){
+      if (occ(self(i)) == 0){
+        builder += self(i)
+      }else{
+        occ(self(i)) -= 1
+      }
+      i += 1
+    }
+    new $clazz(builder.result)
+  }
+"""
+    }
+
     List[String](
-      sum, sumLong, product, productLong, productDouble, sorted, maxAndMin, flatten
+      sum, sumLong, product, productLong, productDouble, sorted, maxAndMin, flatten, diff
     ).mkString("\n\n")
 
   }

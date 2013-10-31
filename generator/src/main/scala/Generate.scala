@@ -43,11 +43,26 @@ object Generate{
       s"Arrays.copyOfRange${a.tparamx}(self$cast1, $start, $end )$cast2"
     }
 
+    val occCounts: String = if(a == REF) "" else{
+s"""
+  private def occCounts(sq: Array[$a]): mutable.Map[$a, Int] = {
+    val occ = new mutable.HashMap[$a, Int] { override def default(k: $a) = 0 }
+    var i = 0
+    while(i < sq.length){
+      occ(sq(i)) += 1
+      i += 1
+    }
+    occ
+  }
+"""
+    }
+
 
 s"""package nobox
 
 import java.util.Arrays
 import scala.reflect.ClassTag
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuilder
 
 final class $classWithTag (val self: Array[$a]) extends $parent {
@@ -588,6 +603,8 @@ object $obj {
     }
     new $clazz(array)
   }
+
+$occCounts
 
 }
 """

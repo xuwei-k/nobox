@@ -417,4 +417,9 @@ object TestInt extends TestBase("ofInt"){
   property("mkString") = forAll { (xs: ofInt, start: String, sep: String, end: String) =>
     xs.mkString(start, sep, end) must_== xs.mkString(start, sep, end)
   }
+
+  property("diff") = forAll { (xs: ofInt, ys: ofInt) =>
+    (xs diff ys).self must_=== (xs.self diff ys.self)
+  }
+
 }

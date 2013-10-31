@@ -187,6 +187,12 @@ object IntBenchmark extends Benchmark{
     _exec("fill", Array.fill(size)(1), ofInt.fill(size)(1))
 
     _exec("fillAll", Array.fill(size)(1), ofInt.fillAll(size)(1))
+
+    {
+       val n = 0.001
+       val array3 = ofInt.fill((size * n).toInt)(util.Random.nextInt)
+       benchmark("diff", n)(_ diff array3.self, _ diff array3)
+    }
   }
 
 }
