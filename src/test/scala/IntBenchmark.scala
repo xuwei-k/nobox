@@ -183,6 +183,10 @@ object IntBenchmark extends Benchmark{
     _exec("foldMapLeft1", array2.foldMapLeft1Ref(_.toLong)(_ + _), array2.foldMapLeft1Long(_.toLong)(_ + _))
 
     _exec("foldMapLeft1", array2.foldMapLeft1Ref(x => x)(_ + _), array2.foldMapLeft1(x => x)(_ + _))
+
+    _exec("fill", Array.fill(size)(1), ofInt.fill(size)(1))
+
+    _exec("fillAll", Array.fill(size)(1), ofInt.fillAll(size)(1))
   }
 
 }

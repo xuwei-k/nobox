@@ -573,6 +573,22 @@ object $obj {
     new $clazz(array)
   }
 
+  def fillAll${withTag}(size: Int)(elem: $a): $clazz = {
+    val array = new Array[$a](size)
+    Arrays.fill(array$castObj, elem)
+    new $clazz(array)
+  }
+
+  def fill$withTag(size: Int)(f: => $a): $clazz = {
+    val array = new Array[$a](size)
+    var i = 0
+    while(i < size){
+      array(i) = f
+      i += 1
+    }
+    new $clazz(array)
+  }
+
 }
 """
   }

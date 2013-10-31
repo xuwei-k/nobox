@@ -140,6 +140,10 @@ object RefBenchmark extends Benchmark{
       val array: ofRef[BigInt] = new ofRef((BigInt(1) to size).toArray)
       _exec("sum", array.self.sum, array.sum)
     }
+
+    _exec("fill", Array.fill(size)(""), ofRef.fill(size)(""))
+
+    _exec("fillAll", Array.fill(size)(""), ofRef.fillAll(size)(""))
   }
 
 }
