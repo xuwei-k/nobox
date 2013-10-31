@@ -1,9 +1,12 @@
 language: scala
 
 scala:
-  - 2.10.3
-  - 2.11.0-M6
   - test-only
+  - ref-211
+  - int-211
+  - ref-210
+  - int-210
+  - scalameter
 
 jdk:
   - oraclejdk7
