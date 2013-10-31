@@ -68,7 +68,7 @@ benchmark := {
   }
 }
 
-val printInfo = taskKey[Unit]("print each file line counts")
+val printInfo = inputKey[Unit]("print each file line counts")
 
 printInfo <<= printInfo.dependsOn(compile)
 
@@ -79,5 +79,6 @@ printInfo := {
   files.foreach{ case (file, lines) =>
     println(file.getName + " " + lines.size)
   }
+  (runMain in Test).fullInput(" nobox.Info").evaluated
 }
 
