@@ -276,7 +276,7 @@ s"""
     new of$tparamy(array)
   }
 """
-}
+    }
 
     val scanRight: Type => String = { b =>
       import b._
@@ -292,11 +292,49 @@ s"""
     new of$tparamy(array)
   }
 """
-}
+    }
 
+    val foldMapLeft1: Type => String = { b =>
+      import b._
+s"""
+  def foldMapLeft1$tparamy(z: $a => $y)(f: ($y, $a) => $y): Option[$y] = {
+    if(self.length == 0){
+      None
+    }else{
+      var acc = z(self(0))
+      var i = 1
+      while(i < self.length){
+        acc = f(acc, self(i))
+        i += 1
+      }
+      Some(acc)
+    }
+  }
+"""
+    }
+
+    val foldMapRight1: Type => String = { b =>
+      import b._
+s"""
+  def foldMapRight1$tparamy(z: $a => $y)(f: ($a, $y) => $y): Option[$y] = {
+    if(self.length == 0){
+      None
+    }else{
+      var acc = z(self(self.length - 1))
+      var i = self.length - 2
+      while(i >= 0){
+        acc = f(self(i), acc)
+        i -= 1
+      }
+      Some(acc)
+    }
+  }
+"""
+    }
 
     (List[Type => String](
-      map, reverseMap, flatMap, collect, collectFirst, foldLeft, foldRight, scanLeft, scanRight
+      map, reverseMap, flatMap, collect, collectFirst, foldLeft, foldRight, scanLeft, scanRight,
+      foldMapLeft1, foldMapRight1
     ).map{ method =>
       withRef map method mkString "\n"
     } ::: List[String](
