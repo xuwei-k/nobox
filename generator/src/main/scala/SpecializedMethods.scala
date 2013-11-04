@@ -4,6 +4,12 @@ import Generate.{list, withRef}
 
 object SpecializedMethods{
 
+  private final val collectIsSlow = s"""
+  /**
+   * can not avoid boxing `PartialFunction#applyOrElse`
+   * use `.withFilter(predicate).map(f)` instead
+   */"""
+
   def apply(a: Type): String = {
 
     val map0: String = {
@@ -60,6 +66,7 @@ $cases
       }.mkString("\n")
 
 s"""
+  $collectIsSlow
   def collect[A](f: PartialFunction[$a, A])(implicit A: ClassTag[A]): Array[A] = {
     (A match {
 $cases
@@ -231,6 +238,7 @@ s"""
     val collect: Type => String = { b =>
       import b._
 s"""
+  $collectIsSlow
   def collect$yWithTag(f: PartialFunction[$a, $y]): of$tparamy = {
     val builder = new ArrayBuilder.of$tparamy()
     var i = 0

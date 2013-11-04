@@ -5,6 +5,7 @@ sealed abstract class Type(val name: String){
   def tparamx = ""
   def tparamy = name
   def yWithTag = name
+  def xWithTag = ""
   def y = name
   def x = name
 }
@@ -22,6 +23,7 @@ object Type {
     override def tparamx = "[X]"
     override def tparamy = "Ref[Y]"
     override def yWithTag = "Ref[Y <: AnyRef :reflect.ClassTag]"
+    override def xWithTag = "[X <: AnyRef :reflect.ClassTag]"
     override def y = "Y"
     override def x = "X"
     override def toString = "X"

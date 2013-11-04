@@ -25,7 +25,7 @@ object Generate{
   def src(a: Type): String = {
 
     val clazz = "of" + a.name + a.tparamx
-    val withTag = if(a == REF) "[X <: AnyRef: ClassTag]" else ""
+    val withTag = a.xWithTag
     val classWithTag = "of" + a.name + withTag
     val obj = "of" + a.name
     val parent = if(a == REF) "AnyRef" else "AnyVal"
@@ -47,6 +47,10 @@ s"""package nobox
 import java.util.Arrays
 import scala.reflect.ClassTag
 import scala.collection.mutable.ArrayBuilder
+
+final class WithFilter${a.name + withTag} private[nobox](self: $clazz, f: $a => Boolean){
+  ${WithFilter(a)}
+}
 
 final class $classWithTag (val self: Array[$a]) extends $parent {
 
@@ -75,7 +79,8 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
 
   def filterNot(f: $a => Boolean): $clazz = filter(!f(_))
 
-  def withFilter(f: $a => Boolean): $clazz = filter(f)
+  def withFilter(f: $a => Boolean): WithFilter${a.name + a.tparamx} =
+    new WithFilter${a.name + a.tparamx}(this, f)
 
   def find(f: $a => Boolean): Option[$a] = {
     var i = 0

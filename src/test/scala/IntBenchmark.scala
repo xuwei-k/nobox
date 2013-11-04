@@ -35,6 +35,24 @@ object IntBenchmark extends Benchmark{
 
     benchmark("filter")(_.filter(_ % 2 == 0), _.filter(_ % 2 == 0))
 
+    benchmark("withFilter_map")(_.withFilter(_ % 4 != 0).map(_ + 1), _.withFilter(_ % 4 != 0).map(_ + 1))
+
+    {
+      val f0: Int => Boolean = Function.const(true) _
+      val f1: Int => Boolean = _ % 4 != 0
+      val f2: Int => Boolean = _ % 7 != 0
+
+      _exec("withFilter_vs_filter",
+        array2.filter(f0).filter(f1).filter(f2).map(_ + 1),
+        array2.withFilter(f0).withFilter(f1).withFilter(f2).map(_ + 1)
+      )
+    }
+
+    _exec("withFilter_vs_collect",
+      array2.collect{case i if i % 3 != 0 => i + 1},
+      array2.withFilter(_ % 3 != 0).map(_ + 1)
+    )
+
     benchmark("find")(_.find(_ == -1), _.find(_ == -1))
 
     benchmark("reverse")(_.reverse, _.reverse)

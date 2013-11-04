@@ -8,6 +8,35 @@ object TestInt extends TestBase("ofInt"){
   val pf: PartialFunction[Int, Long] = {case i: Int if i % 3 == 0 => i + 1}
   val f: Int => Boolean = {i: Int => 5 < i && i < 10 }
 
+  property("withFilter.map") = forAll { a: ofInt =>
+    a.withFilter(pf isDefinedAt _).map(pf) must_=== a.self.collect(pf)
+
+    val pf2: PartialFunction[Int, String] = {case i: Int if i > 0 => i.toString }
+    a.withFilter(pf2 isDefinedAt _).map(pf2) must_=== a.self.collect(pf2)
+  }
+
+  property("withFilter.flatMap") = forAll { a: ofInt =>
+    val f1 = (_: Int) % 3 != 0
+    val f2 = (a: Int) => Array(a, a + 1)
+    a.withFilter(f1).flatMap(f2) must_=== a.self.filter(f1).flatMap(f2 andThen (_.toSeq))
+
+    val f3 = (a: Int) => Array(a.toString)
+    a.withFilter(f1).flatMap(f3) must_=== a.self.filter(f1).flatMap(f3 andThen (_.toSeq))
+  }
+
+  property("withFilter.withFilter") = forAll { a: ofInt =>
+    val f1 = (_: Int) % 2 != 0
+    val f2 = (_: Int) % 3 != 0
+    a.withFilter(f1).withFilter(f2).map(x => x) must_=== a.self.withFilter(f1).withFilter(f2).map(x => x)
+  }
+
+  property("withFilter.foreach") = forAll { a: ofInt =>
+    val b1, b2 = collection.mutable.ArrayBuilder.make[String]
+    a.withFilter(f).foreach(b1 += _.toString)
+    a.self.withFilter(f).foreach(b2 += _.toString)
+    b1.result must_=== b2.result
+  }
+
   property("collectLong") = forAll { a: ofInt =>
     a.collectLong(pf).self must_=== a.self.collect(pf)
   }
