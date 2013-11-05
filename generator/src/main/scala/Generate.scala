@@ -631,6 +631,19 @@ object $obj {
     new $clazz(array)
   }
 
+  def unfold[@specialized B ${if(a == REF) ",X <: AnyRef: reflect.ClassTag" else ""}](z: B)(f: B => Option[(B, $a)]): $clazz = {
+    val builder = new ArrayBuilder.$clazz()
+    @annotation.tailrec
+    def loop(next: Option[(B, $a)]): Unit = next match {
+      case Some((b, a)) =>
+        builder += a
+        loop(f(b))
+      case None =>
+    }
+    loop(f(z))
+    new $clazz(builder.result)
+  }
+
 }
 """
   }
