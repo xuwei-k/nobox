@@ -466,4 +466,15 @@ object TestInt extends TestBase("ofInt"){
   property("unfold") = {
     ofInt.unfold(0)(a => if(a < 10) Some((a + 1, a + 1)) else None) === ofInt.iterate(1, 10)(_ + 1)
   }
+
+  property("deleteFirst") = forAll { (xs: ofInt, e: Int) =>
+    if(xs.contains(e)){
+      val a = xs.deleteFirst(e)
+      a.size must_== (xs.size - 1)
+      val i = xs.indexOf(e).get
+      a.self must_=== (xs.take(i) ++ xs.drop(i + 1)).self
+    }else{
+      xs.deleteFirst(e) must_== xs
+    }
+  }
 }

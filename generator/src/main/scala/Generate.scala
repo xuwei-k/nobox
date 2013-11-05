@@ -553,6 +553,19 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
     }
   }
 
+  def deleteFirst(elem: $a): $clazz = {
+    var i = 0
+    while(i < self.length){
+      if(self(i) == elem){
+        val array = new Array[$a](self.length - 1)
+        System.arraycopy(self, 0, array, 0, i)
+        System.arraycopy(self, i + 1, array, i, self.length - i - 1)
+        return new $clazz(array)
+      }
+      i += 1
+    }
+    this
+  }
 }
 
 object $obj {
