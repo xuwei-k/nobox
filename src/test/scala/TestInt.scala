@@ -462,4 +462,8 @@ object TestInt extends TestBase("ofInt"){
   property("mkString") = forAll { (xs: ofInt, start: String, sep: String, end: String) =>
     xs.mkString(start, sep, end) must_== xs.mkString(start, sep, end)
   }
+
+  property("unfold") = {
+    ofInt.unfold(0)(a => if(a < 10) Some((a + 1, a + 1)) else None) === ofInt.iterate(1, 10)(_ + 1)
+  }
 }
