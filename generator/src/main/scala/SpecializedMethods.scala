@@ -371,7 +371,34 @@ s"""
 """
     }
 
-    (List[Type => String](
+    val zipWith: (Type, Type) => String = { (b, c) =>
+      import Type.REF
+      val xy = (b, c) match{
+        case (REF, REF) => "RefRef[X <: AnyRef :reflect.ClassTag, Y <: AnyRef: reflect.ClassTag]"
+        case (_  , REF) => b + "Ref[Y <: AnyRef :reflect.ClassTag]"
+        case (REF, _  ) => "Ref" + c + "[X <: AnyRef :reflect.ClassTag]"
+        case _          => b.name + c.name
+      }
+s"""
+  def zipWith$xy(that: of${b.name + b.tparamx})(f: ($a, ${b.x}) => ${c.y}): Array[${c.y}] = {
+    val len = math.max(self.length, that.length)
+    val array = new Array[${c.y}](len)
+    var i = 0
+    while(i < len){
+      array(i) = f(self(i), that.self(i))
+      i += 1
+    }
+    array
+  }
+"""
+    }
+
+
+    (List[(Type, Type) => String](
+      zipWith
+    ).map{ method =>
+      { for(a <- list; b <- list) yield method(a, b) } mkString "\n"
+    } ::: List[Type => String](
       map, reverseMap, flatMap, collect, collectFirst, foldLeft, foldRight, scanLeft, scanRight,
       foldMapLeft1, foldMapRight1
     ).map{ method =>
