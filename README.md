@@ -7,7 +7,7 @@ https://bintray.com/xuwei-k/maven/nobox
 ```scala
 resolvers += "bintray" at "http://dl.bintray.com/xuwei-k/maven"
 
-libraryDependencies += "com.github.xuwei-k" %% "nobox" % "0.1.5"
+libraryDependencies += "com.github.xuwei-k" %% "nobox" % "0.1.6"
 ```
 
 ## what's this
