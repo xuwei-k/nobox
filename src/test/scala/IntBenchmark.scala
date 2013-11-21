@@ -2,7 +2,7 @@ package nobox
 
 object IntBenchmark extends Benchmark{
 
-  def defaultSize = 40000000
+  def defaultSize = 20000000
   type Array1 = Array[Int]
   type Array2 = ofInt
   def createSampleArray(size: Int) = {
