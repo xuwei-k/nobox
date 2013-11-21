@@ -1,11 +1,10 @@
 Common.commonSettings
 
 libraryDependencies ++= Seq(
-  // https://github.com/rickynils/scalacheck/pull/64#issuecomment-26704597
-  "org.scalacheck" %% "scalacheck" % "1.10.1" % "test" exclude("org.scala-lang", "scala-compiler")
+  "org.scalacheck" %% "scalacheck" % "1.11.1" % "test"
 )
 
-crossScalaVersions := List("2.10.3", "2.11.0-M6")
+crossScalaVersions := List("2.10.3", "2.11.0-M7")
 
 name := "nobox"
 
