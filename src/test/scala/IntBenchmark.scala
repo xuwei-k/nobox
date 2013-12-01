@@ -173,6 +173,8 @@ object IntBenchmark extends Benchmark{
 
     benchmark("min")(_.min, _.min)
 
+    _exec("minmax", {array2.min; array2.max}, array2.minmax)
+
     benchmark("scanLeft")(_.scanLeft(0)(_ + _), _.scanLeft(0)(_ + _))
 
     benchmark("scanRight", 0.05)(_.scanRight(0)(_ + _), _.scanRight(0)(_ + _))

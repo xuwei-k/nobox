@@ -245,6 +245,14 @@ object TestRef extends TestBase("ofRef"){
     }
   }
 
+  property("minmax") = forAll { a: ofRef[BigInt] =>
+    if(a.self.isEmpty){
+      a.minmax must_== None
+    }else{
+      a.minmax must_== Option((a.self.min, a.self.max))
+    }
+  }
+
   property("scanLeftInt") = forAll { (a: ofRef[Integer], z: Int) =>
     a.scanLeftInt(z)(_ - _).self.toList must_== a.self.scanLeft(z)(_ - _).toList
   }

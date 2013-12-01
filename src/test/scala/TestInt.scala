@@ -371,6 +371,14 @@ object TestInt extends TestBase("ofInt"){
     }
   }
 
+  property("minmax") = forAll { a: ofInt =>
+    if(a.self.isEmpty){
+      a.min must_== None
+    }else{
+      a.minmax must_== Some((a.self.min, a.self.max))
+    }
+  }
+
   property("scanLeftInt") = forAll { (a: ofInt, z: Int) =>
     a.scanLeftInt(z)(_ - _).self.toList must_== a.self.scanLeft(z)(_ - _).toList
   }

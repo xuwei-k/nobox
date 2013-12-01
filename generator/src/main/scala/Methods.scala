@@ -180,6 +180,24 @@ s"""
     }
   }
 
+  def minmax[B >: X](implicit O: Ordering[B]): Option[($a, $a)] = {
+    if(self.length == 0){
+      None
+    }else{
+      var i = 1
+      var _min, _max = self(0)
+      while(i < self.length){
+        val x = self(i)
+        if(O.lt(x, _min)){
+          _min = x
+        }else if(O.gt(x, _max)){
+          _max = x
+        }
+        i += 1
+      }
+      Some((_min, _max))
+    }
+  }
 """
       }else{
 s"""
@@ -214,6 +232,25 @@ s"""
         i += 1
       }
       Some(n)
+    }
+  }
+
+  def minmax: Option[($a, $a)] = {
+    if(self.length == 0){
+      None
+    }else{
+      var i = 1
+      var _min, _max = self(0)
+      while(i < self.length){
+        val x = self(i)
+        if(_min > x){
+          _min = x
+        }else if(_max < x){
+          _max = x
+        }
+        i += 1
+      }
+      Some((_min, _max))
     }
   }
 """
