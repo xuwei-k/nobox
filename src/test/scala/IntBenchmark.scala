@@ -80,6 +80,8 @@ object IntBenchmark extends Benchmark{
 
     benchmark("takeWhile")(_.takeWhile(_ > 1), _.takeWhile(_ > 1))
 
+    benchmark("takeWhileR")(_.reverse.takeWhile(_ > 1).reverse, _.takeWhileR(_ > 1))
+
     benchmark("take")(_.take(size / 2), _.take(size / 2))
 
     benchmark("takeRight")(_.takeRight(size / 2), _.takeRight(size / 2))
