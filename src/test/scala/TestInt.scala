@@ -131,6 +131,11 @@ object TestInt extends TestBase("ofInt"){
     a.takeWhile(f).self must_=== a.self.takeWhile(f)
   }
 
+  property("takeWhileR") = forAll { a: ofInt =>
+    val f = {i: Int => 5 < i }
+    a.takeWhileR(f).self must_=== a.self.reverse.takeWhile(f).reverse
+  }
+
   property("takeRight") = forAll { (a: ofInt, n: Int) =>
     a.takeRight(n).self must_=== a.self.toList.takeRight(n).toArray
   }
@@ -146,6 +151,11 @@ object TestInt extends TestBase("ofInt"){
   property("dropWhile") = forAll { a: ofInt =>
     val f = {i: Int => i > 3}
     a.dropWhile(f).self must_=== a.self.dropWhile(f)
+  }
+
+  property("dropWhileR") = forAll { a: ofInt =>
+    val f = {i: Int => i > 10}
+    a.dropWhileR(f).self must_=== a.self.reverse.dropWhile(f).reverse
   }
 
   property("dropRight") = forAll { (a: ofInt, n: Int) =>

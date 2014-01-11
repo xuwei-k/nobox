@@ -127,6 +127,17 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
     }
   }
 
+  def takeWhileR(f: $a => Boolean): $clazz = {
+    val len = lastIndex(f) + 1
+    if(len <= 0){
+      this
+    }else if(len == self.length){
+      $empty
+    }else{
+      new $clazz(${copyOfRange("len", "self.length")})
+    }
+  }
+
   def takeRight(n: Int): $clazz = {
     if(n <= 0){
       $empty
@@ -195,6 +206,17 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
       this
     }else{
       new $clazz(${copyOfRange("len", "self.length")})
+    }
+  }
+
+  def dropWhileR(f: $a => Boolean): $clazz = {
+    val len = lastIndex(f) + 1
+    if(len <= 0){
+      $empty
+    }else if(len == self.length){
+      this
+    }else{
+      new $clazz(${copyOf("len")})
     }
   }
 
@@ -381,6 +403,17 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
         return i
       }
       i += 1
+    }
+    -1
+  }
+
+  @inline private def lastIndex(f: $a => Boolean): Int = {
+    var i = self.length - 1
+    while(0 <= i){
+      if(!f(self(i))){
+        return i
+      }
+      i -= 1
     }
     -1
   }
