@@ -242,10 +242,9 @@ s"""
   def collect$yWithTag(f: PartialFunction[$a, $y]): of$tparamy = {
     val builder = new ArrayBuilder.of$tparamy()
     var i = 0
+    val appendFunc = f.runWith(builder += _)
     while(i < self.length){
-      if(f isDefinedAt self(i)){
-        builder += f(self(i))
-      }
+      appendFunc(self(i))
       i += 1
     }
     new of$tparamy(builder.result)
