@@ -38,9 +38,9 @@ ReleaseKeys.releaseProcess := Seq[ReleaseStep](
   runTest,
   setReleaseVersion,
   commitReleaseVersion,
+  updateReadmeProcess,
   tagRelease,
   publishArtifacts,
-  updateReadmeProcess,
   setNextVersion,
   commitNextVersion,
   pushChanges
