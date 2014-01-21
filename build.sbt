@@ -24,6 +24,7 @@ scmInfo := Some(ScmInfo(
 description := "immutable primitive array wrapper for Scala"
 
 pomExtra := (
+<url>https://github.com/xuwei-k/nobox</url>
 <developers>
   <developer>
     <id>xuwei-k</id>
