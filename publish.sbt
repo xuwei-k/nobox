@@ -57,6 +57,13 @@ ReleaseKeys.releaseProcess := Seq[ReleaseStep](
   pushChanges
 )
 
+publishTo := {
+  if(version.value endsWith "SNAPSHOT")
+    Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots")
+  else
+    publishTo.value
+}
+
 val checkPackage = taskKey[Unit]("show pom.xml and sources.jar")
 
 checkPackage := {
