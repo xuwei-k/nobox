@@ -40,7 +40,7 @@ val updateReadmeProcess: ReleaseStep = updateReadme
 
 val publishSignedStep: ReleaseStep = ReleaseStep{ state =>
   Project.extract(state).runTask(PgpKeys.publishSigned, state)._1
-}
+}.copy(enableCrossBuild = true)
 
 ReleaseKeys.releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
