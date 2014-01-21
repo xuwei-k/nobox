@@ -7,5 +7,7 @@ addSbtPlugin("me.lessis" % "bintray-sbt" % "0.1.0")
 
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.8")
 
-scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xlint")
+scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xlint", "-language:_")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-pgp" % "0.8.1")
 

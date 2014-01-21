@@ -9,12 +9,22 @@ bintray.Keys.whoami := "xuwei-k"
 
 releaseSettings
 
-val updateReadme = { (state: State, v: String) =>
+val sonatypeURL =
+"https://oss.sonatype.org/service/local/repositories/releases/archive/"
+
+val updateReadme = { state: State =>
+  val extracted = Project.extract(state)
+  val scalaV = extracted get scalaBinaryVersion
+  val v = extracted get version
+  val org =  extracted get organization
+  val n = extracted get name
   val readme = "README.md"
   val readmeFile = file(readme)
   val newReadme = Predef.augmentString(IO.read(readmeFile)).lines.map{ line =>
     if(line.startsWith("libraryDependencies")){
-      s"""libraryDependencies += "com.github.xuwei-k" %% "nobox" % "$v""""
+      s"""libraryDependencies += "${org}" %% "${n}" % "$v""""
+    }else if(line contains sonatypeURL){
+      s"[API Documentation](${sonatypeURL}${org.replace('.','/')}/${n}_${scalaV}/${v}/${n}_${scalaV}-${v}-javadoc.jar/!/index.html)"
     }else line
   }.mkString("", "\n", "\n")
   IO.write(readmeFile, newReadme)
@@ -24,11 +34,12 @@ val updateReadme = { (state: State, v: String) =>
   state
 }
 
-commands += Command.single("updateReadme")(updateReadme)
+commands += Command.command("updateReadme")(updateReadme)
 
-val updateReadmeProcess: ReleaseStep = { state: State =>
-  val v = Project.extract(state) get version
-  updateReadme(state, v)
+val updateReadmeProcess: ReleaseStep = updateReadme
+
+val publishSignedStep: ReleaseStep = ReleaseStep{ state =>
+  Project.extract(state).runTask(PgpKeys.publishSigned, state)._1
 }
 
 ReleaseKeys.releaseProcess := Seq[ReleaseStep](
@@ -40,7 +51,7 @@ ReleaseKeys.releaseProcess := Seq[ReleaseStep](
   commitReleaseVersion,
   updateReadmeProcess,
   tagRelease,
-  publishArtifacts,
+  publishSignedStep,
   setNextVersion,
   commitNextVersion,
   pushChanges
