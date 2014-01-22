@@ -1,10 +1,10 @@
 Common.commonSettings
 
 libraryDependencies ++= Seq(
-  "org.scalacheck" %% "scalacheck" % "1.11.1" % "test"
+  "org.scalacheck" %% "scalacheck" % "1.11.3" % "test"
 )
 
-crossScalaVersions := List("2.10.3", "2.11.0-M7")
+crossScalaVersions := List("2.10.3", "2.11.0-M8")
 
 name := "nobox"
 

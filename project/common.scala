@@ -8,6 +8,7 @@ object Common {
     javaOptions ++= "-Djava.awt.headless=true" +: sys.process.javaVmArguments.filter(
       a => Seq("-Xmx","-Xms","-XX").exists(a.startsWith)
     ),
+    resolvers += Opts.resolver.sonatypeReleases,
     incOptions := incOptions.value.withNameHashing(true),
     scalacOptions ++= Seq("-optimize", "-deprecation", "-unchecked", "-Xlint"),
     trapExit := false
