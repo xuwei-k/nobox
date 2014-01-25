@@ -61,15 +61,8 @@ publishTo := {
   if(version.value endsWith "SNAPSHOT")
     Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots")
   else
-    publishTo.value
+    Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
 }
 
-val checkPackage = taskKey[Unit]("show pom.xml and sources.jar")
+sonatypeSettings
 
-checkPackage := {
-  println(IO.read(makePom.value))
-  println()
-  IO.withTemporaryDirectory{ dir =>
-    IO.unzip((packageSrc in Compile).value, dir).map(f => f.getName -> f.length) foreach println
-  }
-}
