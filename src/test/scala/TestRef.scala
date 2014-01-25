@@ -349,4 +349,16 @@ object TestRef extends TestBase("ofRef"){
     xs.mkString(start, sep, end) must_== xs.mkString(start, sep, end)
   }
 
+  property("intersperse") = forAll { (xs: ofRef[String], x: String) =>
+    val a = xs.intersperse(x)
+    a.size must_== (
+      if(xs.self.isEmpty) 0 else (xs.size * 2) - 1
+    )
+    (1 until a.size by 2).forall(a.self(_) == x) must_== true
+    val size0 = if(xs.self.isEmpty) 0 else xs.size - 1
+    a.count(x == _) must_== (xs.count(x == _) + size0)
+    xs.forall(a.contains) must_== true
+  }
+
+
 }

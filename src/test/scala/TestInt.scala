@@ -495,4 +495,15 @@ object TestInt extends TestBase("ofInt"){
       xs.deleteFirst(e) must_== xs
     }
   }
+
+  property("intersperse") = forAll { (xs: ofInt, x: Int) =>
+    val a = xs.intersperse(x)
+    a.size must_== (
+      if(xs.self.isEmpty) 0 else (xs.size * 2) - 1
+    )
+    (1 until a.size by 2).forall(a.self(_) == x) must_== true
+    val size0 = if(xs.self.isEmpty) 0 else xs.size - 1
+    a.count(x == _) must_== (xs.count(x == _) + size0)
+    xs.forall(a.contains) must_== true
+  }
 }

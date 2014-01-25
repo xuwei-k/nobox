@@ -599,6 +599,21 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
     }
     this
   }
+
+  def intersperse(a: $a): $clazz = {
+    if(self.length == 0){
+      $empty
+    }else{
+      val array = new Array[$a]((self.length * 2) - 1)
+      var i = 0
+      java.util.Arrays.fill(array$castObj, a)
+      while(i < self.length){
+        array(i * 2) = self(i)
+        i += 1
+      }
+      new $clazz(array)
+    }
+  }
 }
 
 object $obj {
