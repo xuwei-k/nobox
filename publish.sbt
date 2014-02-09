@@ -1,12 +1,6 @@
 import sbtrelease._
 import ReleaseStateTransformations._
 
-bintrayPublishSettings
-
-bintray.Keys.packageLabels in bintray.Keys.bintray := Seq("array", "collection")
-
-bintray.Keys.whoami := "xuwei-k"
-
 releaseSettings
 
 val sonatypeURL =
@@ -62,8 +56,10 @@ publishTo := {
   if(version.value endsWith "SNAPSHOT")
     Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots")
   else
-    publishTo.value
+    Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
 }
+
+sonatypeSettings
 
 val checkPackage = taskKey[Unit]("show pom.xml and sources.jar")
 
