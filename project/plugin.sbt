@@ -5,7 +5,7 @@ resolvers += Resolver.url(
 
 addSbtPlugin("me.lessis" % "bintray-sbt" % "0.1.0")
 
-addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.8")
+addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.8.1")
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xlint", "-language:_")
 

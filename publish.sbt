@@ -28,8 +28,9 @@ val updateReadme = { state: State =>
     }else line
   }.mkString("", "\n", "\n")
   IO.write(readmeFile, newReadme)
-  Git.add(readme) ! state.log
-  Git.commit("update " + readme) ! state.log
+  val git = new Git(extracted get baseDirectory)
+  git.add(readme) ! state.log
+  git.commit("update " + readme) ! state.log
   "git diff HEAD^" ! state.log
   state
 }
