@@ -9,6 +9,12 @@ object Common {
       a => Seq("-Xmx","-Xms","-XX").exists(a.startsWith)
     ),
     resolvers += Opts.resolver.sonatypeReleases,
+    resolvers ++= {
+      if(scalaVersion.value endsWith "SNAPSHOT"){
+        Opts.resolver.sonatypeSnapshots :: Nil
+      }else Nil
+    },
+    scalaBinaryVersion := { if(scalaVersion.value == "2.11.0-SNAPSHOT") "2.11.0-M8" else scalaBinaryVersion.value },
     incOptions := incOptions.value.withNameHashing(true),
     scalacOptions ++= Seq("-optimize", "-deprecation", "-unchecked", "-Xlint"),
     trapExit := false

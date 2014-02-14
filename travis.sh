@@ -12,6 +12,8 @@ elif [[ $TRAVIS_SCALA_VERSION = "test-only" ]]; then
   sbt '++ 2.10.3' test
 elif [[ $TRAVIS_SCALA_VERSION = "scalameter" ]]; then
   sbt '++ 2.10.3' compile printInfo test scalameter/test checkPackage
+elif [[ $TRAVIS_SCALA_VERSION = "2.11.0-SNAPSHOT" ]]; then
+  sbt generator/generateSources && rm generate.sbt && sbt '++ 2.11.0-SNAPSHOT' nobox/compile nobox/test
 else
   echo "no match TRAVIS_SCALA_VERSION"
   exit -1
