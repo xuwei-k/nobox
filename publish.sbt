@@ -3,8 +3,10 @@ import ReleaseStateTransformations._
 
 releaseSettings
 
+sonatypeSettings
+
 val sonatypeURL =
-"https://oss.sonatype.org/service/local/repositories/releases/archive/"
+"https://oss.sonatype.org/service/local/repositories/"
 
 val updateReadme = { state: State =>
   val extracted = Project.extract(state)
@@ -12,13 +14,15 @@ val updateReadme = { state: State =>
   val v = extracted get version
   val org =  extracted get organization
   val n = extracted get name
+  val snapshotOrRelease = if(extracted get isSnapshot) "snapshots" else "releases"
   val readme = "README.md"
   val readmeFile = file(readme)
   val newReadme = Predef.augmentString(IO.read(readmeFile)).lines.map{ line =>
-    if(line.startsWith("libraryDependencies")){
+    val matchReleaseOrSnapshot = line.contains("SNAPSHOT") == v.contains("SNAPSHOT")
+    if(line.startsWith("libraryDependencies") && matchReleaseOrSnapshot){
       s"""libraryDependencies += "${org}" %% "${n}" % "$v""""
-    }else if(line contains sonatypeURL){
-      s"[API Documentation](${sonatypeURL}${org.replace('.','/')}/${n}_${scalaV}/${v}/${n}_${scalaV}-${v}-javadoc.jar/!/index.html)"
+    }else if(line.contains(sonatypeURL) && matchReleaseOrSnapshot){
+      s"- [API Documentation](${sonatypeURL}${snapshotOrRelease}/archive/${org.replace('.','/')}/${n}_${scalaV}/${v}/${n}_${scalaV}-${v}-javadoc.jar/!/index.html)"
     }else line
   }.mkString("", "\n", "\n")
   IO.write(readmeFile, newReadme)
@@ -33,9 +37,10 @@ commands += Command.command("updateReadme")(updateReadme)
 
 val updateReadmeProcess: ReleaseStep = updateReadme
 
-val publishSignedStep: ReleaseStep = ReleaseStep{ state =>
-  Project.extract(state).runTask(PgpKeys.publishSigned, state)._1
-}.copy(enableCrossBuild = true)
+def releaseStepCross[A](key: TaskKey[A]) = ReleaseStep(
+  action = state => Project.extract(state).runTask(key, state)._1,
+  enableCrossBuild = true
+)
 
 ReleaseKeys.releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
@@ -46,20 +51,12 @@ ReleaseKeys.releaseProcess := Seq[ReleaseStep](
   commitReleaseVersion,
   updateReadmeProcess,
   tagRelease,
-  publishSignedStep,
+  releaseStepCross(PgpKeys.publishSigned),
   setNextVersion,
   commitNextVersion,
+  releaseStepCross(SonatypeKeys.sonatypeReleaseAll),
   pushChanges
 )
-
-publishTo := {
-  if(version.value endsWith "SNAPSHOT")
-    Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots")
-  else
-    Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
-}
-
-sonatypeSettings
 
 val checkPackage = taskKey[Unit]("show pom.xml and sources.jar")
 
