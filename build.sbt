@@ -4,7 +4,7 @@ libraryDependencies ++= Seq(
   "org.scalacheck" %% "scalacheck" % "1.11.3" % "test"
 )
 
-crossScalaVersions := List("2.10.3", "2.11.0-M8")
+crossScalaVersions := List("2.10.3", "2.11.0-RC1")
 
 name := "nobox"
 

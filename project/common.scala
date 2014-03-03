@@ -14,7 +14,7 @@ object Common {
         Opts.resolver.sonatypeSnapshots :: Nil
       }else Nil
     },
-    scalaBinaryVersion := { if(scalaVersion.value == "2.11.0-SNAPSHOT") "2.11.0-M8" else scalaBinaryVersion.value },
+    scalaBinaryVersion := { if(scalaVersion.value == "2.11.0-SNAPSHOT") "2.11.0-RC1" else scalaBinaryVersion.value },
     incOptions := incOptions.value.withNameHashing(true),
     scalacOptions ++= Seq("-optimize", "-deprecation", "-unchecked", "-Xlint"),
     trapExit := false

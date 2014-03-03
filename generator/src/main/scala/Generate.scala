@@ -1,13 +1,22 @@
 package nobox
 
-import sbt._
 import nobox.Type._
+import java.io.File
+import java.nio.file.{Files, Path}
+import java.nio.charset.Charset
 
 object Generate{
 
+  private def deleteDir(file: File){
+    if(!file.delete() && file.isDirectory){
+      Option(file.listFiles).toList.flatten.foreach(deleteDir)
+      file.delete
+    }
+  }
+
   def main(args: Array[String]){
-    val dir = file(args.headOption.getOrElse(sys.error("invalid args " + args.mkString(", "))))
-    IO.delete(dir)
+    val dir = new File(args.headOption.getOrElse(sys.error("invalid args " + args.mkString(", "))))
+    deleteDir(dir)
     apply(dir)
   }
 
@@ -15,9 +24,10 @@ object Generate{
   val withRef = list :+ REF
 
   def apply(dir: File): Unit = {
+    dir.mkdir
     withRef.map{ t =>
-      val f = dir / ("of" + t.name + ".scala")
-      IO.write(f, src(t))
+      val f = new File(dir, "of" + t.name + ".scala").toPath
+      Files.write(f, java.util.Collections.singletonList(src(t)), Charset.forName("UTF-8"))
       f
     }
   }

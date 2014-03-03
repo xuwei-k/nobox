@@ -1,13 +1,13 @@
 #!/bin/bash
 
 if [[ $TRAVIS_SCALA_VERSION = "ref-211" ]]; then
-  ./test211.sh && sbt 'nobox/benchmark RefBenchmark'
+  sbt '++ 2.11.0-RC1' 'benchmark RefBenchmark'
 elif [[ $TRAVIS_SCALA_VERSION = "int-211" ]]; then
-  ./test211.sh && sbt 'nobox/benchmark IntBenchmark'
+  sbt '++ 2.11.0-RC1' 'benchmark IntBenchmark'
 elif [[ $TRAVIS_SCALA_VERSION = "ref-210" ]]; then
-  sbt 'benchmark RefBenchmark'
+  sbt '++ 2.10.3' 'benchmark RefBenchmark'
 elif [[ $TRAVIS_SCALA_VERSION = "int-210" ]]; then
-  sbt 'benchmark IntBenchmark'
+  sbt '++ 2.10.3' 'benchmark IntBenchmark'
 elif [[ $TRAVIS_SCALA_VERSION = "test-only" ]]; then
   sbt '++ 2.10.3' test
 elif [[ $TRAVIS_SCALA_VERSION = "scalameter" ]]; then

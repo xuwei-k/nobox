@@ -14,7 +14,6 @@ cleanSrc := IO.delete((scalaSource in Compile).value / generatedSourceDir)
 clean <<= clean dependsOn cleanSrc
 
 lazy val generator = project in file("generator") settings(
-  libraryDependencies <+= sbtDependency,
   generateSources := {
     val dir = ((scalaSource in Compile in LocalRootProject).value / generatedSourceDir).toString
     val cp = (fullClasspath in Compile).value
