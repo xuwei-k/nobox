@@ -3,7 +3,7 @@
 immutable primitive array wrapper for Scala
 
 ```scala
-libraryDependencies += "com.github.xuwei-k" %% "nobox" % "0.1.8"
+libraryDependencies += "com.github.xuwei-k" %% "nobox" % "0.1.9"
 ```
 
 ## what's this
@@ -13,5 +13,5 @@ There are [`ArrayOps`](https://github.com/scala/scala/blob/v2.10.3/src/library/s
 This library provide more efficient(faster and less memory) operations for primitive arrays.
 
 
-[API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/xuwei-k/nobox_2.10/0.1.8/nobox_2.10-0.1.8-javadoc.jar/!/index.html)
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/xuwei-k/nobox_2.10/0.1.9/nobox_2.10-0.1.9-javadoc.jar/!/index.html)
 
