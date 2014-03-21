@@ -1,9 +1,9 @@
 #!/bin/bash
 
 if [[ $TRAVIS_SCALA_VERSION = "ref-211" ]]; then
-  sbt '++ 2.11.0-RC1' 'benchmark RefBenchmark'
+  sbt '++ 2.11.0-RC3' 'benchmark RefBenchmark'
 elif [[ $TRAVIS_SCALA_VERSION = "int-211" ]]; then
-  sbt '++ 2.11.0-RC1' 'benchmark IntBenchmark'
+  sbt '++ 2.11.0-RC3' 'benchmark IntBenchmark'
 elif [[ $TRAVIS_SCALA_VERSION = "ref-210" ]]; then
   sbt '++ 2.10.3' 'benchmark RefBenchmark'
 elif [[ $TRAVIS_SCALA_VERSION = "int-210" ]]; then
