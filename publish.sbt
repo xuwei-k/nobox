@@ -58,6 +58,11 @@ ReleaseKeys.releaseProcess := Seq[ReleaseStep](
   pushChanges
 )
 
+credentials ++= PartialFunction.condOpt(sys.env.get("SONATYPE_USER") -> sys.env.get("SONATYPE_PASS")){
+  case (Some(user), Some(pass)) =>
+    Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", user, pass)
+}.toList
+
 val checkPackage = taskKey[Unit]("show pom.xml and sources.jar")
 
 checkPackage := {

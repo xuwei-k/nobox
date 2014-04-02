@@ -15,3 +15,8 @@ jdk:
 script:
   - ./travis.sh
 
+env:
+  global:
+    - secure: "kGHQxLZj8a2s5Fs9Z8CuDHUsd26u7cR8icUujffcXpcznJHrGyKcYCMmHbNH5ncQDIg0mtqrCmIV3xvjxHTRHt1JgseDRDTTAoshykBlSTeeUnfYAsYVRw/qU3dGN0fh11MNDigrj/80795Mmt6TwhspNQ/rE2Jg5p9PbHK5FA8="
+    - secure: "f8eOm+ZvDJpmyEcAAjUQHiy2dV4VI9U2kOlytmeTM04qg1Y9KvuXtgTcaQ5MKXoA9Z6c14NAqoqwVrJSR3imItTLoz7fP+MazIPRpsaNONucndd9RPAhu6C8q+wkUQHWwJD6ZBDeSrJl2fM7wpVUQHFaLolUvmvuMEN3L002moY="
+
