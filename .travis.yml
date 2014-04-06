@@ -1,7 +1,8 @@
 language: scala
 
 scala:
-  - test-only
+  - test-only-211
+  - test-only-210
   - ref-211
   - int-211
   - ref-210
