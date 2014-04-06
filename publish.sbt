@@ -54,6 +54,7 @@ ReleaseKeys.releaseProcess := Seq[ReleaseStep](
   releaseStepCross(PgpKeys.publishSigned),
   setNextVersion,
   commitNextVersion,
+  updateReadmeProcess,
   releaseStepCross(SonatypeKeys.sonatypeReleaseAll),
   pushChanges
 )
