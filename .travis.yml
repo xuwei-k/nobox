@@ -8,7 +8,6 @@ scala:
   - ref-210
   - int-210
   - scalameter
-  - 2.11.0-SNAPSHOT
 
 jdk:
   - oraclejdk7
