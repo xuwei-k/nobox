@@ -16,12 +16,11 @@ startYear := Some(2013)
 
 organization := "com.github.xuwei-k"
 
-scmInfo := Some(ScmInfo(
-  url("https://github.com/xuwei-k/nobox"),
-  "scm:git:git@github.com:xuwei-k/nobox.git"
-))
-
 description := "immutable primitive array wrapper for Scala"
+
+def gitHash: Option[String] = scala.util.Try(
+  sys.process.Process("git rev-parse HEAD").lines_!.head
+).toOption
 
 pomExtra := (
 <url>https://github.com/xuwei-k/nobox</url>
@@ -32,6 +31,11 @@ pomExtra := (
     <url>https://github.com/xuwei-k</url>
   </developer>
 </developers>
+<scm>
+  <url>git@github.com:xuwei-k/nobox.git</url>
+  <connection>scm:git:git@github.com:xuwei-k/nobox.git</connection>
+  <tag>{if(isSnapshot.value) gitHash.getOrElse("master") else { "v" + version.value }}</tag>
+</scm>
 )
 
 val benchmark = inputKey[Unit]("benchmark")
