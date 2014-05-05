@@ -16,6 +16,12 @@ object Common {
     },
     incOptions := incOptions.value.withNameHashing(true),
     scalacOptions ++= Seq("-optimize", "-deprecation", "-unchecked", "-Xlint"),
+    scalacOptions ++= {
+      if(scalaVersion.value.startsWith("2.11"))
+        Seq("-Ywarn-unused", "-Ywarn-unused-import")
+      else
+        Nil
+    },
     trapExit := false
   )
 
