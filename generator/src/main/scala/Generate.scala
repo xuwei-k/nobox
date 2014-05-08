@@ -402,9 +402,9 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
     }
   }
 
-  def length: Int = self.length
+  @inline def length: Int = self.length
 
-  def size: Int = self.length
+  @inline def size: Int = self.length
 
   @inline private def index(f: $a => Boolean): Int = {
     var i = 0
@@ -458,6 +458,7 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
     b
   }
 
+  @inline
   def ===(that: $clazz): Boolean = Arrays.equals(self$castObj, that.self$castObj)
 
   @throws[IllegalArgumentException]
