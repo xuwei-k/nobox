@@ -15,7 +15,16 @@ object Common {
       }else Nil
     },
     incOptions := incOptions.value.withNameHashing(true),
-    scalacOptions ++= Seq("-optimize", "-deprecation", "-unchecked", "-Xlint"),
+    scalacOptions ++= (
+      "-deprecation" ::
+      "-unchecked" ::
+      "-Xlint" ::
+      "-optimize" ::
+      "-language:existentials" ::
+      "-language:higherKinds" ::
+      "-language:implicitConversions" ::
+      Nil
+    ),
     scalacOptions ++= {
       if(scalaVersion.value.startsWith("2.11"))
         Seq("-Ywarn-unused", "-Ywarn-unused-import")
