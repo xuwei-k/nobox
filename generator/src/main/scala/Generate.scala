@@ -25,10 +25,9 @@ object Generate{
 
   def apply(dir: File): Unit = {
     dir.mkdir
-    withRef.map{ t =>
+    withRef.foreach{ t =>
       val f = new File(dir, "of" + t.name + ".scala").toPath
       Files.write(f, java.util.Collections.singletonList(src(t)), Charset.forName("UTF-8"))
-      f
     }
   }
 
@@ -426,6 +425,18 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
       i -= 1
     }
     -1
+  }
+
+  def toArray: Array[$a] = self.clone
+
+  def toList: List[${a}] = {
+    var list: List[$a] = Nil
+    var i = self.length - 1
+    while(i >= 0){
+      list ::= self(i)
+      i -= 1
+    }
+    list
   }
 
   override def toString = mkString("$obj(", ", ", ")")

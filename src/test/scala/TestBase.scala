@@ -1,7 +1,6 @@
 package nobox
 
 import org.scalacheck._
-import Prop.forAll
 
 abstract class TestBase(name: String) extends Properties(name){
   def fail(message: String) =

@@ -506,4 +506,12 @@ object TestInt extends TestBase("ofInt"){
     a.count(x == _) must_== (xs.count(x == _) + size0)
     xs.forall(a.contains) must_== true
   }
+
+  property("toList") = forAll { xs: ofInt =>
+    xs.toList must_== xs.self.toList
+  }
+
+  property("toArray") = forAll { xs: ofInt =>
+    xs.toArray must_=== xs.self.toArray
+  }
 }
