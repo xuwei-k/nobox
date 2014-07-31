@@ -1,7 +1,7 @@
 Common.commonSettings
 
 libraryDependencies ++= Seq(
-  "org.scalacheck" %% "scalacheck" % "1.11.3" % "test"
+  "org.scalacheck" %% "scalacheck" % "1.11.5" % "test"
 )
 
 scalaVersion := "2.11.2"
