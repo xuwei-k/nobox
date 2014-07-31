@@ -4,8 +4,6 @@ libraryDependencies ++= Seq(
   "org.scalacheck" %% "scalacheck" % "1.11.5" % "test"
 )
 
-scalaVersion := "2.11.2"
-
 crossScalaVersions := "2.10.4" :: scalaVersion.value :: Nil
 
 name := "nobox"
