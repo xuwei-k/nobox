@@ -29,6 +29,10 @@ object Generate{
       val f = new File(dir, "of" + t.name + ".scala").toPath
       Files.write(f, java.util.Collections.singletonList(src(t)), Charset.forName("UTF-8"))
     }
+    list.foreach{ t =>
+      val f = new File(dir, "of" + t.name + "1.scala").toPath
+      Files.write(f, java.util.Collections.singletonList(One.src(t)), Charset.forName("UTF-8"))
+    }
   }
 
   def src(a: Type): String = {
