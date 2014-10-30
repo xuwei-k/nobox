@@ -1,7 +1,7 @@
 Common.commonSettings
 
 libraryDependencies ++= Seq(
-  "org.scalacheck" %% "scalacheck" % "1.11.5" % "test"
+  "org.scalacheck" %% "scalacheck" % "1.11.6" % "test"
 )
 
 crossScalaVersions := "2.10.4" :: scalaVersion.value :: Nil
