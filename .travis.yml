@@ -9,6 +9,8 @@ scala:
   - int-210
   - scalameter
 
+sudo: false
+
 jdk:
   - oraclejdk7
 
