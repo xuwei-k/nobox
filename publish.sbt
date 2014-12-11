@@ -22,7 +22,14 @@ val updateReadme = { state: State =>
     if(line.startsWith("libraryDependencies") && matchReleaseOrSnapshot){
       s"""libraryDependencies += "${org}" %% "${n}" % "$v""""
     }else if(line.contains(sonatypeURL) && matchReleaseOrSnapshot){
-      s"- [API Documentation](${sonatypeURL}${snapshotOrRelease}/archive/${org.replace('.','/')}/${n}_${scalaV}/${v}/${n}_${scalaV}-${v}-javadoc.jar/!/index.html)"
+      val sxrIndexHtml = "-sxr.jar/!/index.html"
+      val javadocIndexHtml = "-javadoc.jar/!/index.html"
+      val baseURL = s"${sonatypeURL}${snapshotOrRelease}/archive/${org.replace('.', '/')}/${n}_${scalaV}/${v}/${n}_${scalaV}-${v}"
+      if(line.contains(javadocIndexHtml)){
+        s"- [API Documentation](${baseURL}${javadocIndexHtml})"
+      }else if (line.contains(sxrIndexHtml)){
+        s"- [sxr](${baseURL}${sxrIndexHtml})"
+      }else line
     }else line
   }.mkString("", "\n", "\n")
   IO.write(readmeFile, newReadme)
