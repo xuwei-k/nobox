@@ -626,6 +626,39 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
     this
   }
 
+  def interleave(that: $clazz): $clazz = {
+    if(self.length == 0){
+      that
+    }else if(that.self.length == 0){
+      this
+    }else{
+      val len = Math.min(self.length, that.self.length)
+      val array = new Array[$a](self.length + that.self.length)
+      @annotation.tailrec
+      def loop(isThis: Boolean, i: Int): Unit = {
+        if(i < len) {
+          if (isThis) {
+            array(i * 2) = self(i)
+            loop(false, i)
+          } else {
+            array(i * 2 + 1) = that.self(i)
+            loop(true, i + 1)
+          }
+        }
+      }
+      loop(true, 0)
+      def cp(min: Array[$a], max: Array[$a]): Unit = {
+        System.arraycopy(max, min.length, array, len * 2, max.length - min.length)
+      }
+      if(self.length > that.length) {
+        cp(that.self, self)
+      }else if(self.length < that.length){
+        cp(self, that.self)
+      }
+      new $clazz(array)
+    }
+  }
+
   def intersperse(a: $a): $clazz = {
     if(self.length == 0){
       $empty

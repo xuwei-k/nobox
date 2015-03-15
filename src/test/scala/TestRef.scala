@@ -349,6 +349,22 @@ object TestRef extends TestBase("ofRef"){
     xs.mkString(start, sep, end) must_== xs.mkString(start, sep, end)
   }
 
+  property("interleave") = forAll { (xs: ofRef[String], ys: ofRef[String]) =>
+    val a = xs interleave ys
+    (xs.length + ys.length) must_== a.length
+    val min = math.min(xs.length, ys.length)
+
+    xs.toList.zipWithIndex.forall{ case (x, i) =>
+      val index = if(i <= min) i * 2 else (min * 2) + i - min
+      a.self(index) == x
+    } must_== true
+
+    ys.toList.zipWithIndex.forall{ case (y, i) =>
+      val index = if(i < min) (i * 2) + 1 else (min * 2) + i - min
+      a.self(index) == y
+    } must_== true
+  }
+
   property("intersperse") = forAll { (xs: ofRef[String], x: String) =>
     val a = xs.intersperse(x)
     a.size must_== (
