@@ -27,10 +27,10 @@ libraryDependencies += "com.github.xuwei-k" %% "nobox" % "0.1.11"
 ```scala
 resolvers += Opts.resolver.sonatypeSnapshots
 
-libraryDependencies += "com.github.xuwei-k" %% "nobox" % "0.1.11-SNAPSHOT"
+libraryDependencies += "com.github.xuwei-k" %% "nobox" % "0.1.12-SNAPSHOT"
 ```
 
 
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/xuwei-k/nobox_2.11/0.1.11-SNAPSHOT/nobox_2.11-0.1.11-SNAPSHOT-javadoc.jar/!/index.html)
-- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/xuwei-k/nobox_2.11/0.1.11-SNAPSHOT/nobox_2.11-0.1.11-SNAPSHOT-sxr.jar/!/index.html)
+- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/xuwei-k/nobox_2.11/0.1.12-SNAPSHOT/nobox_2.11-0.1.12-SNAPSHOT-javadoc.jar/!/index.html)
+- [sxr](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/xuwei-k/nobox_2.11/0.1.12-SNAPSHOT/nobox_2.11-0.1.12-SNAPSHOT-sxr.jar/!/index.html)
 
