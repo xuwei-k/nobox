@@ -2,6 +2,12 @@ import sbt._, Keys._
 
 object Common {
 
+  private[this] val unusedWarnings = (
+    "-Ywarn-unused" ::
+    "-Ywarn-unused-import" ::
+    Nil
+  )
+
   val commonSettings: Seq[Def.Setting[_]] = Seq(
     scalaVersion := "2.11.6",
     aggregate := false,
@@ -25,13 +31,12 @@ object Common {
       "-language:implicitConversions" ::
       Nil
     ),
-    scalacOptions ++= {
-      if(scalaVersion.value.startsWith("2.11"))
-        Seq("-Ywarn-unused", "-Ywarn-unused-import")
-      else
-        Nil
-    },
+    scalacOptions ++= PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion.value)){
+      case Some((2, v)) if v >= 11 => unusedWarnings
+    }.toList.flatten,
     trapExit := false
+  ) ++ Seq(Compile, Test).flatMap(c =>
+    scalacOptions in (c, console) ~= {_.filterNot(unusedWarnings.toSet)}
   )
 
 }
