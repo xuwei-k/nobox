@@ -1,14 +1,12 @@
 import sbtrelease._
 import ReleaseStateTransformations._
 
-releaseSettings
-
-sonatypeSettings
+xerial.sbt.Sonatype.sonatypeSettings
 
 val sonatypeURL =
 "https://oss.sonatype.org/service/local/repositories/"
 
-val updateReadme = { state: State =>
+val updateReadme: State => State = { state =>
   val extracted = Project.extract(state)
   val scalaV = extracted get scalaBinaryVersion
   val v = extracted get version
@@ -49,7 +47,7 @@ def releaseStepCross[A](key: TaskKey[A]) = ReleaseStep(
   enableCrossBuild = true
 )
 
-ReleaseKeys.releaseProcess := Seq[ReleaseStep](
+releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
   runClean,
@@ -62,7 +60,7 @@ ReleaseKeys.releaseProcess := Seq[ReleaseStep](
   setNextVersion,
   commitNextVersion,
   updateReadmeProcess,
-  releaseStepCross(SonatypeKeys.sonatypeReleaseAll),
+  releaseStepCross(sonatypeReleaseAll),
   pushChanges
 )
 
