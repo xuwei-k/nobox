@@ -1,12 +1,14 @@
 package nobox
 
-import org.scalacheck._
+import scalaprops.Scalaprops
 
-abstract class TestBase(name: String) extends Properties(name){
-  def fail(message: String) =
+abstract class TestBase extends Scalaprops {
+  import scalaprops.Gen
+
+  protected final def fail(message: String) =
     throw new AssertionError(message)
 
-  implicit class AnyOps[A](actual: => A) {
+  implicit final class AnyOps[A](actual: => A) {
     def mustThrowA[T <: Throwable](implicit man: reflect.ClassTag[T]): Boolean = {
       val erasedClass = man.runtimeClass
       try {
@@ -30,7 +32,7 @@ abstract class TestBase(name: String) extends Properties(name){
     }
   }
 
-  implicit class ArrayOps[A](val self: Array[A]) {
+  implicit final class ArrayOps[A](val self: Array[A]) {
     def must_===(that: Array[A]): Boolean = {
       if(self sameElements that) true
       else {
@@ -40,20 +42,28 @@ abstract class TestBase(name: String) extends Properties(name){
     }
   }
 
-  implicit val ofIntArb: Arbitrary[ofInt] =
-    Arbitrary(implicitly[Arbitrary[Array[Int]]].arbitrary.map(array => ofInt(array: _*)))
+  implicit val stringGen = scalaprops.Gen.alphaNumString
 
-  implicit val ofByteArb: Arbitrary[ofByte] =
-    Arbitrary(implicitly[Arbitrary[Array[Byte]]].arbitrary.map(array => ofByte(array: _*)))
+  protected[this] implicit val onInt1Gen: Gen[ofInt1] =
+    Gen[(Int, Array[Int])].map{ case (h, t) => ofInt1(h, t: _*) }
 
-  implicit val ofFloatArb: Arbitrary[ofFloat] =
-    Arbitrary(implicitly[Arbitrary[Array[Float]]].arbitrary.map(array => ofFloat(array: _*)))
+  protected[this] implicit val onByteGen: Gen[ofByte] =
+    Gen[Array[Byte]].map{ xs => ofByte(xs: _*) }
 
-  implicit def ofRefArb[A <: AnyRef : reflect.ClassTag](implicit A: Arbitrary[A]): Arbitrary[ofRef[A]] =
-    Arbitrary(implicitly[Arbitrary[List[A]]].arbitrary.map(array => ofRef[A](array: _*)))
+  protected[this] implicit val onIntGen: Gen[ofInt] =
+    Gen[Array[Int]].map{ xs => ofInt(xs: _*) }
 
-  implicit def javaLangIntegerArb: Arbitrary[Integer] =
-    Arbitrary(implicitly[Arbitrary[Int]].arbitrary.map(Integer.valueOf(_)))
+  protected[this] implicit val onFloatGen: Gen[ofFloat] = {
+    implicit val scalaFloatGen: Gen[Float] =
+      Gen[Int].map { n =>
+        java.lang.Float.intBitsToFloat(n) match {
+          case x if x.isNaN => n
+          case x => x
+        }
+      }
+
+    Gen[Array[Float]].map{ xs => ofFloat(xs: _*) }
+  }
 
   type Tagged[T] = {type Tag = T}
 
@@ -61,6 +71,8 @@ abstract class TestBase(name: String) extends Properties(name){
 
   object Tag {
     def apply[A, T](a: A): A @@ T = a.asInstanceOf[A @@ T]
+
+    def subst[F[_], A, T](fa: F[A]): F[A @@ T] = fa.asInstanceOf[F[A @@ T]]
   }
 
   sealed trait Unsigned8
@@ -71,10 +83,10 @@ abstract class TestBase(name: String) extends Properties(name){
   /** positive 8bit integer. 1 to 256 */
   type PInt8 = Int @@ Positive8
 
-  implicit val UInt8Arb: Arbitrary[UInt8] =
-    Arbitrary(implicitly[Arbitrary[Byte]].arbitrary.map(byte => Tag[Int, Unsigned8](byte + 128)))
+  implicit val uIntGen: Gen[UInt8] =
+    Tag.subst(Gen.choose(0, 255))
 
-  implicit val PInt8Arb: Arbitrary[PInt8] =
-    Arbitrary(implicitly[Arbitrary[Byte]].arbitrary.map(byte => Tag[Int, Positive8](byte + 129)))
+  implicit val pIntGen: Gen[PInt8] =
+    Tag.subst(Gen.choose(1, 255))
+
 }
-
