@@ -25,12 +25,12 @@ object Common {
       "-deprecation" ::
       "-unchecked" ::
       "-Xlint" ::
-      "-optimize" ::
       "-language:existentials" ::
       "-language:higherKinds" ::
       "-language:implicitConversions" ::
       Nil
     ),
+    scalacOptions in (Compile, compile) += "-optimize", // https://issues.scala-lang.org/browse/SI-3882
     scalacOptions ++= PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion.value)){
       case Some((2, v)) if v >= 11 => unusedWarnings
     }.toList.flatten,
