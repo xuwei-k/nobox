@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCALA_211="2.11.6"
+SCALA_211="2.11.7"
 SCALA_210="2.10.5"
 
 if [[ $TRAVIS_SCALA_VERSION = "ref-211" ]]; then
