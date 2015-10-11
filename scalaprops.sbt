@@ -1,3 +1,3 @@
 scalapropsSettings
 
-scalapropsVersion := "0.1.11"
+scalapropsVersion := "0.1.15"
