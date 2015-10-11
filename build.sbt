@@ -1,6 +1,6 @@
 Common.commonSettings
 
-crossScalaVersions := "2.10.5" :: scalaVersion.value :: Nil
+crossScalaVersions := "2.10.6" :: scalaVersion.value :: Nil
 
 name := "nobox"
 

@@ -1,24 +1,27 @@
 language: scala
 
-scala:
-  - test-only-211
-  - test-only-210
-  - ref-211
-  - int-211
-  - ref-210
-  - int-210
-  - scalameter
-
 sudo: false
-
-jdk:
-  - oraclejdk7
-
-script:
-  - ./travis.sh
 
 env:
   global:
     - secure: "kGHQxLZj8a2s5Fs9Z8CuDHUsd26u7cR8icUujffcXpcznJHrGyKcYCMmHbNH5ncQDIg0mtqrCmIV3xvjxHTRHt1JgseDRDTTAoshykBlSTeeUnfYAsYVRw/qU3dGN0fh11MNDigrj/80795Mmt6TwhspNQ/rE2Jg5p9PbHK5FA8="
     - secure: "f8eOm+ZvDJpmyEcAAjUQHiy2dV4VI9U2kOlytmeTM04qg1Y9KvuXtgTcaQ5MKXoA9Z6c14NAqoqwVrJSR3imItTLoz7fP+MazIPRpsaNONucndd9RPAhu6C8q+wkUQHWwJD6ZBDeSrJl2fM7wpVUQHFaLolUvmvuMEN3L002moY="
 
+matrix:
+  include:
+    - script: sbt -Ddisable_sxr "++ 2.11.7" "benchmark RefBenchmark"
+      jdk: oraclejdk8
+    - script: sbt -Ddisable_sxr "++ 2.10.6" "benchmark RefBenchmark"
+      jdk: oraclejdk8
+    - script: sbt -Ddisable_sxr "++ 2.11.7" "benchmark IntBenchmark"
+      jdk: oraclejdk8
+    - script: sbt -Ddisable_sxr "++ 2.10.6" "benchmark IntBenchmark"
+      jdk: oraclejdk8
+    - script: sbt "++ 2.11.7" test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then echo publish ; fi)
+      jdk: oraclejdk8
+    - script: sbt "++ 2.10.6" test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then echo publish ; fi)
+      jdk: oraclejdk8
+    - script: rm sxr.sbt && rm scalameter.sbt && sbt "++ 2.12.0-M3" test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then echo publish ; fi)
+      jdk: oraclejdk8
+    - script: sbt -Ddisable_sxr "++ 2.10.6" compile printInfo test scalameter/test checkPackage
+      jdk: oraclejdk8
