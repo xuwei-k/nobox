@@ -2,7 +2,7 @@ package nobox
 
 import nobox.Type._
 import java.io.File
-import java.nio.file.{Files, Path}
+import java.nio.file.Files
 import java.nio.charset.Charset
 
 object Generate{

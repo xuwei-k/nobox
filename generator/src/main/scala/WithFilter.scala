@@ -1,6 +1,6 @@
 package nobox
 
-import Generate.{list, withRef}
+import Generate.list
 
 object WithFilter {
 
