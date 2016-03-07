@@ -1,7 +1,7 @@
 package nobox
 
 import scalaprops._
-import scalaprops.Property.{forAll, forAllG}
+import scalaprops.Property.forAll
 
 object TestRef extends TestBase {
 
