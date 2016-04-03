@@ -9,7 +9,7 @@ object Common {
   )
 
   val commonSettings: Seq[Def.Setting[_]] = Seq(
-    scalaVersion := "2.11.7",
+    scalaVersion := "2.11.8",
     aggregate := false,
     javaOptions ++= "-Djava.awt.headless=true" +: sys.process.javaVmArguments.filter(
       a => Seq("-Xmx","-Xms","-XX").exists(a.startsWith)
