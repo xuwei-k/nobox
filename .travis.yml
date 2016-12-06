@@ -21,7 +21,7 @@ matrix:
       jdk: oraclejdk8
     - script: sbt "++ 2.10.6" test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then echo publish ; fi)
       jdk: oraclejdk8
-    - script: rm sxr.sbt && rm scalameter.sbt && sbt "++ 2.12.0-RC1" test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then echo publish ; fi)
+    - script: rm sxr.sbt && sbt "++ 2.12.0-RC1" test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then echo publish ; fi)
       jdk: oraclejdk8
-    - script: sbt -Ddisable_sxr "++ 2.10.6" compile printInfo test scalameter/test checkPackage
+    - script: sbt -Ddisable_sxr "++ 2.10.6" compile printInfo test checkPackage
       jdk: oraclejdk8
