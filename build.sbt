@@ -1,6 +1,8 @@
 Common.commonSettings
 
-crossScalaVersions := "2.10.6" :: scalaVersion.value :: Nil
+Sxr.settings
+
+crossScalaVersions := "2.12.1" :: Common.Scala211 :: "2.10.6" :: Nil
 
 name := "nobox"
 
@@ -70,7 +72,7 @@ benchmark := {
 
 val printInfo = inputKey[Unit]("print each file line counts")
 
-printInfo <<= printInfo.dependsOn(compile)
+printInfo := printInfo.dependsOn(compile).inputTaskValue
 
 printInfo := {
   val srcs = (scalaSource in Compile).value

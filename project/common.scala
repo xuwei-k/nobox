@@ -8,8 +8,10 @@ object Common {
     Nil
   )
 
+  val Scala211 = "2.11.8"
+
   val commonSettings: Seq[Def.Setting[_]] = Seq(
-    scalaVersion := "2.11.8",
+    scalaVersion := Scala211,
     aggregate := false,
     javaOptions ++= "-Djava.awt.headless=true" +: sys.process.javaVmArguments.filter(
       a => Seq("-Xmx","-Xms","-XX").exists(a.startsWith)
@@ -30,7 +32,6 @@ object Common {
       "-language:implicitConversions" ::
       Nil
     ),
-    scalacOptions in (Compile, compile) += "-optimize", // https://issues.scala-lang.org/browse/SI-3882
     scalacOptions ++= PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion.value)){
       case Some((2, v)) if v >= 11 => unusedWarnings
     }.toList.flatten,
