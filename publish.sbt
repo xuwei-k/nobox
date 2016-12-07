@@ -8,7 +8,7 @@ val sonatypeURL =
 
 val updateReadme: State => State = { state =>
   val extracted = Project.extract(state)
-  val scalaV = extracted get scalaBinaryVersion
+  val scalaV = "2.11" // sxr does not support Scala 2.12
   val v = extracted get version
   val org =  extracted get organization
   val n = extracted get name
