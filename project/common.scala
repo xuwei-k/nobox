@@ -8,7 +8,7 @@ object Common {
     Nil
   )
 
-  val Scala211 = "2.11.9"
+  val Scala211 = "2.11.8"
 
   val commonSettings: Seq[Def.Setting[_]] = Seq(
     scalaVersion := Scala211,
