@@ -2,7 +2,7 @@ Common.commonSettings
 
 Sxr.settings
 
-crossScalaVersions := "2.12.1" :: Common.Scala211 :: "2.10.6" :: Nil
+crossScalaVersions := "2.12.2" :: Common.Scala211 :: "2.10.6" :: Nil
 
 name := "nobox"
 

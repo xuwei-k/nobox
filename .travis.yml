@@ -9,19 +9,19 @@ env:
 
 matrix:
   include:
-    - script: sbt "++ 2.11.8" "benchmark RefBenchmark"
+    - script: sbt "++ 2.11.11" "benchmark RefBenchmark"
       jdk: oraclejdk8
-    - script: sbt "++ 2.12.1" "benchmark RefBenchmark"
+    - script: sbt "++ 2.12.2" "benchmark RefBenchmark"
       jdk: oraclejdk8
-    - script: sbt "++ 2.11.8" "benchmark IntBenchmark"
+    - script: sbt "++ 2.11.11" "benchmark IntBenchmark"
       jdk: oraclejdk8
-    - script: sbt "++ 2.12.1" "benchmark IntBenchmark"
+    - script: sbt "++ 2.12.2" "benchmark IntBenchmark"
       jdk: oraclejdk8
-    - script: sbt "++ 2.11.8" test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then echo publish ; fi)
+    - script: sbt "++ 2.11.11" test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then echo publish ; fi)
       jdk: oraclejdk8
     - script: sbt "++ 2.10.6" test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then echo publish ; fi)
       jdk: oraclejdk8
-    - script: sbt "++ 2.12.1" test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then echo publish ; fi)
+    - script: sbt "++ 2.12.2" test $(if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then echo publish ; fi)
       jdk: oraclejdk8
     - script: sbt "++ 2.10.6" compile printInfo test checkPackage
       jdk: oraclejdk8
