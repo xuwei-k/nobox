@@ -1,5 +1,7 @@
 Common.commonSettings
 
+unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt"
+
 Sxr.settings
 
 crossScalaVersions := "2.12.2" :: Common.Scala211 :: "2.10.6" :: Nil
