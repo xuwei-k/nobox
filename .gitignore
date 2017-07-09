@@ -3,4 +3,3 @@ target
 *.jar
 *.swp
 .DS_Store
-src/main/scala/generated/
