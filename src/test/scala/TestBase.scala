@@ -5,6 +5,9 @@ import scalaprops.Scalaprops
 abstract class TestBase extends Scalaprops {
   import scalaprops.Gen
 
+  implicit final def ofRefGen[A <: AnyRef : Gen: reflect.ClassTag]: Gen[ofRef[A]] =
+    Gen[List[A]].map(xs => ofRef[A](xs: _*))
+
   protected final def fail(message: String) =
     throw new AssertionError(message)
 

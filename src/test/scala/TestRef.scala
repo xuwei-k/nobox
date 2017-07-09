@@ -5,9 +5,6 @@ import scalaprops.Property.forAll
 
 object TestRef extends TestBase {
 
-  implicit def ofRefGen[A <: AnyRef : Gen: reflect.ClassTag]: Gen[ofRef[A]] =
-    Gen[List[A]].map(xs => ofRef[A](xs: _*))
-
   val collect1 = forAll { (a: ofRef[Integer], pf: PartialFunction[Integer, Long]) =>
     a.collectLong(pf).self must_=== a.self.collect(pf)
   }
@@ -129,7 +126,7 @@ object TestRef extends TestBase {
     if(0 <= index && index < a.size)
       a.updated(index, elem).self must_=== a.self.updated(index, elem)
     else
-      a.updated(index, elem).mustThrowA[IndexOutOfBoundsException]
+      a.updated(index, elem).mustThrowA[nobox.Platform.IndexOutOfBoundsError]
   }
 
   val sum = {
@@ -309,10 +306,6 @@ object TestRef extends TestBase {
   val flatten2 = forAll { xs: ofRef[Array[String]] =>
     xs.flatten must_=== xs.self.flatten
   }.toProperties((), Param.maxSize(5))
-
-  val flatten3 = forAll { xs: ofRef[Array[Int]] =>
-    xs.flatten must_=== xs.self.flatten
-  }
 
   val groupBy = forAll { (a: ofRef[Integer], x: PInt8) =>
     a.self.groupBy(_ % x).map{case (k, v) => k -> v.toList} must_== (
