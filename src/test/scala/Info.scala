@@ -1,7 +1,7 @@
 package nobox
 
 object Info {
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     val classes = List[Class[_]](
       classOf[ofInt],
       classOf[ofLong],
