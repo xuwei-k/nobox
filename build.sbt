@@ -116,8 +116,6 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
       baseDirectory.value.getParentFile / "jvm_js/src/test/scala/"
     }
   ).jsSettings(
-    scalaJSUseMainModuleInitializer in Compile := true,
-    scalaJSUseMainModuleInitializer in Test := true,
     scalacOptions += {
       val a = (baseDirectory in LocalRootProject).value.toURI.toString
       val g = "https://raw.githubusercontent.com/xuwei-k/nobox/" + gitTagOrHash.value
