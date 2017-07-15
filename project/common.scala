@@ -26,7 +26,11 @@ object Common {
     val newReadme = Predef.augmentString(IO.read(readmeFile)).lines.map{ line =>
       val matchReleaseOrSnapshot = line.contains("SNAPSHOT") == v.contains("SNAPSHOT")
       if(line.startsWith("libraryDependencies") && matchReleaseOrSnapshot){
-        s"""libraryDependencies += "${org}" %% "${n}" % "$v""""
+        if(line.contains(" %%% ")){
+          s"""libraryDependencies += "${org}" %%% "${n}" % "$v""""
+        } else {
+          s"""libraryDependencies += "${org}" %% "${n}" % "$v""""
+        }
       }else if(line.contains(sonatypeURL) && matchReleaseOrSnapshot){
         val sxrIndexHtml = "-sxr.jar/!/index.html"
         val javadocIndexHtml = "-javadoc.jar/!/index.html"
