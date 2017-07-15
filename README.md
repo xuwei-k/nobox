@@ -26,6 +26,7 @@ libraryDependencies += "com.github.xuwei-k" %%% "nobox" % "0.2.0"
 ```
 
 - [generated source code](http://java-src.appspot.com/com.github.xuwei-k/nobox_2.12?latest)
+- [sxr](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/xuwei-k/nobox_2.12/0.2.0/nobox_2.12-0.2.0-sxr.jar/!/index.html)
 
 ### snapshot version
 
