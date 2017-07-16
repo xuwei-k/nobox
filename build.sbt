@@ -1,5 +1,4 @@
 import sbtcrossproject.{crossProject, CrossType}
-import sbtrelease._
 
 lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CustomCrossType)
