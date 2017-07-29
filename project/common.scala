@@ -64,7 +64,7 @@ object Common {
 
   val commonSettings: Seq[Def.Setting[_]] = Seq(
     scalaVersion := Scala211,
-    crossScalaVersions := "2.13.0-M1" :: "2.12.3" :: Scala211 :: Nil,
+    crossScalaVersions := "2.13.0-M2" :: "2.12.3" :: Scala211 :: Nil,
     organization := "com.github.xuwei-k",
     commands += Command.command("updateReadme")(updateReadme),
     resolvers += Opts.resolver.sonatypeReleases,
