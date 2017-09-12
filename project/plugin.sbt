@@ -18,7 +18,7 @@ addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.7.0")
 
 addSbtPlugin("com.github.scalaprops" % "sbt-scalaprops" % "0.2.3")
 
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.18")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.19")
 
 addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.2.0")
 
