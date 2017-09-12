@@ -13,14 +13,14 @@ matrix:
   include:
   - env: TEST_PROJECT="noboxJVM"
     scala: "2.11.11"
-    jdk: oraclejdk7
+    jdk: openjdk7
   - env: TEST_PROJECT="noboxJVM"
     scala: "2.12.3"
   - env: TEST_PROJECT="noboxJVM"
     scala: "2.13.0-M2"
   - env: TEST_PROJECT="noboxJS"
     scala: "2.11.11"
-    jdk: oraclejdk7
+    jdk: openjdk7
   - env: TEST_PROJECT="noboxJS"
     scala: "2.12.3"
   - env: TEST_PROJECT="noboxJS"
