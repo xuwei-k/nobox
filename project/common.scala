@@ -68,6 +68,12 @@ object Common {
     organization := "com.github.xuwei-k",
     commands += Command.command("updateReadme")(updateReadme),
     resolvers += Opts.resolver.sonatypeReleases,
+    publishTo := Some(
+      if (isSnapshot.value)
+        Opts.resolver.sonatypeSnapshots
+      else
+        Opts.resolver.sonatypeStaging
+    ),
     resolvers ++= {
       if(scalaVersion.value endsWith "SNAPSHOT"){
         Opts.resolver.sonatypeSnapshots :: Nil
