@@ -79,7 +79,6 @@ object Common {
         Opts.resolver.sonatypeSnapshots :: Nil
       }else Nil
     },
-    incOptions := incOptions.value.withNameHashing(true),
     scalacOptions ++= (
       "-deprecation" ::
       "-unchecked" ::
