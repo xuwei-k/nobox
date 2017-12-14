@@ -156,7 +156,7 @@ lazy val root = project.in(file(".")).aggregate(
 
 lazy val gitTagOrHash = Def.setting {
   if(isSnapshot.value) {
-    sys.process.Process("git rev-parse HEAD").lines_!.head
+    sys.process.Process("git rev-parse HEAD").lineStream_!.head
   } else {
     "v" + version.value
   }

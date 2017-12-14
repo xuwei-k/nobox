@@ -3,7 +3,6 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11")
 scalacOptions ++= (
   "-deprecation" ::
   "-unchecked" ::
-  "-Xlint" ::
   "-language:existentials" ::
   "-language:higherKinds" ::
   "-language:implicitConversions" ::
