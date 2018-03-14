@@ -12,21 +12,21 @@ jdk: oraclejdk8
 matrix:
   include:
   - env: TEST_PROJECT="noboxJVM"
-    scala: "2.11.11"
+    scala: "2.11.12"
     jdk: openjdk7
   - env: TEST_PROJECT="noboxJVM"
-    scala: "2.12.3"
+    scala: "2.12.4"
   - env: TEST_PROJECT="noboxJVM"
     scala: "2.13.0-M3"
   - env: TEST_PROJECT="noboxJS"
-    scala: "2.11.11"
+    scala: "2.11.12"
     jdk: openjdk7
   - env: TEST_PROJECT="noboxJS"
-    scala: "2.12.3"
+    scala: "2.12.4"
   - env: TEST_PROJECT="noboxJS"
     scala: "2.13.0-M3"
   - env: TEST_PROJECT="noboxNative"
-    scala: "2.11.11"
+    scala: "2.11.12"
     dist: trusty
     sudo: required
     before_install:
