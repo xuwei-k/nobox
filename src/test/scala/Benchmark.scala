@@ -33,7 +33,7 @@ trait Benchmark {
     System.nanoTime - start
   }
 
-  def exec[A](name: String, f1: => A, f2: => A){
+  def exec[A](name: String, f1: => A, f2: => A): Unit = {
     println(name)
     val x = time(f1)
     val y = time(f2)
@@ -62,14 +62,14 @@ trait Benchmark {
 
   def createSampleArray(size: Int): (Array1, Array2)
 
-  def _exec[A](name: String, f1: => A, f2: => A){
+  def _exec[A](name: String, f1: => A, f2: => A): Unit = {
     if(args.test(name)){
       exec(name, f1, f2)
     }
   }
 
   def benchmark(name: String, n: Double = 1.0)(f1: Array1 => Unit, f2: Array2 => Unit)(
-    implicit A1: Take[Array1], A2: Take[Array2] ){
+    implicit A1: Take[Array1], A2: Take[Array2] ): Unit = {
     val (a1, a2) = if(n != 1.0){
       val nn = (args.size * n).toInt
       (A1.resize(args.array1, nn), A2.resize(args.array2, nn))

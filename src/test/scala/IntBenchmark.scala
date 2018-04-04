@@ -11,7 +11,7 @@ object IntBenchmark extends Benchmark{
     (array1, array2)
   }
 
-  def run(){
+  def run(): Unit = {
     val a = args
     import a._
 
