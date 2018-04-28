@@ -54,7 +54,7 @@ s"""
   def reverseMap[A](f: $a => A)(implicit A: ClassTag[A]): Array[A] = {
     (A match {
 $cases
-      case _ => self.reverseMap(f)
+      case _ => self.reverseIterator.map(f).toArray
     }).asInstanceOf[Array[A]]
   }
 """

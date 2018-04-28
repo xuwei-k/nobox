@@ -677,9 +677,8 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
 
 object $obj {
 
-  def apply${withTag}(elems: $a *): $clazz = elems match{
-    case a: collection.mutable.WrappedArray.${clazz} => new $clazz(a.array)
-    case _ => new $clazz(elems.toArray)
+  def apply${withTag}(elems: $a *): $clazz = {
+    new $clazz(elems.toArray)
   }
 
   ${

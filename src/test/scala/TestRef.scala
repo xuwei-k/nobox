@@ -46,13 +46,13 @@ object TestRef extends TestBase {
 
   val reverseMapInt = forAll { a: ofRef[Integer] =>
     val f = {i: Integer => i * 2 }
-    a.reverseMapInt(f).self must_=== a.self.reverseMap(f)
+    a.reverseMapInt(f).self must_=== a.self.reverseMap(f).toArray
   }
 
   val reverseMap = forAll { (a: ofRef[Integer], f2: Integer => Byte) =>
     val f1 = (_:Integer).toString
-    a.reverseMap(f1).self must_=== a.self.reverseMap(f1)
-    a.reverseMap(f2).self must_=== a.self.reverseMap(f2)
+    a.reverseMap(f1).self must_=== a.self.reverseMap(f1).toArray
+    a.reverseMap(f2).self must_=== a.self.reverseMap(f2).toArray
   }
 
   val `reverse.reverse` = forAll { a: ofRef[Integer] =>

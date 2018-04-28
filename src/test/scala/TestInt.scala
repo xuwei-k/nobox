@@ -95,19 +95,19 @@ object TestInt extends TestBase {
 
   val reverseMapInt = forAll { a: ofInt =>
     val f = {i: Int => i * 2 }
-    a.reverseMapInt(f).self must_=== a.self.reverseMap(f)
+    a.reverseMapInt(f).self must_=== a.self.reverseMap(f).toArray
   }
 
   val reverseRef = forAll { a: ofInt =>
     val f = (_:Int).toString
-    a.reverseMapRef(f).self must_=== a.self.reverseMap(f)
+    a.reverseMapRef(f).self must_=== a.self.reverseMap(f).toArray
   }
 
   val reverseMap = forAll { a: ofInt =>
     val f1 = (_:Int).toString
     val f2 = (_:Int).toByte
-    a.reverseMap(f1).self must_=== a.self.reverseMap(f1)
-    a.reverseMap(f2).self must_=== a.self.reverseMap(f2)
+    a.reverseMap(f1).self must_=== a.self.reverseMap(f1).toArray
+    a.reverseMap(f2).self must_=== a.self.reverseMap(f2).toArray
   }
 
   val `reverse.reverse` = forAll { a: ofInt =>
