@@ -24,7 +24,6 @@ object One {
     s"""
 package nobox
 
-import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable.ArrayBuilder
 import java.util.Arrays
 
@@ -95,16 +94,6 @@ final class ${clazz} private(val self: Array[${a}]) extends AnyVal {
   }
 
   def toArray: Array[$a] = self.clone
-
-  def to[F[_]](implicit C: CanBuildFrom[Nothing, $a, F[$a]]): F[$a] = {
-    val buf = C()
-    var i = 0
-    while(i < self.length){
-      buf += self(i)
-      i += 1
-    }
-    buf.result
-  }
 
   def take(n: Int): $zero = {
     if(n >= self.length){
