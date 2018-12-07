@@ -15,14 +15,14 @@ matrix:
     scala: "2.11.12"
     jdk: openjdk7
   - env: TEST_PROJECT="noboxJVM"
-    scala: "2.12.6"
+    scala: "2.12.8"
   - env: TEST_PROJECT="noboxJVM"
     scala: "2.13.0-M3"
   - env: TEST_PROJECT="noboxJS"
     scala: "2.11.12"
     jdk: openjdk7
   - env: TEST_PROJECT="noboxJS"
-    scala: "2.12.6"
+    scala: "2.12.8"
   - env: TEST_PROJECT="noboxJS"
     scala: "2.13.0-M3"
   - env: TEST_PROJECT="noboxNative"
