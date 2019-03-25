@@ -1,4 +1,6 @@
 import sbtcrossproject.{crossProject, CrossType}
+import scala.collection.JavaConverters._
+import java.lang.management.ManagementFactory
 
 lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CustomCrossType)
@@ -122,7 +124,7 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     }
   ).jvmSettings(
     Sxr.settings,
-    javaOptions ++= "-Djava.awt.headless=true" +: sys.process.javaVmArguments.filter(
+    javaOptions ++= "-Djava.awt.headless=true" +: ManagementFactory.getRuntimeMXBean.getInputArguments.asScala.toList.filter(
       a => Seq("-Xmx","-Xms","-XX").exists(a.startsWith)
     )
   ).nativeSettings(
