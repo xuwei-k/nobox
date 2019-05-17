@@ -78,10 +78,17 @@ object Common {
         Opts.resolver.sonatypeSnapshots :: Nil
       }else Nil
     },
+    scalacOptions ++= {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, v)) if v <= 12 =>
+          Seq("-Xfuture")
+        case _ =>
+          Nil
+      }
+    },
     scalacOptions ++= (
       "-deprecation" ::
       "-unchecked" ::
-      "-Xfuture" ::
       "-Xlint" ::
       "-language:existentials" ::
       "-language:higherKinds" ::
