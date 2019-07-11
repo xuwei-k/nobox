@@ -2,12 +2,14 @@ language: scala
 
 sudo: false
 
+dist: xenial
+
 env:
   global:
   - secure: "VTRufLY6GMlbw5sfj7ikjsejNxHblyM3sOjpx2lCnA9ScTpFmntteg8BA4G+sKpwKTs+XD2QQyFPzZQa8PVFa3zsMmcx65HhqvXUmtLR60PYbXsT8gJqrM66MKcRLHoaQPq1+yPs3QOaHORIz06/1m1P5xXe3VJYGBHnveBGzxb4UhqHtcdhpqYksD81Eo9r8fwgOzRk/3MTwog6aFl1l17ZhwOloU8ZdGZAyN2/BAZPMTScrMSV1IemKQDzp0qrPstQymgWHgwSGHqwN31ixZyHhULJUqrOqPd85qTYhLkH2zqCRw+NkL5kWbhmIKIBhQ39myGt6AvrggWhez2ZlbI6/bc7Q0IquMcni8lfvyfazhw5b+8SdKM8+qD3OFwNDS3dtwfeNRHa0M/GwZtu1hXuzdfhiS9CA2lMA6ut1wS0331SwTaIkDmgPuP3xjw4J4BBEbt9B+G9QhiDQlDBOUN/i9snwEqJQC+puVHCM2iQA/5LT1KeZiFgimv2dkcSY/6UtnM8S2af1mD1/9uQOUmOKV7AkZsbLgHpoSnmzPM4DweswxBLEJ2Cl3091mxg7RL1lwWwQBiKQBt+eO7lDhaCuEIS1Qf31K+GNGtxmYF6du76RrEQWJDQKfYfAt68r5+cfy6UiZEDnJemyfoEizxukQHhba/lwjCuk6fUTJY="
   - secure: "jnz3jIdpb4lO1CpRWLIhyCLvb3ACcxF3SApr1ErxLeFTdNn1QnjuBOFA6u09RmpYN1lWvhRFcM/Jn4c/Wt+nMFLTiHwKXRjyZshL8Syzxg+AbupFddCNMNoru0qNC3bi5hoMmIlV3ubcNKm4Nn5RAa4GMbZAF7nN/8E6A9bjLW7VLnuuHCsbcWQE6fGdYiZtROi6J9fY9Hr4PW16fr6LosIBB1jgT8SOC+uEHuJXVL2bD9vXnM2AgoXoOmDt9wDruErQ0QYhDJW77a1w1xX0t63pbAZkGUb7+savxu6XkvqAKDoLEV51ZaKO+efhlx+5SaOS149fYyP4zcgMXegqNmZvu+sbCs+fafbVm8zpctp3X8IAq9a46Z1e0mz42Nyy43WjfXLcym7xwecfIvv2E6lUBFtvBZ39OCmb8n9nYregO9QNzbOVPzGaesFbQkUJWctB5YPERsBq/TJhhDqeDVbxdytTCOzWBYXBBp4G9VSdP6PeBAZFKwZNaGdP0qgFlD0IZmLg5GORq0BqZVO9ZCdTHtbKUMjkID+VeL96P0HuN5xVqp5Id4T6X8iZYw4h6+eoeSNXmB0I2obOayqSJIdSTjKjeAzPW9wbl5x3Rp0fnkrBetbJ8nDDe5d0Qyg02uZh3rU3E1Y+XTdE42sn4A3ZTQZ1pnfpY7/jP3yhrFI="
 
-jdk: oraclejdk8
+jdk: openjdk8
 
 matrix:
   include:
@@ -25,7 +27,6 @@ matrix:
     scala: "2.13.0"
   - env: TEST_PROJECT="noboxNative"
     scala: "2.11.12"
-    dist: trusty
     sudo: required
     before_install:
     - curl https://raw.githubusercontent.com/scala-native/scala-native/master/scripts/travis_setup.sh | bash -x
