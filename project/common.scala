@@ -66,7 +66,6 @@ object Common {
     crossScalaVersions := "2.13.0" :: "2.12.8" :: Scala211 :: Nil,
     organization := "com.github.xuwei-k",
     commands += Command.command("updateReadme")(updateReadme),
-    resolvers += Opts.resolver.sonatypeReleases,
     publishTo := Some(
       if (isSnapshot.value)
         Opts.resolver.sonatypeSnapshots
