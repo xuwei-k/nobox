@@ -126,7 +126,7 @@ object TestRef extends TestBase {
     if(0 <= index && index < a.size)
       a.updated(index, elem).self must_=== a.self.updated(index, elem)
     else
-      a.updated(index, elem).mustThrowA[nobox.Platform.IndexOutOfBoundsError]
+      a.updated(index, elem).mustThrowA[IndexOutOfBoundsException]
   }
 
   val sum = {
