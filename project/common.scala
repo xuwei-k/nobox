@@ -3,6 +3,7 @@ import sbt._, Keys._
 import sbtrelease.Git
 import sbtrelease.ReleasePlugin.autoImport._
 import sbtrelease.ReleaseStateTransformations._
+import xerial.sbt.Sonatype.autoImport._
 
 object Common {
 
@@ -66,12 +67,7 @@ object Common {
     crossScalaVersions := "2.13.1" :: "2.12.10" :: Scala211 :: Nil,
     organization := "com.github.xuwei-k",
     commands += Command.command("updateReadme")(updateReadme),
-    publishTo := Some(
-      if (isSnapshot.value)
-        Opts.resolver.sonatypeSnapshots
-      else
-        Opts.resolver.sonatypeStaging
-    ),
+    publishTo := sonatypePublishToBundle.value,
     resolvers ++= {
       if(scalaVersion.value endsWith "SNAPSHOT"){
         Opts.resolver.sonatypeSnapshots :: Nil
@@ -108,10 +104,10 @@ object Common {
       tagRelease,
       releaseStepCross(PgpKeys.publishSigned),
       releaseStepCommandAndRemaining("noboxNative/publishSigned"),
+      releaseStepCommandAndRemaining("sonatypeBundleRelease"),
       setNextVersion,
       commitNextVersion,
       updateReadmeProcess,
-      releaseStepCommand("sonatypeReleaseAll"),
       pushChanges
     ),
     trapExit := false
