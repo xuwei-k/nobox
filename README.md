@@ -10,7 +10,7 @@ immutable primitive array wrapper for Scala
 ## what's this
 
 nobox means **No** Boxing primitive values.
-There are [`ArrayOps`](https://github.com/scala/scala/blob/v2.12.11/src/library/scala/collection/mutable/ArrayOps.scala) and [`WrappedArray`](https://github.com/scala/scala/blob/v2.12.11/src/library/scala/collection/mutable/WrappedArray.scala) in [Scala standard library](http://docs.scala-lang.org/overviews/collections/arrays.html), but these operations sometimes so slow.
+There are [`ArrayOps`](https://github.com/scala/scala/blob/v2.12.12/src/library/scala/collection/mutable/ArrayOps.scala) and [`WrappedArray`](https://github.com/scala/scala/blob/v2.12.12/src/library/scala/collection/mutable/WrappedArray.scala) in [Scala standard library](http://docs.scala-lang.org/overviews/collections/arrays.html), but these operations sometimes so slow.
 This library provide more efficient(faster and less memory) operations for primitive arrays.
 
 ### latest stable version
