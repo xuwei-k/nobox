@@ -1,6 +1,6 @@
 # nobox
 
-[![Build Status](https://secure.travis-ci.com/xuwei-k/nobox.png?branch=master)](http://travis-ci.com/xuwei-k/nobox)
+[![Build Status](https://travis-ci.com/xuwei-k/nobox.svg?branch=master)](http://travis-ci.com/xuwei-k/nobox)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.xuwei-k/nobox_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.xuwei-k/nobox_2.12)
 [![scaladoc](https://javadoc-badge.appspot.com/com.github.xuwei-k/nobox_2.12.svg?label=javadoc)](https://javadoc-badge.appspot.com/com.github.xuwei-k/nobox_2.12/nobox/index.html?javadocio=true)
 
