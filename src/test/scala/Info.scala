@@ -34,13 +34,13 @@ object Info {
 
     if(!args.isEmpty){
       methods.foreach{ case (c, m) =>
-        println(c + " " + m.size)
+        println(c.toString + " " + m.size)
         println(m.mkString(", "))
         println()
       }
     }else{
       methods.foreach{ case (c, m) =>
-        println(c + " " + m.size)
+        println(c.toString + " " + m.size)
       }
     }
   }

@@ -4,11 +4,11 @@ import scalaprops.Property.forAll
 
 object TestInt1 extends TestBase {
 
-  val head = forAll { a: ofInt1 =>
+  val head = forAll { (a: ofInt1) =>
     a.head must_== a.self.head
   }
 
-  val tail = forAll { a: ofInt1 =>
+  val tail = forAll { (a: ofInt1) =>
     a.tail.self must_=== a.self.tail
   }
 
@@ -28,11 +28,11 @@ object TestInt1 extends TestBase {
     a.forall(f) must_== a.self.forall(f)
   }
 
-  val `reverse.reverse` = forAll { a: ofInt1 =>
+  val `reverse.reverse` = forAll { (a: ofInt1) =>
     a.reverse.reverse === a
   }
 
-  val reverse = forAll { a: ofInt1 =>
+  val reverse = forAll { (a: ofInt1) =>
     a.reverse.self must_=== a.self.reverse
   }
 
@@ -48,11 +48,11 @@ object TestInt1 extends TestBase {
     a.count(f) must_== a.self.count(f)
   }
 
-  val toList = forAll { a: ofInt1 =>
+  val toList = forAll { (a: ofInt1) =>
     a.toList must_== a.self.toList
   }
 
-  val toArray = forAll { xs: ofInt1 =>
+  val toArray = forAll { (xs: ofInt1) =>
     xs.toArray must_=== xs.self.toArray
   }
 
@@ -76,15 +76,15 @@ object TestInt1 extends TestBase {
     (a ++ b).self must_=== (a.self ++ b.self)
   }
 
-  val sorted = forAll { a: ofInt1 =>
+  val sorted = forAll { (a: ofInt1) =>
     a.sorted.self must_=== a.self.sorted
   }
 
-  val reduceLeft = forAll { a: ofInt1 =>
+  val reduceLeft = forAll { (a: ofInt1) =>
     a.reduceLeft(_ - _) must_== a.self.reduceLeftOption(_ - _).get
   }
 
-  val reduceRightOption = forAll { a: ofInt1 =>
+  val reduceRightOption = forAll { (a: ofInt1) =>
     a.reduceRight(_ - _) must_== a.self.reduceRightOption(_ - _).get
   }
 
@@ -100,25 +100,25 @@ object TestInt1 extends TestBase {
     a.mkString(start, sep, end) must_== a.self.mkString(start, sep, end)
   }
 
-  val maxBy = forAll { a: ofInt1 =>
+  val maxBy = forAll { (a: ofInt1) =>
     val f = (_: Int).toHexString
     a.maxBy(f) must_== a.self.maxBy(f)
   }
 
-  val minBy = forAll { a: ofInt1 =>
+  val minBy = forAll { (a: ofInt1) =>
     val f = (_: Int).toHexString
     a.minBy(f) must_== a.self.minBy(f)
   }
 
-  val max = forAll { a: ofInt1 =>
+  val max = forAll { (a: ofInt1) =>
     a.max must_== a.self.max
   }
 
-  val min = forAll { a: ofInt1 =>
+  val min = forAll { (a: ofInt1) =>
     a.min must_== a.self.min
   }
 
-  val minmax = forAll { a: ofInt1 =>
+  val minmax = forAll { (a: ofInt1) =>
     a.minmax must_== (a.self.min -> a.self.max)
   }
 
@@ -126,11 +126,11 @@ object TestInt1 extends TestBase {
     a.scanLeft1(f).self.toList must_== a.self.tail.scanLeft(a.self.head)(f).toList
   }
 
-  val scanRight1 = forAll { a: ofInt1 =>
+  val scanRight1 = forAll { (a: ofInt1) =>
     a.scanRight1(_ - _).self.toList must_== a.self.init.scanRight(a.self.last)(_ - _).toList
   }
 
-  val testToString = forAll { xs: ofInt1 =>
+  val testToString = forAll { (xs: ofInt1) =>
     xs.toString must_== xs.mkString("ofInt1(", ", ", ")")
   }
 

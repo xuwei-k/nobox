@@ -25,18 +25,18 @@ object TestRef extends TestBase {
     a.find(f) must_== a.self.find(f)
   }
 
-  val flatMap = forAll { a: ofRef[Integer] =>
-    val f: Integer => Array[Integer] = {i: Integer => Array[Integer](i, i + 10)}
+  val flatMap = forAll { (a: ofRef[Integer]) =>
+    val f: Integer => Array[Integer] = {(i: Integer) => Array[Integer](i, i + 10)}
     a.flatMap(f).self must_=== a.self.flatMap(x => f(x).toList)
   }
 
-  val forall = forAll { a: ofRef[Integer] =>
-    val f = {i: Integer => 5 < i }
+  val forall = forAll { (a: ofRef[Integer]) =>
+    val f = {(i: Integer) => 5 < i }
     a.forall(f) must_== a.self.forall(f)
   }
 
-  val mapInt = forAll { a: ofRef[Integer] =>
-    val f = {i: Integer => i - 1 }
+  val mapInt = forAll { (a: ofRef[Integer]) =>
+    val f = {(i: Integer) => i - 1 }
     a.mapInt(f).self must_=== a.self.map(f)
   }
 
@@ -44,8 +44,8 @@ object TestRef extends TestBase {
     a.map(f) must_=== a.self.map(f)
   }
 
-  val reverseMapInt = forAll { a: ofRef[Integer] =>
-    val f = {i: Integer => i * 2 }
+  val reverseMapInt = forAll { (a: ofRef[Integer]) =>
+    val f = {(i: Integer) => i * 2 }
     a.reverseMapInt(f).self must_=== a.self.reverseMap(f).toArray
   }
 
@@ -55,11 +55,11 @@ object TestRef extends TestBase {
     a.reverseMap(f2).self must_=== a.self.reverseMap(f2).toArray
   }
 
-  val `reverse.reverse` = forAll { a: ofRef[Integer] =>
+  val `reverse.reverse` = forAll { (a: ofRef[Integer]) =>
     a.reverse.reverse === a
   }
 
-  val reverse = forAll { a: ofRef[Integer] =>
+  val reverse = forAll { (a: ofRef[Integer]) =>
     a.reverse.self must_=== a.self.reverse
   }
 
@@ -111,8 +111,8 @@ object TestRef extends TestBase {
     (a ++ b).self must_=== (a.self ++ b.self)
   }
 
-  val partition = forAll { a: ofRef[Integer] =>
-    val f = {i: Integer => i > 0}
+  val partition = forAll { (a: ofRef[Integer]) =>
+    val f = {(i: Integer) => i > 0}
     val (x1, x2) = a.partition(f)
     val (y1, y2) = a.self.partition(f)
     (x1.self must_=== y1) && (x2.self must_=== y2)
@@ -130,15 +130,15 @@ object TestRef extends TestBase {
   }
 
   val sum = {
-    implicit val bigIntGen = Gen[Long].map(BigInt(_))
-    forAll { a: ofRef[BigInt] =>
+    implicit val bigIntGen: Gen[BigInt] = Gen[Long].map(BigInt(_))
+    forAll { (a: ofRef[BigInt]) =>
       a.sum must_== a.self.sum
     }
   }
 
   // TODO product
 
-  val sorted = forAll { a: ofRef[Integer] =>
+  val sorted = forAll { (a: ofRef[Integer]) =>
     val o = implicitly[Ordering[Integer]]
     a.sorted.self must_=== a.self.sorted
     a.sorted(o.reverse).self must_=== a.self.sorted(o.reverse)
@@ -148,11 +148,11 @@ object TestRef extends TestBase {
     a.slice(from, until).self must_=== a.self.slice(from, until)
   }
 
-  val reduceLeftOption = forAll { a: ofRef[Integer] =>
+  val reduceLeftOption = forAll { (a: ofRef[Integer]) =>
     a.reduceLeftOption(_ - _) must_== a.self.reduceLeftOption(_ - _)
   }
 
-  val reduceRightOption = forAll { a: ofRef[Integer] =>
+  val reduceRightOption = forAll { (a: ofRef[Integer]) =>
     a.reduceRightOption(_ - _) must_== a.self.reduceRightOption(_ - _)
   }
 
@@ -192,14 +192,14 @@ object TestRef extends TestBase {
     a.inits.map(_.self.toSeq).toList must_== a.self.inits.map(_.toSeq).toList
   }
 
-  val tailOption = forAll { a: ofRef[Integer] =>
+  val tailOption = forAll { (a: ofRef[Integer]) =>
     a.tailOption.map(_.self.toSeq) must_== (
       if(a.self.isEmpty) None
       else Some(a.self.tail.toSeq)
     )
   }
 
-  val initOption = forAll { a: ofRef[Integer] =>
+  val initOption = forAll { (a: ofRef[Integer]) =>
     a.initOption.map(_.self.toSeq) must_== (
       if(a.self.isEmpty) None
       else Some(a.self.init.toSeq)
@@ -224,7 +224,7 @@ object TestRef extends TestBase {
     }
   }
 
-  val max = forAll { a: ofRef[Integer] =>
+  val max = forAll { (a: ofRef[Integer]) =>
     if(a.self.isEmpty){
       a.max must_== None
     }else{
@@ -232,7 +232,7 @@ object TestRef extends TestBase {
     }
   }
 
-  val min = forAll { a: ofRef[Integer] =>
+  val min = forAll { (a: ofRef[Integer]) =>
     if(a.self.isEmpty){
       a.min must_== None
     }else{
@@ -240,7 +240,7 @@ object TestRef extends TestBase {
     }
   }
 
-  val minmax = forAll { a: ofRef[Integer] =>
+  val minmax = forAll { (a: ofRef[Integer]) =>
     if(a.self.isEmpty){
       a.minmax must_== None
     }else{
@@ -264,14 +264,14 @@ object TestRef extends TestBase {
     a.scanRight(z)(_ :: _).self.toList must_== a.self.scanRight(z)(_ :: _).toList
   }
 
-  val scanLeft1 = forAll { a: ofRef[Integer] =>
+  val scanLeft1 = forAll { (a: ofRef[Integer]) =>
     a.scanLeft1(_ - _).self.toList must_== (
       if(a.self.isEmpty) List()
       else a.self.tail.scanLeft(a.self.head)(_ - _).toList
     )
   }
 
-  val scanRight1 = forAll { a: ofRef[Integer] =>
+  val scanRight1 = forAll { (a: ofRef[Integer]) =>
     a.scanRight1(_ - _).self.toList must_== (
       if(a.self.isEmpty) List()
       else a.self.init.scanRight(a.self.last)(_ - _).toList
@@ -290,20 +290,20 @@ object TestRef extends TestBase {
     a.endsWith(b.self) must_== a.self.endsWith(b.self)
   }
 
-  val iterate = forAll { size: UInt8 =>
+  val iterate = forAll { (size: UInt8) =>
     ofRef.iterate("0", size)(a => (a.toInt + 1).toString).self must_=== Array.iterate("0", size)(a => (a.toInt + 1).toString)
   }
 
-  val tabulate = forAll { size: UInt8 =>
+  val tabulate = forAll { (size: UInt8) =>
     ofRef.tabulate(size)(_.toString).self must_=== Array.tabulate(size)(_.toString)
   }
 
-  val flatten1 = forAll { xs: Array[Array[Integer]] =>
+  val flatten1 = forAll { (xs: Array[Array[Integer]]) =>
     xs.flatten must_=== ofRef.flatten(xs).self
     Array.concat(xs: _*) must_=== ofRef.flatten(xs).self
   }
 
-  val flatten2 = forAll { xs: ofRef[Array[String]] =>
+  val flatten2 = forAll { (xs: ofRef[Array[String]]) =>
     xs.flatten must_=== xs.self.flatten
   }.toProperties((), Param.maxSize(5))
 
@@ -332,7 +332,7 @@ object TestRef extends TestBase {
     buf1.result must_== buf2.result
   }
 
-  val testToString = forAll { xs: ofRef[Integer] =>
+  val testToString = forAll { (xs: ofRef[Integer]) =>
     xs.toString must_== xs.mkString("ofRef(", ", ", ")")
   }
 

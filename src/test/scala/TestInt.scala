@@ -11,7 +11,7 @@ object TestInt extends TestBase {
     a.withFilter(pf2 isDefinedAt _).map(pf2) must_=== a.self.collect(pf2)
   }
 
-  val `withFilter.flatMap` = forAll { a: ofInt =>
+  val `withFilter.flatMap` = forAll { (a: ofInt) =>
     val f1 = (_: Int) % 3 != 0
     val f2 = (a: Int) => Array(a, a + 1)
     a.withFilter(f1).flatMap(f2) must_=== a.self.filter(f1).flatMap(f2 andThen (_.toSeq))
@@ -20,7 +20,7 @@ object TestInt extends TestBase {
     a.withFilter(f1).flatMap(f3) must_=== a.self.filter(f1).flatMap(f3 andThen (_.toSeq))
   }
 
-  val `withFilter.withFilter` = forAll { a: ofInt =>
+  val `withFilter.withFilter` = forAll { (a: ofInt) =>
     val f1 = (_: Int) % 2 != 0
     val f2 = (_: Int) % 3 != 0
     a.withFilter(f1).withFilter(f2).map(x => x) must_=== a.self.withFilter(f1).withFilter(f2).map(x => x)
@@ -37,7 +37,7 @@ object TestInt extends TestBase {
     a.collectLong(pf).self must_=== a.self.collect(pf)
   }
 
-  val collectRef = forAll { a: ofInt =>
+  val collectRef = forAll { (a: ofInt) =>
     val pf: PartialFunction[Int, String] = {case i if i > 0 => i.toString}
     a.collectRef(pf).self must_=== a.self.collect(pf)
   }
@@ -46,7 +46,7 @@ object TestInt extends TestBase {
     a.collectFirstLong(pf) must_== a.self.collectFirst(pf)
   }
 
-  val collectFirstRef = forAll { a: ofInt =>
+  val collectFirstRef = forAll { (a: ofInt) =>
     val pf: PartialFunction[Int, String] = {case i if i > 0 => i.toString}
     a.collectFirstRef(pf) must_== a.self.collectFirst(pf)
   }
@@ -63,58 +63,58 @@ object TestInt extends TestBase {
     a.find(f) must_== a.self.find(f)
   }
 
-  val flatMapInt = forAll { a: ofInt =>
-    val f: Int => Array[Int] = {i: Int => Array(i, i + 10)}
+  val flatMapInt = forAll { (a: ofInt) =>
+    val f: Int => Array[Int] = {(i: Int) => Array(i, i + 10)}
     a.flatMapInt(f).self must_=== a.self.flatMap(x => f(x).toList)
   }
 
-  val flatMapRef = forAll { a: ofInt =>
-    val f: Int => Array[String] = {i: Int => Array(i.toString)}
+  val flatMapRef = forAll { (a: ofInt) =>
+    val f: Int => Array[String] = {(i: Int) => Array(i.toString)}
     a.flatMapRef(f).self must_=== a.self.flatMap(x => f(x).toList)
   }
 
-  val forall = forAll { a: ofInt =>
-    val f = {i: Int => 5 < i }
+  val forall = forAll { (a: ofInt) =>
+    val f = {(i: Int) => 5 < i }
     a.forall(f) must_== a.self.forall(f)
   }
 
-  val mapInt = forAll { a: ofInt =>
-    val f = {i: Int => i - 1 }
+  val mapInt = forAll { (a: ofInt) =>
+    val f = {(i: Int) => i - 1 }
     a.mapInt(f).self must_=== a.self.map(f)
   }
 
-  val mapRef = forAll { a: ofInt =>
+  val mapRef = forAll { (a: ofInt) =>
     val f = (_:Int).toString
     a.mapRef(f).self must_=== a.self.map(f)
   }
 
-  val map = forAll { a: ofInt =>
+  val map = forAll { (a: ofInt) =>
     val f = (_:Int).toString
     a.map(f) must_=== a.self.map(f)
   }
 
-  val reverseMapInt = forAll { a: ofInt =>
-    val f = {i: Int => i * 2 }
+  val reverseMapInt = forAll { (a: ofInt) =>
+    val f = {(i: Int) => i * 2 }
     a.reverseMapInt(f).self must_=== a.self.reverseMap(f).toArray
   }
 
-  val reverseRef = forAll { a: ofInt =>
+  val reverseRef = forAll { (a: ofInt) =>
     val f = (_:Int).toString
     a.reverseMapRef(f).self must_=== a.self.reverseMap(f).toArray
   }
 
-  val reverseMap = forAll { a: ofInt =>
+  val reverseMap = forAll { (a: ofInt) =>
     val f1 = (_:Int).toString
     val f2 = (_:Int).toByte
     a.reverseMap(f1).self must_=== a.self.reverseMap(f1).toArray
     a.reverseMap(f2).self must_=== a.self.reverseMap(f2).toArray
   }
 
-  val `reverse.reverse` = forAll { a: ofInt =>
+  val `reverse.reverse` = forAll { (a: ofInt) =>
     a.reverse.reverse === a
   }
 
-  val reverse = forAll { a: ofInt =>
+  val reverse = forAll { (a: ofInt) =>
     a.reverse.self must_=== a.self.reverse
   }
 
@@ -122,13 +122,13 @@ object TestInt extends TestBase {
     a.take(n).self must_=== a.self.take(n)
   }
 
-  val takeWhile = forAll { a: ofInt =>
-    val f = {i: Int => 5 < i }
+  val takeWhile = forAll { (a: ofInt) =>
+    val f = {(i: Int) => 5 < i }
     a.takeWhile(f).self must_=== a.self.takeWhile(f)
   }
 
-  val takeWhileR = forAll { a: ofInt =>
-    val f = {i: Int => 5 < i }
+  val takeWhileR = forAll { (a: ofInt) =>
+    val f = {(i: Int) => 5 < i }
     a.takeWhileR(f).self must_=== a.self.reverse.takeWhile(f).reverse
   }
 
@@ -144,13 +144,13 @@ object TestInt extends TestBase {
     a.drop(n).self must_=== a.self.drop(n)
   }
 
-  val dropWhile = forAll { a: ofInt =>
-    val f = {i: Int => i > 3}
+  val dropWhile = forAll { (a: ofInt) =>
+    val f = {(i: Int) => i > 3}
     a.dropWhile(f).self must_=== a.self.dropWhile(f)
   }
 
-  val dropWhileR = forAll { a: ofInt =>
-    val f = {i: Int => i > 10}
+  val dropWhileR = forAll { (a: ofInt) =>
+    val f = {(i: Int) => i > 10}
     a.dropWhileR(f).self must_=== a.self.reverse.dropWhile(f).reverse
   }
 
@@ -168,8 +168,8 @@ object TestInt extends TestBase {
     (x1.self must_=== y1) && (x2.self must_=== y2)
   }
 
-  val span = forAll { a: ofInt =>
-    val f = {i: Int => i > 0}
+  val span = forAll { (a: ofInt) =>
+    val f = {(i: Int) => i > 0}
     val (x1, x2) = a.span(f)
     val (y1, y2) = a.self.span(f)
     (x1.self must_=== y1) && (x2.self must_=== y2)
@@ -179,8 +179,8 @@ object TestInt extends TestBase {
     (a ++ b).self must_=== (a.self ++ b.self)
   }
 
-  val partition = forAll { a: ofInt =>
-    val f = {i: Int => i > 0}
+  val partition = forAll { (a: ofInt) =>
+    val f = {(i: Int) => i > 0}
     val (x1, x2) = a.partition(f)
     val (y1, y2) = a.self.partition(f)
     (x1.self must_=== y1) && (x2.self must_=== y2)
@@ -197,39 +197,39 @@ object TestInt extends TestBase {
       a.updated(index, elem).mustThrowA[IndexOutOfBoundsException]
   }
 
-  val `sum ofInt` = forAll { a: ofInt =>
+  val `sum ofInt` = forAll { (a: ofInt) =>
     a.sum must_== a.self.sum
   }
 
-  val `sum ofFloat` = forAll { a: ofFloat =>
+  val `sum ofFloat` = forAll { (a: ofFloat) =>
     a.sum must_== a.self.sum
   }
 
-  val sumLong = forAll { a: ofInt =>
+  val sumLong = forAll { (a: ofInt) =>
     a.sumLong must_== a.self.map(_.toLong).sum
   }
 
-  val `product ofInt` = forAll { a: ofInt =>
+  val `product ofInt` = forAll { (a: ofInt) =>
     a.product must_== a.self.product
   }
 
-  val `product ofFloat` = forAll { a: ofFloat =>
+  val `product ofFloat` = forAll { (a: ofFloat) =>
     val x = a.product
     val y = a.self.product
     (x == y) || (x.isNaN && y.isNaN)
   }
 
-  val productLong = forAll { a: ofInt =>
+  val productLong = forAll { (a: ofInt) =>
     a.productLong must_== a.self.map(_.toLong).product
   }
 
-  val productDouble = forAll { a: ofInt =>
+  val productDouble = forAll { (a: ofInt) =>
     val x = a.productDouble
     val y = a.self.map(_.toDouble).product
     (x == y) || (x.isNaN && y.isNaN)
   }
 
-  val sorted = forAll { a: ofFloat =>
+  val sorted = forAll { (a: ofFloat) =>
     a.sorted.self must_=== a.self.sorted
   }
 
@@ -237,7 +237,7 @@ object TestInt extends TestBase {
     a.slice(from, until).self must_=== a.self.slice(from, until)
   }
 
-  val foldMapLeft1Long = forAll { a: ofInt =>
+  val foldMapLeft1Long = forAll { (a: ofInt) =>
     val z = (_: Int).toLong + 10
     a.foldMapLeft1Long(z)(_ - _) must_== {
       if(a.length == 0) None
@@ -245,7 +245,7 @@ object TestInt extends TestBase {
     }
   }
 
-  val foldMapLeft1 = forAll { a: ofInt =>
+  val foldMapLeft1 = forAll { (a: ofInt) =>
     val z = (_: Int).toString
     a.foldMapLeft1(z)(_ + _) must_== {
       if(a.length == 0) None
@@ -253,7 +253,7 @@ object TestInt extends TestBase {
     }
   }
 
-  val foldMapRight1Int = forAll { a: ofInt =>
+  val foldMapRight1Int = forAll { (a: ofInt) =>
     val z = (_: Int) + 10
     a.foldMapRight1Int(z)(_ - _) must_== {
       if(a.length == 0) None
@@ -261,7 +261,7 @@ object TestInt extends TestBase {
     }
   }
 
-  val foldMapRight1 = forAll { a: ofInt =>
+  val foldMapRight1 = forAll { (a: ofInt) =>
     val z = (_: Int) + 10
     a.foldMapRight1(z)(_ - _) must_== {
       if(a.length == 0) None
@@ -269,11 +269,11 @@ object TestInt extends TestBase {
     }
   }
 
-  val reduceLeftOption = forAll { a: ofInt =>
+  val reduceLeftOption = forAll { (a: ofInt) =>
     a.reduceLeftOption(_ - _) must_== a.self.reduceLeftOption(_ - _)
   }
 
-  val reduceRightOption = forAll { a: ofInt =>
+  val reduceRightOption = forAll { (a: ofInt) =>
     a.reduceRightOption(_ - _) must_== a.self.reduceRightOption(_ - _)
   }
 
@@ -313,14 +313,14 @@ object TestInt extends TestBase {
     a.inits.map(_.self.toSeq).toList must_== a.self.inits.map(_.toSeq).toList
   }
 
-  val tailOption = forAll { a: ofInt =>
+  val tailOption = forAll { (a: ofInt) =>
     a.tailOption.map(_.self.toSeq) must_== (
       if(a.self.isEmpty) None
       else Some(a.self.tail.toSeq)
     )
   }
 
-  val initOption = forAll { a: ofInt =>
+  val initOption = forAll { (a: ofInt) =>
     a.initOption.map(_.self.toSeq) must_== (
       if(a.self.isEmpty) None
       else Some(a.self.init.toSeq)
@@ -345,7 +345,7 @@ object TestInt extends TestBase {
     }
   }
 
-  val maxBy = forAll { a: ofInt =>
+  val maxBy = forAll { (a: ofInt) =>
     val f = (_: Int).toHexString
     a.maxBy(f) must_== (
       if(a.size == 0) None
@@ -353,7 +353,7 @@ object TestInt extends TestBase {
     )
   }
 
-  val minBy = forAll { a: ofInt =>
+  val minBy = forAll { (a: ofInt) =>
     val f = (_: Int).toHexString
     a.minBy(f) must_== (
       if(a.size == 0) None
@@ -361,7 +361,7 @@ object TestInt extends TestBase {
     )
   }
 
-  val max = forAll { a: ofInt =>
+  val max = forAll { (a: ofInt) =>
     if(a.self.isEmpty){
       a.max must_== None
     }else{
@@ -369,7 +369,7 @@ object TestInt extends TestBase {
     }
   }
 
-  val min = forAll { a: ofInt =>
+  val min = forAll { (a: ofInt) =>
     if(a.self.isEmpty){
       a.min must_== None
     }else{
@@ -377,7 +377,7 @@ object TestInt extends TestBase {
     }
   }
 
-  val minmax = forAll { a: ofInt =>
+  val minmax = forAll { (a: ofInt) =>
     if(a.self.isEmpty){
       a.min must_== None
     }else{
@@ -405,14 +405,14 @@ object TestInt extends TestBase {
     a.scanRightRef(z)(_ :: _).self.toList must_== a.self.scanRight(z)(_ :: _).toList
   }
 
-  val scanLeft1 = forAll { a: ofInt =>
+  val scanLeft1 = forAll { (a: ofInt) =>
     a.scanLeft1(_ - _).self.toList must_== (
       if(a.self.isEmpty) List()
       else a.self.tail.scanLeft(a.self.head)(_ - _).toList
     )
   }
 
-  val scanRight1 = forAll { a: ofInt =>
+  val scanRight1 = forAll { (a: ofInt) =>
     a.scanRight1(_ - _).self.toList must_== (
       if(a.self.isEmpty) List()
       else a.self.init.scanRight(a.self.last)(_ - _).toList
@@ -435,11 +435,11 @@ object TestInt extends TestBase {
     ofInt.iterate(start, size)(_ + 1).self must_=== Array.iterate(start, size)(_ + 1)
   }
 
-  val tabulate = forAll { size: UInt8 =>
+  val tabulate = forAll { (size: UInt8) =>
     ofInt.tabulate(size)(_ + 1).self must_=== Array.tabulate(size)(_ + 1)
   }
 
-  val flatten = forAll { xs: Array[Array[Int]] =>
+  val flatten = forAll { (xs: Array[Array[Int]]) =>
     xs.flatten must_=== ofInt.flatten(xs).self
     Array.concat(xs: _*) must_=== ofInt.flatten(xs).self
   }
@@ -469,7 +469,7 @@ object TestInt extends TestBase {
     buf1.result must_== buf2.result
   }
 
-  val testToString = forAll { xs: ofInt =>
+  val testToString = forAll { (xs: ofInt) =>
     xs.toString must_== xs.mkString("ofInt(", ", ", ")")
   }
 
@@ -515,11 +515,11 @@ object TestInt extends TestBase {
     xs.forall(a.contains) must_== true
   }
 
-  val toList = forAll { xs: ofInt =>
+  val toList = forAll { (xs: ofInt) =>
     xs.toList must_== xs.self.toList
   }
 
-  val toArray = forAll { xs: ofInt =>
+  val toArray = forAll { (xs: ofInt) =>
     xs.toArray must_=== xs.self.toArray
   }
 }

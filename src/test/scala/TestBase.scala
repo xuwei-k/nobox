@@ -30,7 +30,7 @@ abstract class TestBase extends Scalaprops {
       val self = actual
       if(self == that) true
       else {
-        fail(self + " is not equal to " + that)
+        fail(self.toString + " is not equal to " + that)
       }
     }
   }
@@ -45,7 +45,7 @@ abstract class TestBase extends Scalaprops {
     }
   }
 
-  implicit val stringGen = scalaprops.Gen.alphaNumString
+  implicit val stringGen: Gen[String] = scalaprops.Gen.alphaNumString
 
   protected[this] implicit val onInt1Gen: Gen[ofInt1] =
     Gen[(Int, Array[Int])].map{ case (h, t) => ofInt1(h, t: _*) }
