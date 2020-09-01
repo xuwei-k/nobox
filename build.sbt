@@ -12,7 +12,7 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     libraryDependencies ++= (
       ("com.github.scalaprops" %%% "scalaprops" % "0.8.0" % "test") ::
       Nil
-    ),
+    ).map(_.withDottyCompat(scalaVersion.value)),
     unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
     name := "nobox",
     licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
@@ -117,10 +117,16 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
       baseDirectory.value.getParentFile / "jvm_js/src/test/scala/"
     }
   ).jsSettings(
-    scalacOptions += {
+    scalacOptions ++= {
       val a = (baseDirectory in LocalRootProject).value.toURI.toString
       val g = "https://raw.githubusercontent.com/xuwei-k/nobox/" + gitTagOrHash.value
-      s"-P:scalajs:mapSourceURI:$a->$g/"
+      // TODO
+      // https://github.com/lampepfl/dotty/blob/4c99388e77be12ee6cc/compiler/src/dotty/tools/backend/sjs/JSPositions.scala#L64-L69
+      if (isDottyJS.value) {
+        Nil
+      } else {
+        Seq(s"-P:scalajs:mapSourceURI:$a->$g/")
+      }
     }
   ).jvmSettings(
     Sxr.settings,

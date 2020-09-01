@@ -19,16 +19,20 @@ matrix:
     scala: "2.12.12"
   - env: TEST_PROJECT="noboxJVM"
     scala: "2.13.3"
+  - env: TEST_PROJECT="noboxJVM"
+    scala: "0.27.0-RC1"
   - env: TEST_PROJECT="noboxJS"
     scala: "2.11.12"
   - env: TEST_PROJECT="noboxJS"
     scala: "2.12.12"
   - env: TEST_PROJECT="noboxJS"
     scala: "2.13.3"
+  - env: TEST_PROJECT="noboxJS"
+    scala: "0.27.0-RC1"
   - env: TEST_PROJECT="noboxNative"
     scala: "2.11.12"
     sudo: required
     before_install:
     - curl https://raw.githubusercontent.com/scala-native/scala-native/master/scripts/travis_setup.sh | bash -x
 
-script: sbt "++ ${TRAVIS_SCALA_VERSION} -v" ${TEST_PROJECT}/test
+script: sbt "++ ${TRAVIS_SCALA_VERSION}! -v" ${TEST_PROJECT}/test

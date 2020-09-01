@@ -4,6 +4,7 @@ import sbtrelease.Git
 import sbtrelease.ReleasePlugin.autoImport._
 import sbtrelease.ReleaseStateTransformations._
 import xerial.sbt.Sonatype.autoImport._
+import dotty.tools.sbtplugin.DottyPlugin.autoImport.isDotty
 
 object Common {
 
@@ -81,15 +82,20 @@ object Common {
           Nil
       }
     },
-    scalacOptions ++= (
-      "-deprecation" ::
-      "-unchecked" ::
-      "-Xlint" ::
-      "-language:existentials" ::
-      "-language:higherKinds" ::
-      "-language:implicitConversions" ::
-      Nil
+    scalacOptions ++= Seq(
+      "-deprecation",
+      "-unchecked",
+      "-language:existentials,higherKinds,implicitConversions"
     ),
+    scalacOptions ++= {
+      if (isDotty.value) {
+        Nil
+      } else {
+        Seq(
+          "-Xlint"
+        )
+      }
+    },
     scalacOptions ++= unusedWarnings,
     releaseCrossBuild := true,
     releaseProcess := Seq[ReleaseStep](
