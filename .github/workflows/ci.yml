@@ -1,0 +1,25 @@
+name: CI
+on:
+  pull_request:
+  push:
+  schedule:
+  - cron: '0 3 * * 2'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - args: '"+noboxJVM/test"'
+          - args: '"+noboxJS/test"'
+          - args: '"++ 2.11.12!" noboxNative/test'
+            name: scala-native
+    steps:
+    - uses: actions/checkout@v1
+    - uses: olafurpg/setup-scala@v10
+      with:
+        java-version: "adopt@1.8"
+    - uses: coursier/cache-action@v5
+    - run: if [[ "${{ matrix.name }}" == "scala-native" ]] ; then ./.github/scala-native-setup.sh ; fi
+    - run: sbt -v ${{ matrix.args }}
