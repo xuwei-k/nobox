@@ -10,7 +10,7 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     Common.commonSettings,
     scalapropsCoreSettings,
     libraryDependencies ++= (
-      ("com.github.scalaprops" %%% "scalaprops" % "0.8.1" % "test") ::
+      ("com.github.scalaprops" %%% "scalaprops" % "0.8.2" % "test") ::
       Nil
     ).map(_.withDottyCompat(scalaVersion.value)),
     unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
@@ -135,8 +135,7 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     )
   ).nativeSettings(
     scalapropsNativeSettings,
-    crossScalaVersions := Common.Scala211 :: Nil,
-    selectMainClass in Test := Some("scalaprops.NativeTestMain")
+    crossScalaVersions ~= (_.filter(_ startsWith "2.1")),
   )
 
 lazy val noboxJVM = nobox.jvm
