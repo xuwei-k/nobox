@@ -120,10 +120,8 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     scalacOptions ++= {
       val a = (baseDirectory in LocalRootProject).value.toURI.toString
       val g = "https://raw.githubusercontent.com/xuwei-k/nobox/" + gitTagOrHash.value
-      // TODO
-      // https://github.com/lampepfl/dotty/blob/4c99388e77be12ee6cc/compiler/src/dotty/tools/backend/sjs/JSPositions.scala#L64-L69
       if (isDottyJS.value) {
-        Nil
+        Seq(s"-scalajs-mapSourceURI:$a->$g/")
       } else {
         Seq(s"-P:scalajs:mapSourceURI:$a->$g/")
       }
