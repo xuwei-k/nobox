@@ -13,7 +13,7 @@ jobs:
         include:
           - args: '"+noboxJVM/test"'
           - args: '"+noboxJS/test"'
-          - args: '"++ 2.11.12!" noboxNative/test'
+          - args: '"+noboxNative/test"'
             name: scala-native
     steps:
     - uses: actions/checkout@v2.3.4
