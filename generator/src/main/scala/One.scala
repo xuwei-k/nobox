@@ -54,7 +54,7 @@ final class ${clazz} private(val self: Array[${a}]) extends AnyVal {
       }
       i += 1
     }
-    new $zero(builder.result)
+    new $zero(builder.result())
   }
 
   def filterNot(f: $a => Boolean): $zero = filter(!f(_))
@@ -389,7 +389,7 @@ object $obj {
     val builder = new ArrayBuilder.$zero()
     builder += elem0
     builder ++= elems
-    new $clazz(builder.result)
+    new $clazz(builder.result())
   }
 
 }

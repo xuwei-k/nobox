@@ -230,7 +230,7 @@ s"""
       }
       i += 1
     }
-    new of$tparamy(builder.result)
+    new of$tparamy(builder.result())
   }
 """
     }
@@ -247,7 +247,7 @@ s"""
       appendFunc(self(i))
       i += 1
     }
-    new of$tparamy(builder.result)
+    new of$tparamy(builder.result())
   }
 """
     }

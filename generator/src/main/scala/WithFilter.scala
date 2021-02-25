@@ -33,7 +33,7 @@ s"""
       }
       i += 1
     }
-    builder.result
+    builder.result()
   }
 """
     }
@@ -55,7 +55,7 @@ s"""
       }
       i += 1
     }
-    builder.result
+    builder.result()
   }
 """
     }
