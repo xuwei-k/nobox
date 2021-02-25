@@ -87,7 +87,7 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
       }
       i += 1
     }
-    new $clazz(builder.result)
+    new $clazz(builder.result())
   }
 
   def filterNot(f: $a => Boolean): $clazz = filter(!f(_))
@@ -760,7 +760,7 @@ object $obj {
       case None =>
     }
     loop(f(z))
-    new $clazz(builder.result)
+    new $clazz(builder.result())
   }
 
 }
