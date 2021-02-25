@@ -56,7 +56,7 @@ object Common {
   def releaseStepCross[A](key: TaskKey[A]) = ReleaseStep(
     action = { state =>
       val extracted = Project extract state
-      extracted.runAggregated(key in Global in extracted.get(thisProjectRef), state)
+      extracted.runAggregated(extracted.get(thisProjectRef) / (Global / key), state)
     },
     enableCrossBuild = true
   )
@@ -118,7 +118,7 @@ object Common {
     ),
     trapExit := false
   ) ++ Seq(Compile, Test).flatMap(c =>
-    scalacOptions in (c, console) --= unusedWarnings
+    c / console / scalacOptions --= unusedWarnings
   )
 
 }

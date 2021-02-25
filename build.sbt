@@ -13,10 +13,10 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
       ("com.github.scalaprops" %%% "scalaprops" % "0.8.2" % "test") ::
       Nil
     ).map(_.withDottyCompat(scalaVersion.value)),
-    unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
+    (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
     name := "nobox",
     licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
-    initialCommands in console := "import nobox._",
+    console / initialCommands := "import nobox._",
     startYear := Some(2013),
     description := "immutable primitive array wrapper for Scala",
     pomExtra := (
@@ -36,13 +36,13 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     ),
     printInfo := printInfo.dependsOn(compile).evaluated,
     printInfo := {
-      val srcs = (scalaSource in Compile).value
+      val srcs = (Compile / scalaSource).value
       val files = (srcs ** "*.scala").get.map(f => f -> IO.readLines(f)).sortBy(_._1)
       println("all lines " + files.map(_._2.size).sum)
       files.foreach{ case (file, lines) =>
         println(file.getName + " " + lines.size)
       }
-      (runMain in Test).fullInput(" nobox.Info").evaluated
+      (Test / runMain).fullInput(" nobox.Info").evaluated
     },
     pomPostProcess := { node =>
       import scala.xml._
@@ -68,13 +68,13 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     ),
     buildInfoPackage := "nobox",
     buildInfoObject := "BuildInfoNobox",
-    sourceGenerators in Compile += Def.sequential(
+    (Compile / sourceGenerators) += Def.sequential(
       Def.task {
         IO.delete(generateDir.value)
       },
       Def.task {
-        val cp = (fullClasspath in Compile in generator).value
-        val _ = (runner in Compile in generator).value.run(
+        val cp = (generator / Compile / fullClasspath).value
+        val _ = (generator / Compile / runner).value.run(
           mainClass = "nobox.Generate",
           classpath = Attributed.data(cp),
           options = Seq(generateDir.value.toString),
@@ -85,22 +85,22 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
         (generateDir.value ** "*.scala").get
       }
     ),
-    mappings in (Compile, packageSrc) ++= (managedSources in Compile).value.map{ f =>
+    (Compile / packageSrc / mappings) ++= (Compile / managedSources).value.map{ f =>
       // to merge generated sources into sources.jar as well
-      (f, f.relativeTo((sourceManaged in Compile).value).get.getPath.replace(generateDirName, "nobox").replace("sbt-buildinfo", "nobox"))
+      (f, f.relativeTo((Compile / sourceManaged).value).get.getPath.replace(generateDirName, "nobox").replace("sbt-buildinfo", "nobox"))
     },
     checkPackage := {
       println(IO.read(makePom.value))
       println()
       IO.withTemporaryDirectory{ dir =>
-        IO.unzip((packageSrc in Compile).value, dir).map(f => f.getName -> f.length) foreach println
+        IO.unzip((Compile / packageSrc).value, dir).map(f => f.getName -> f.length) foreach println
       }
     },
     benchmark := {
       val args = benchmarkArgsParser.parsed
       val ((classes, names), sizes) = args
-      val cp = (fullClasspath in Test).value
-      val r = (runner in Test).value
+      val cp = (Test / fullClasspath).value
+      val r = (Test / runner).value
       classes.foreach{ clazz =>
         def run(s: Option[String]) = r.run(
           "nobox."+clazz,
@@ -113,12 +113,12 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
       }
     }
   ).platformsSettings(JVMPlatform, JSPlatform)(
-    unmanagedSourceDirectories in Test += {
+    (Test / unmanagedSourceDirectories) += {
       baseDirectory.value.getParentFile / "jvm_js/src/test/scala/"
     }
   ).jsSettings(
     scalacOptions ++= {
-      val a = (baseDirectory in LocalRootProject).value.toURI.toString
+      val a = (LocalRootProject / baseDirectory).value.toURI.toString
       val g = "https://raw.githubusercontent.com/xuwei-k/nobox/" + gitTagOrHash.value
       if (isDottyJS.value) {
         Seq(s"-scalajs-mapSourceURI:$a->$g/")
@@ -153,8 +153,8 @@ lazy val root = project.in(file(".")).aggregate(
 ).settings(
   Common.commonSettings,
   notPublish,
-  scalaSource in Compile := file("dummy"),
-  scalaSource in Test := file("dummy")
+  Compile / scalaSource := file("dummy"),
+  Test / scalaSource := file("dummy")
 )
 
 lazy val gitTagOrHash = Def.setting {
@@ -189,7 +189,7 @@ lazy val checkPackage = taskKey[Unit]("show pom.xml and sources.jar")
 lazy val generateDirName = "generate"
 
 lazy val generateDir = Def.setting {
-  (sourceManaged in Compile).value / generateDirName
+  (Compile / sourceManaged).value / generateDirName
 }
 
 lazy val generator = (project in file("generator")).settings(
