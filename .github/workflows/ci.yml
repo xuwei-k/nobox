@@ -20,4 +20,4 @@ jobs:
       with:
         java-version: "adopt@1.8"
     - uses: coursier/cache-action@v5
-    - run: sbt -v ${{ matrix.args }}
+    - run: sbt -v -J-Xss10m ${{ matrix.args }}
