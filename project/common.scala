@@ -4,9 +4,11 @@ import sbtrelease.Git
 import sbtrelease.ReleasePlugin.autoImport._
 import sbtrelease.ReleaseStateTransformations._
 import xerial.sbt.Sonatype.autoImport._
-import dotty.tools.sbtplugin.DottyPlugin.autoImport.isDotty
 
 object Common {
+  val isScala3 = Def.setting(
+    CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3)
+  )
 
   private[this] val unusedWarnings = (
     "-Ywarn-unused" ::
@@ -88,7 +90,7 @@ object Common {
       "-language:existentials,higherKinds,implicitConversions"
     ),
     scalacOptions ++= {
-      if (isDotty.value) {
+      if (isScala3.value) {
         Nil
       } else {
         Seq(
