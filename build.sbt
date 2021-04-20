@@ -12,7 +12,7 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     libraryDependencies ++= (
       ("com.github.scalaprops" %%% "scalaprops" % "0.8.2" % "test") ::
       Nil
-    ).map(_.withDottyCompat(scalaVersion.value)),
+    ).map(_ cross CrossVersion.for3Use2_13),
     (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
     name := "nobox",
     licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
