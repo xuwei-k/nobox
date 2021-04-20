@@ -1,6 +1,7 @@
 import sbtcrossproject.{crossProject, CrossType}
 import scala.collection.JavaConverters._
 import java.lang.management.ManagementFactory
+import Common.isScala3
 
 lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CustomCrossType)
@@ -120,7 +121,7 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     scalacOptions ++= {
       val a = (LocalRootProject / baseDirectory).value.toURI.toString
       val g = "https://raw.githubusercontent.com/xuwei-k/nobox/" + gitTagOrHash.value
-      if (isDottyJS.value) {
+      if (isScala3.value) {
         Seq(s"-scalajs-mapSourceURI:$a->$g/")
       } else {
         Seq(s"-P:scalajs:mapSourceURI:$a->$g/")
