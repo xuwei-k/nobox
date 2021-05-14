@@ -11,7 +11,7 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     Common.commonSettings,
     scalapropsCoreSettings,
     libraryDependencies ++= (
-      ("com.github.scalaprops" %%% "scalaprops" % "0.8.2" % "test") ::
+      ("com.github.scalaprops" %%% "scalaprops" % "0.8.3" % "test") ::
       Nil
     ).map(_ cross CrossVersion.for3Use2_13),
     (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
