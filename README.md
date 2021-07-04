@@ -25,15 +25,3 @@ libraryDependencies += "com.github.xuwei-k" %%% "nobox" % "0.3.0"
 ```
 
 - [generated source code](http://java-src.appspot.com/com.github.xuwei-k/nobox_2.12?latest)
-
-### snapshot version
-
-```scala
-resolvers += Opts.resolver.sonatypeSnapshots
-
-libraryDependencies += "com.github.xuwei-k" %% "nobox" % "0.3.1-SNAPSHOT"
-```
-
-
-- [API Documentation](https://oss.sonatype.org/service/local/repositories/snapshots/archive/com/github/xuwei-k/nobox_2.12/0.3.1-SNAPSHOT/nobox_2.12-0.3.1-SNAPSHOT-javadoc.jar/!/index.html)
-
