@@ -108,7 +108,7 @@ object Common {
       updateReadmeProcess,
       tagRelease,
       releaseStepCross(PgpKeys.publishSigned),
-      releaseStepCommandAndRemaining("noboxNative/publishSigned"),
+      releaseStepCommandAndRemaining("+ noboxNative/publishSigned"),
       releaseStepCommandAndRemaining("sonatypeBundleRelease"),
       setNextVersion,
       commitNextVersion,
