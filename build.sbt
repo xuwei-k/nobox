@@ -128,7 +128,6 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
       }
     }
   ).jvmSettings(
-    Sxr.settings,
     javaOptions ++= "-Djava.awt.headless=true" +: ManagementFactory.getRuntimeMXBean.getInputArguments.asScala.toList.filter(
       a => Seq("-Xmx","-Xms","-XX").exists(a.startsWith)
     )
