@@ -153,8 +153,8 @@ lazy val root = project.in(file(".")).aggregate(
 ).settings(
   Common.commonSettings,
   notPublish,
-  Compile / scalaSource := file("dummy"),
-  Test / scalaSource := file("dummy")
+  Compile / scalaSource := baseDirectory.value / "dummy",
+  Test / scalaSource := baseDirectory.value / "dummy"
 )
 
 lazy val gitTagOrHash = Def.setting {
