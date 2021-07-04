@@ -15,13 +15,13 @@ This library provide more efficient(faster and less memory) operations for primi
 ### latest stable version
 
 ```scala
-libraryDependencies += "com.github.xuwei-k" %% "nobox" % "0.3.0"
+libraryDependencies += "com.github.xuwei-k" %% "nobox" % "0.3.1"
 ```
 
 for scala-js, scala-native
 
 ```scala
-libraryDependencies += "com.github.xuwei-k" %%% "nobox" % "0.3.0"
+libraryDependencies += "com.github.xuwei-k" %%% "nobox" % "0.3.1"
 ```
 
 - [generated source code](http://java-src.appspot.com/com.github.xuwei-k/nobox_2.12?latest)
