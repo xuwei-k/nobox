@@ -132,6 +132,15 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
       a => Seq("-Xmx","-Xms","-XX").exists(a.startsWith)
     )
   ).nativeSettings(
+    Compile / doc / scalacOptions --= {
+      // TODO remove this workaround
+      // https://github.com/scala-native/scala-native/issues/2503
+      if (scalaBinaryVersion.value == "3") {
+        (Compile / doc / scalacOptions).value.filter(_.contains("-Xplugin"))
+      } else {
+        Nil
+      }
+    },
     scalapropsNativeSettings,
   )
 
