@@ -22,5 +22,3 @@ for scala-js, scala-native
 ```scala
 libraryDependencies += "com.github.xuwei-k" %%% "nobox" % "0.3.1"
 ```
-
-- [generated source code](http://java-src.appspot.com/com.github.xuwei-k/nobox_2.12?latest)
