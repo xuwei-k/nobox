@@ -1,8 +1,7 @@
 # nobox
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.xuwei-k/nobox_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.xuwei-k/nobox_2.12)
-[![scaladoc](https://javadoc-badge.appspot.com/com.github.xuwei-k/nobox_2.12.svg?label=javadoc)](https://javadoc-badge.appspot.com/com.github.xuwei-k/nobox_2.12/nobox/index.html?javadocio=true)
-
+[![scaladoc](https://javadoc.io/badge2/com.github.xuwei-k/nobox_2.13/javadoc.svg)](https://javadoc.io/doc/com.github.xuwei-k/nobox_2.13/latest/nobox/index.html)
 
 immutable primitive array wrapper for Scala
 
