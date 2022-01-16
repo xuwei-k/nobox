@@ -1,4 +1,4 @@
-import sbtcrossproject.{crossProject, CrossType}
+import sbtcrossproject.CrossType
 import scala.collection.JavaConverters._
 import java.lang.management.ManagementFactory
 import Common.isScala3
