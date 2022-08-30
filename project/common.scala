@@ -68,11 +68,6 @@ object Common {
     organization := "com.github.xuwei-k",
     commands += Command.command("updateReadme")(updateReadme),
     publishTo := sonatypePublishToBundle.value,
-    resolvers ++= {
-      if(scalaVersion.value endsWith "SNAPSHOT"){
-        Opts.resolver.sonatypeSnapshots :: Nil
-      }else Nil
-    },
     scalacOptions ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, v)) if v <= 12 =>
