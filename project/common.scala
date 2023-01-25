@@ -60,11 +60,11 @@ object Common {
     enableCrossBuild = true
   )
 
-  val Scala211 = "2.11.12"
+  def Scala212 = "2.12.17"
 
   val commonSettings: Seq[Def.Setting[_]] = Seq(
-    scalaVersion := Scala211,
-    crossScalaVersions := "3.2.2" :: "2.13.10" :: "2.12.17" :: Scala211 :: Nil,
+    scalaVersion := Scala212,
+    crossScalaVersions := "3.2.2" :: "2.13.10" :: Scala212 :: Nil,
     organization := "com.github.xuwei-k",
     commands += Command.command("updateReadme")(updateReadme),
     publishTo := sonatypePublishToBundle.value,
