@@ -329,7 +329,7 @@ object TestRef extends TestBase {
       x <- xs; if x % 2 == 0; y <- ys
     }{ buf2 += ((x, y)) }
 
-    buf1.result must_== buf2.result
+    buf1.result() must_== buf2.result()
   }
 
   val testToString = forAll { (xs: ofRef[Integer]) =>

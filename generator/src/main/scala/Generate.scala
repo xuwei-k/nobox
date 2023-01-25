@@ -301,7 +301,7 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
       }
       i += 1
     }
-    (new $clazz(l.result), new $clazz(r.result))
+    (new $clazz(l.result()), new $clazz(r.result()))
   }
 
   @throws[IndexOutOfBoundsException]
@@ -378,7 +378,7 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
   def tails: Iterator[$clazz] = new Iterator[$clazz]{
     private[this] var i = 0
     var hasNext = true
-    def next: $clazz = {
+    def next(): $clazz = {
       val r = new $clazz(${copyOfRange("i", "self.length")})
       i += 1
       if(i > self.length) hasNext = false
@@ -389,7 +389,7 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
   def inits: Iterator[$clazz] = new Iterator[$clazz]{
     private[this] var i = self.length
     var hasNext = true
-    def next: $clazz = {
+    def next(): $clazz = {
       val r = new $clazz(${copyOfRange("0", "i")})
       i -= 1
       if(i < 0) hasNext = false
@@ -486,7 +486,7 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
     new Iterator[$clazz]{
       private[this] var i = 0
       var hasNext = self.length != 0
-      def next = {
+      def next() = {
         // n is negative, if `i + _size` overflow
         val n = i + _size
         val until = if(n > 0) math.min(n, self.length) else self.length
@@ -568,10 +568,10 @@ final class $classWithTag (val self: Array[$a]) extends $parent {
 
     val b = Map.newBuilder[A, $clazz]
     m.foreach{ case (k, v) =>
-      b += ((k, new $clazz(v.result)))
+      b += ((k, new $clazz(v.result())))
     }
 
-    b.result
+    b.result()
   }
 
   def maxBy[A](f: $a => A)(implicit A: Ordering[A]): Option[$a] = {

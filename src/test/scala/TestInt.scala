@@ -30,7 +30,7 @@ object TestInt extends TestBase {
     val b1, b2 = collection.mutable.ArrayBuilder.make[String]
     a.withFilter(f).foreach(b1 += _.toString)
     a.self.withFilter(f).foreach(b2 += _.toString)
-    b1.result must_=== b2.result
+    b1.result() must_=== b2.result()
   }
 
   val collectLong = forAll { (a: ofInt, pf: PartialFunction[Int, Long]) =>
@@ -466,7 +466,7 @@ object TestInt extends TestBase {
       x <- xs; if x % 2 == 0; y <- ys
     }{ buf2 += ((x, y)) }
 
-    buf1.result must_== buf2.result
+    buf1.result() must_== buf2.result()
   }
 
   val testToString = forAll { (xs: ofInt) =>
