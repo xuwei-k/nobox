@@ -86,6 +86,7 @@ object Common {
         Nil
       } else {
         Seq(
+          "-Xsource:3",
           "-Xlint"
         )
       }
