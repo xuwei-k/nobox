@@ -15,7 +15,7 @@ addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.21")
 
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.12.0")
 
-addSbtPlugin("com.github.scalaprops" % "sbt-scalaprops" % "0.4.4")
+addSbtPlugin("com.github.scalaprops" % "sbt-scalaprops" % "0.5.0")
 
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.16.0")
 
