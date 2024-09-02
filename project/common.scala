@@ -60,7 +60,7 @@ object Common {
     enableCrossBuild = true
   )
 
-  def Scala212 = "2.12.19"
+  def Scala212 = "2.12.20"
 
   val commonSettings: Seq[Def.Setting[_]] = Seq(
     scalaVersion := Scala212,
