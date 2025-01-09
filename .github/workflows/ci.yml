@@ -24,5 +24,6 @@ jobs:
       with:
         java-version: "${{ matrix.java }}"
         distribution: adopt
+    - uses: sbt/setup-sbt@v1
     - uses: coursier/cache-action@v6
     - run: sbt -v -J-Xss10m ${{ matrix.args }}
