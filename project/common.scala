@@ -82,13 +82,19 @@ object Common {
       "-language:existentials,higherKinds,implicitConversions"
     ),
     scalacOptions ++= {
-      if (isScala3.value) {
-        Nil
-      } else {
-        Seq(
-          "-Xsource:3",
-          "-Xlint"
-        )
+      scalaBinaryVersion.value match {
+        case "2.12" =>
+          Seq(
+            "-Xsource:3",
+            "-Xlint"
+          )
+        case "2.13" =>
+          Seq(
+            "-Xsource:3-cross",
+            "-Xlint"
+          )
+        case _ =>
+          Nil
       }
     },
     scalacOptions ++= unusedWarnings,
