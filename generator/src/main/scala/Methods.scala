@@ -264,10 +264,10 @@ s"""
           s"      case Clazz.$b => of$b.flatten(self.asInstanceOf[Array[Array[$b]]]).self"
         }.mkString("\n")
 s"""
-  def flatten[E](implicit E: X <:< Array[E]): Array[E] =
+  def flatten[E](implicit E: X <:< Array[E], tag: ClassTag[E]): Array[E] =
     (self.getClass.getComponentType.getComponentType match {
 $cases
-      case c => ofRef.flatten[E with AnyRef](self.asInstanceOf[Array[Array[E with AnyRef]]])(using ClassTag(c)).self
+      case _ => ofRef.flatten[E with AnyRef](self.asInstanceOf[Array[Array[E with AnyRef]]])(using tag.asInstanceOf[ClassTag[E with AnyRef]]).self
     }).asInstanceOf[Array[E]]
 """
       }
