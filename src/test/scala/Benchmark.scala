@@ -27,7 +27,6 @@ trait Benchmark {
 
   def time[A](action: => A): Long = {
     System.gc()
-    System.runFinalization()
     val start = System.nanoTime
     val _ = action
     System.nanoTime - start
