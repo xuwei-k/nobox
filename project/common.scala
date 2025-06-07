@@ -3,7 +3,6 @@ import sbt._, Keys._
 import sbtrelease.Git
 import sbtrelease.ReleasePlugin.autoImport._
 import sbtrelease.ReleaseStateTransformations._
-import xerial.sbt.Sonatype.autoImport._
 
 object Common {
   val isScala3 = Def.setting(
@@ -67,7 +66,7 @@ object Common {
     crossScalaVersions := "3.3.6" :: "2.13.16" :: Scala212 :: Nil,
     organization := "com.github.xuwei-k",
     commands += Command.command("updateReadme")(updateReadme),
-    publishTo := sonatypePublishToBundle.value,
+    publishTo := (if (isSnapshot.value) None else localStaging.value),
     scalacOptions ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, v)) if v <= 12 =>
@@ -111,7 +110,7 @@ object Common {
       tagRelease,
       releaseStepCross(PgpKeys.publishSigned),
       releaseStepCommandAndRemaining("+ noboxNative/publishSigned"),
-      releaseStepCommandAndRemaining("sonatypeBundleRelease"),
+      releaseStepCommandAndRemaining("sonaRelease"),
       setNextVersion,
       commitNextVersion,
       updateReadmeProcess,
