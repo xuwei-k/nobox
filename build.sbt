@@ -10,9 +10,8 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .settings(
     Common.commonSettings,
     scalapropsCoreSettings,
-    libraryDependencies ++= (
-      ("com.github.scalaprops" %%% "scalaprops" % "0.10.0" % "test") ::
-        Nil
+    libraryDependencies ++= Seq(
+      "com.github.scalaprops" %%% "scalaprops" % "0.10.0" % "test",
     ),
     (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
     name := "nobox",
@@ -146,6 +145,7 @@ lazy val noboxJS = nobox.js
 lazy val noboxNative = nobox.native
 
 lazy val notPublish = Seq(
+  publish / skip := true,
   publishArtifact := false,
   publish := {},
   publishLocal := {},
@@ -156,8 +156,10 @@ lazy val notPublish = Seq(
 lazy val root = project
   .in(file("."))
   .aggregate(
+    generator,
     noboxJVM,
-    noboxJS // exclude noboxNative on purpose
+    noboxJS,
+    noboxNative,
   )
   .settings(
     Common.commonSettings,
