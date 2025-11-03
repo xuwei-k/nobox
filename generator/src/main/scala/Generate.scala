@@ -43,7 +43,7 @@ object Generate {
     val obj = "of" + a.name
     val parent = if (a == REF) "AnyRef" else "AnyVal"
     val empty = obj + "." + "empty" + a.tparamx
-    val cast1 = if (a == REF) s".asInstanceOf[Array[$a with AnyRef]]" else ""
+    val cast1 = if (a == REF) s".asInstanceOf[Array[$a & AnyRef]]" else ""
     val cast2 = if (a == REF) s".asInstanceOf[Array[$a]]" else ""
     val castObj = if (a == REF) s".asInstanceOf[Array[AnyRef]]" else ""
     def copyOf(n: String) = {
