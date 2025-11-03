@@ -1,3 +1,5 @@
+addSbtPlugin("com.github.xuwei-k" % "sbt-root-aggregate" % "0.1.0")
+
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.6")
 
 addSbtPlugin("com.github.sbt" % "sbt-release" % "1.4.0")
