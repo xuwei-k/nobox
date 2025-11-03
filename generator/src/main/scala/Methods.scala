@@ -267,7 +267,7 @@ object Methods {
   def flatten[E](implicit E: X <:< Array[E], tag: ClassTag[E]): Array[E] =
     (self.getClass.getComponentType.getComponentType match {
 $cases
-      case _ => ofRef.flatten[E with AnyRef](self.asInstanceOf[Array[Array[E with AnyRef]]])(using tag.asInstanceOf[ClassTag[E with AnyRef]]).self
+      case _ => ofRef.flatten[E & AnyRef](self.asInstanceOf[Array[Array[E & AnyRef]]])(using tag.asInstanceOf[ClassTag[E & AnyRef]]).self
     }).asInstanceOf[Array[E]]
 """
       }

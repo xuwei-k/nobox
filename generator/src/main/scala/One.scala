@@ -10,7 +10,7 @@ object One {
     val withTag = a.xWithTag
     val obj = "of" + a.name + "1"
     val empty = zero + "." + "empty" + a.tparamx
-    val cast1 = if (a == REF) s".asInstanceOf[Array[$a with AnyRef]]" else ""
+    val cast1 = if (a == REF) s".asInstanceOf[Array[$a & AnyRef]]" else ""
     val cast2 = if (a == REF) s".asInstanceOf[Array[$a]]" else ""
     val castObj = if (a == REF) s".asInstanceOf[Array[AnyRef]]" else ""
     def copyOf(n: String) = {
