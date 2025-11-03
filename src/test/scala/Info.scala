@@ -2,7 +2,7 @@ package nobox
 
 object Info {
   def main(args: Array[String]): Unit = {
-    val classes = List[Class[_]](
+    val classes = List[Class[?]](
       classOf[ofInt],
       classOf[ofLong],
       classOf[ofBoolean],
@@ -11,10 +11,10 @@ object Info {
       classOf[ofChar],
       classOf[ofFloat],
       classOf[ofDouble],
-      classOf[ofRef[_]]
+      classOf[ofRef[?]]
     )
 
-    val companions = List[Class[_]](
+    val companions = List[Class[?]](
       ofInt.getClass,
       ofLong.getClass,
       ofBoolean.getClass,
@@ -28,22 +28,20 @@ object Info {
 
     val exclude = classOf[AnyRef].getMethods.map(_.getName).toSet
 
-    val methods = List(classes, companions).flatten.map{ c =>
+    val methods = List(classes, companions).flatten.map { c =>
       c -> c.getMethods.map(_.getName).filterNot(m => (m contains '$') || exclude(m))
     }
 
-    if(!args.isEmpty){
-      methods.foreach{ case (c, m) =>
+    if (!args.isEmpty) {
+      methods.foreach { case (c, m) =>
         println(c.toString + " " + m.size)
         println(m.mkString(", "))
         println()
       }
-    }else{
-      methods.foreach{ case (c, m) =>
+    } else {
+      methods.foreach { case (c, m) =>
         println(c.toString + " " + m.size)
       }
     }
   }
 }
-
-

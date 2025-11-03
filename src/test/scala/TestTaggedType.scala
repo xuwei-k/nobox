@@ -13,4 +13,3 @@ object TestTaggedType extends TestBase {
   }
 
 }
-

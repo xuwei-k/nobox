@@ -1,6 +1,6 @@
 package nobox
 
-import scalaprops._
+import scalaprops.*
 import scalaprops.Property.forAll
 
 object TestRef extends TestBase {
@@ -17,40 +17,40 @@ object TestRef extends TestBase {
     a.exists(f) must_== a.self.exists(f)
   }
 
-  val filter = forAll { (a: ofRef[Integer], f: Integer => Boolean)  =>
+  val filter = forAll { (a: ofRef[Integer], f: Integer => Boolean) =>
     a.filter(f).self must_=== a.self.filter(f)
   }
 
-  val find = forAll { (a: ofRef[Integer], f: Integer => Boolean)  =>
+  val find = forAll { (a: ofRef[Integer], f: Integer => Boolean) =>
     a.find(f) must_== a.self.find(f)
   }
 
   val flatMap = forAll { (a: ofRef[Integer]) =>
-    val f: Integer => Array[Integer] = {(i: Integer) => Array[Integer](i, i + 10)}
+    val f: Integer => Array[Integer] = { (i: Integer) => Array[Integer](i, i + 10) }
     a.flatMap(f).self must_=== a.self.flatMap(x => f(x).toList)
   }
 
   val forall = forAll { (a: ofRef[Integer]) =>
-    val f = {(i: Integer) => 5 < i }
+    val f = { (i: Integer) => 5 < i }
     a.forall(f) must_== a.self.forall(f)
   }
 
   val mapInt = forAll { (a: ofRef[Integer]) =>
-    val f = {(i: Integer) => i - 1 }
+    val f = { (i: Integer) => i - 1 }
     a.mapInt(f).self must_=== a.self.map(f)
   }
 
-  val map = forAll { (a: ofRef[Integer], f: Integer => List[Boolean])  =>
+  val map = forAll { (a: ofRef[Integer], f: Integer => List[Boolean]) =>
     a.map(f) must_=== a.self.map(f)
   }
 
   val reverseMapInt = forAll { (a: ofRef[Integer]) =>
-    val f = {(i: Integer) => i * 2 }
+    val f = { (i: Integer) => i * 2 }
     a.reverseMapInt(f).self must_=== a.self.reverseMap(f).toArray
   }
 
   val reverseMap = forAll { (a: ofRef[Integer], f2: Integer => Byte) =>
-    val f1 = (_:Integer).toString
+    val f1 = (_: Integer).toString
     a.reverseMap(f1).self must_=== a.self.reverseMap(f1).toArray
     a.reverseMap(f2).self must_=== a.self.reverseMap(f2).toArray
   }
@@ -112,7 +112,7 @@ object TestRef extends TestBase {
   }
 
   val partition = forAll { (a: ofRef[Integer]) =>
-    val f = {(i: Integer) => i > 0}
+    val f = { (i: Integer) => i > 0 }
     val (x1, x2) = a.partition(f)
     val (y1, y2) = a.self.partition(f)
     (x1.self must_=== y1) && (x2.self must_=== y2)
@@ -123,7 +123,7 @@ object TestRef extends TestBase {
   }
 
   val updated = forAll { (a: ofRef[Integer], index: Int, elem: Integer) =>
-    if(0 <= index && index < a.size)
+    if (0 <= index && index < a.size)
       a.updated(index, elem).self must_=== a.self.updated(index, elem)
     else
       a.updated(index, elem).mustThrowA[IndexOutOfBoundsException]
@@ -194,56 +194,56 @@ object TestRef extends TestBase {
 
   val tailOption = forAll { (a: ofRef[Integer]) =>
     a.tailOption.map(_.self.toSeq) must_== (
-      if(a.self.isEmpty) None
+      if (a.self.isEmpty) None
       else Some(a.self.tail.toSeq)
     )
   }
 
   val initOption = forAll { (a: ofRef[Integer]) =>
     a.initOption.map(_.self.toSeq) must_== (
-      if(a.self.isEmpty) None
+      if (a.self.isEmpty) None
       else Some(a.self.init.toSeq)
     )
   }
 
   val grouped = forAll { (a: ofRef[Integer], n: Int) =>
-    if(n > 0){
+    if (n > 0) {
       a.grouped(n).map(_.self.toSeq).toList must_== a.self.grouped(n).map(_.toSeq).toList
-    }else{
+    } else {
       a.grouped(n).mustThrowA[IllegalArgumentException]
     }
   }
 
   val sliding = forAll { (a: ofRef[Integer], size: Int, step: Int) =>
-    if(size > 0 && step > 0){
+    if (size > 0 && step > 0) {
       a.sliding(size, step).map(_.self.toSeq).toList must_== (
         a.self.sliding(size, step).map(_.toSeq).toList
       )
-    }else{
+    } else {
       a.sliding(size, step).mustThrowA[IllegalArgumentException]
     }
   }
 
   val max = forAll { (a: ofRef[Integer]) =>
-    if(a.self.isEmpty){
+    if (a.self.isEmpty) {
       a.max must_== None
-    }else{
+    } else {
       a.max must_== Option(a.self.max)
     }
   }
 
   val min = forAll { (a: ofRef[Integer]) =>
-    if(a.self.isEmpty){
+    if (a.self.isEmpty) {
       a.min must_== None
-    }else{
+    } else {
       a.min must_== Option(a.self.min)
     }
   }
 
   val minmax = forAll { (a: ofRef[Integer]) =>
-    if(a.self.isEmpty){
+    if (a.self.isEmpty) {
       a.minmax must_== None
-    }else{
+    } else {
       a.minmax must_== Option((a.self.min, a.self.max))
     }
   }
@@ -266,22 +266,22 @@ object TestRef extends TestBase {
 
   val scanLeft1 = forAll { (a: ofRef[Integer]) =>
     a.scanLeft1(_ - _).self.toList must_== (
-      if(a.self.isEmpty) List()
+      if (a.self.isEmpty) List()
       else a.self.tail.scanLeft(a.self.head)(_ - _).toList
     )
   }
 
   val scanRight1 = forAll { (a: ofRef[Integer]) =>
     a.scanRight1(_ - _).self.toList must_== (
-      if(a.self.isEmpty) List()
+      if (a.self.isEmpty) List()
       else a.self.init.scanRight(a.self.last)(_ - _).toList
     )
   }
 
   val startsWith = forAll { (a: ofRef[Integer], b: ofRef[Integer], n: Int) =>
-    if(n >= 0){
+    if (n >= 0) {
       a.startsWith(b.self, n) must_== a.self.startsWith(b.self, n)
-    }else{
+    } else {
       a.startsWith(b.self, n).mustThrowA[IllegalArgumentException]
     }
   }
@@ -291,7 +291,9 @@ object TestRef extends TestBase {
   }
 
   val iterate = forAll { (size: UInt8) =>
-    ofRef.iterate("0", size)(a => (a.toInt + 1).toString).self must_=== Array.iterate("0", size)(a => (a.toInt + 1).toString)
+    ofRef.iterate("0", size)(a => (a.toInt + 1).toString).self must_=== Array.iterate("0", size)(a =>
+      (a.toInt + 1).toString
+    )
   }
 
   val tabulate = forAll { (size: UInt8) =>
@@ -300,7 +302,7 @@ object TestRef extends TestBase {
 
   val flatten1 = forAll { (xs: Array[Array[Integer]]) =>
     xs.flatten must_=== ofRef.flatten(xs).self
-    Array.concat(xs: _*) must_=== ofRef.flatten(xs).self
+    Array.concat(xs*) must_=== ofRef.flatten(xs).self
   }
 
   val flatten2 = forAll { (xs: ofRef[Array[String]]) =>
@@ -308,26 +310,34 @@ object TestRef extends TestBase {
   }.toProperties((), Param.maxSize(5))
 
   val groupBy = forAll { (a: ofRef[Integer], x: PInt8) =>
-    a.self.groupBy(_ % x).map{case (k, v) => k -> v.toList} must_== (
-      a.groupBy(_ % x).map{case (k, v) => k -> v.self.toList}
+    a.self.groupBy(_ % x).map { case (k, v) => k -> v.toList } must_== (
+      a.groupBy(_ % x).map { case (k, v) => k -> v.self.toList }
     )
   }
 
   val `for comprehension` = forAll { (xs: ofRef[Integer], ys: ofByte) =>
-    val a = for{ x <- xs.self; if x % 2 == 0; y <- ys.self } yield (x, y)
-    val b = for{ x <- xs; if x % 2 == 0; y <- ys } yield (x, y)
+    val a = for {
+      x <- xs.self if x % 2 == 0
+      y <- ys.self
+    } yield (x, y)
+    val b = for {
+      x <- xs if x % 2 == 0
+      y <- ys
+    } yield (x, y)
 
     a must_=== b
 
     val buf1, buf2 = List.newBuilder[(Int, Byte)]
 
-    for{
-      x <- xs.self; if x % 2 == 0; y <- ys.self
-    }{ buf1 += ((x, y)) }
+    for {
+      x <- xs.self if x % 2 == 0
+      y <- ys.self
+    } { buf1 += ((x, y)) }
 
-    for{
-      x <- xs; if x % 2 == 0; y <- ys
-    }{ buf2 += ((x, y)) }
+    for {
+      x <- xs if x % 2 == 0
+      y <- ys
+    } { buf2 += ((x, y)) }
 
     buf1.result() must_== buf2.result()
   }
@@ -341,13 +351,13 @@ object TestRef extends TestBase {
     (xs.length + ys.length) must_== a.length
     val min = math.min(xs.length, ys.length)
 
-    xs.toList.zipWithIndex.forall{ case (x, i) =>
-      val index = if(i <= min) i * 2 else (min * 2) + i - min
+    xs.toList.zipWithIndex.forall { case (x, i) =>
+      val index = if (i <= min) i * 2 else (min * 2) + i - min
       a.self(index) == x
     } must_== true
 
-    ys.toList.zipWithIndex.forall{ case (y, i) =>
-      val index = if(i < min) (i * 2) + 1 else (min * 2) + i - min
+    ys.toList.zipWithIndex.forall { case (y, i) =>
+      val index = if (i < min) (i * 2) + 1 else (min * 2) + i - min
       a.self(index) == y
     } must_== true
   }
@@ -355,10 +365,10 @@ object TestRef extends TestBase {
   val intersperse = forAll { (xs: ofRef[String], x: String) =>
     val a = xs.intersperse(x)
     a.size must_== (
-      if(xs.self.isEmpty) 0 else (xs.size * 2) - 1
+      if (xs.self.isEmpty) 0 else (xs.size * 2) - 1
     )
     (1 until a.size by 2).forall(a.self(_) == x) must_== true
-    val size0 = if(xs.self.isEmpty) 0 else xs.size - 1
+    val size0 = if (xs.self.isEmpty) 0 else xs.size - 1
     a.count(x == _) must_== (xs.count(x == _) + size0)
     xs.forall(a.contains) must_== true
   }

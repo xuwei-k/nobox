@@ -1,8 +1,9 @@
-import com.jsuereth.sbtpgp.SbtPgp.autoImport._
-import sbt._, Keys._
+import com.jsuereth.sbtpgp.SbtPgp.autoImport.*
+import sbt.*
+import sbt.Keys.*
 import sbtrelease.Git
-import sbtrelease.ReleasePlugin.autoImport._
-import sbtrelease.ReleaseStateTransformations._
+import sbtrelease.ReleasePlugin.autoImport.*
+import sbtrelease.ReleaseStateTransformations.*
 
 object Common {
   val isScala3 = Def.setting(
@@ -11,7 +12,7 @@ object Common {
 
   private[this] val unusedWarnings = (
     "-Ywarn-unused" ::
-    Nil
+      Nil
   )
 
   val sonatypeURL = "https://oss.sonatype.org/service/local/repositories/"
@@ -22,25 +23,30 @@ object Common {
     val v = extracted get version
     val org = extracted get organization
     val n = "nobox"
-    val snapshotOrRelease = if(extracted get isSnapshot) "snapshots" else "releases"
+    val snapshotOrRelease = if (extracted get isSnapshot) "snapshots" else "releases"
     val readme = "README.md"
     val readmeFile = file(readme)
-    val newReadme = Predef.augmentString(IO.read(readmeFile)).lines.map{ line =>
-      val matchReleaseOrSnapshot = line.contains("SNAPSHOT") == v.contains("SNAPSHOT")
-      if(line.startsWith("libraryDependencies") && matchReleaseOrSnapshot){
-        if(line.contains(" %%% ")){
-          s"""libraryDependencies += "${org}" %%% "${n}" % "$v""""
-        } else {
-          s"""libraryDependencies += "${org}" %% "${n}" % "$v""""
-        }
-      }else if(line.contains(sonatypeURL) && matchReleaseOrSnapshot){
-        val javadocIndexHtml = "-javadoc.jar/!/index.html"
-        val baseURL = s"${sonatypeURL}${snapshotOrRelease}/archive/${org.replace('.', '/')}/${n}_${scalaV}/${v}/${n}_${scalaV}-${v}"
-        if(line.contains(javadocIndexHtml)){
-          s"- [API Documentation](${baseURL}${javadocIndexHtml})"
-        }else line
-      }else line
-    }.mkString("", "\n", "\n")
+    val newReadme = Predef
+      .augmentString(IO.read(readmeFile))
+      .lines
+      .map { line =>
+        val matchReleaseOrSnapshot = line.contains("SNAPSHOT") == v.contains("SNAPSHOT")
+        if (line.startsWith("libraryDependencies") && matchReleaseOrSnapshot) {
+          if (line.contains(" %%% ")) {
+            s"""libraryDependencies += "${org}" %%% "${n}" % "$v""""
+          } else {
+            s"""libraryDependencies += "${org}" %% "${n}" % "$v""""
+          }
+        } else if (line.contains(sonatypeURL) && matchReleaseOrSnapshot) {
+          val javadocIndexHtml = "-javadoc.jar/!/index.html"
+          val baseURL =
+            s"${sonatypeURL}${snapshotOrRelease}/archive/${org.replace('.', '/')}/${n}_${scalaV}/${v}/${n}_${scalaV}-${v}"
+          if (line.contains(javadocIndexHtml)) {
+            s"- [API Documentation](${baseURL}${javadocIndexHtml})"
+          } else line
+        } else line
+      }
+      .mkString("", "\n", "\n")
     IO.write(readmeFile, newReadme)
     val git = new Git(extracted get baseDirectory)
     git.add(readme) ! state.log
@@ -61,7 +67,7 @@ object Common {
 
   def Scala212 = "2.12.20"
 
-  val commonSettings: Seq[Def.Setting[_]] = Seq(
+  val commonSettings: Seq[Def.Setting[?]] = Seq(
     scalaVersion := Scala212,
     crossScalaVersions := "3.3.7" :: "2.13.17" :: Scala212 :: Nil,
     organization := "com.github.xuwei-k",
@@ -117,8 +123,6 @@ object Common {
       pushChanges
     ),
     trapExit := false
-  ) ++ Seq(Compile, Test).flatMap(c =>
-    c / console / scalacOptions --= unusedWarnings
-  )
+  ) ++ Seq(Compile, Test).flatMap(c => c / console / scalacOptions --= unusedWarnings)
 
 }

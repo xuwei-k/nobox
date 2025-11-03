@@ -1,14 +1,14 @@
 package nobox
 
-import nobox.Type._
 import java.io.File
-import java.nio.file.Files
 import java.nio.charset.Charset
+import java.nio.file.Files
+import nobox.Type.*
 
-object Generate{
+object Generate {
 
   private def deleteDir(file: File): Unit = {
-    if(!file.delete() && file.isDirectory){
+    if (!file.delete() && file.isDirectory) {
       Option(file.listFiles).toList.flatten.foreach(deleteDir)
       file.delete
     }
@@ -25,11 +25,11 @@ object Generate{
 
   def apply(dir: File): Unit = {
     dir.mkdir
-    withRef.foreach{ t =>
+    withRef.foreach { t =>
       val f = new File(dir, "of" + t.name + ".scala").toPath
       Files.write(f, java.util.Collections.singletonList(src(t)), Charset.forName("UTF-8"))
     }
-    list.foreach{ t =>
+    list.foreach { t =>
       val f = new File(dir, "of" + t.name + "1.scala").toPath
       Files.write(f, java.util.Collections.singletonList(One.src(t)), Charset.forName("UTF-8"))
     }
@@ -41,11 +41,11 @@ object Generate{
     val withTag = a.xWithTag
     val classWithTag = "of" + a.name + withTag
     val obj = "of" + a.name
-    val parent = if(a == REF) "AnyRef" else "AnyVal"
+    val parent = if (a == REF) "AnyRef" else "AnyVal"
     val empty = obj + "." + "empty" + a.tparamx
-    val cast1 = if(a == REF) s".asInstanceOf[Array[$a with AnyRef]]" else ""
-    val cast2 = if(a == REF) s".asInstanceOf[Array[$a]]" else ""
-    val castObj = if(a == REF) s".asInstanceOf[Array[AnyRef]]" else ""
+    val cast1 = if (a == REF) s".asInstanceOf[Array[$a with AnyRef]]" else ""
+    val cast2 = if (a == REF) s".asInstanceOf[Array[$a]]" else ""
+    val castObj = if (a == REF) s".asInstanceOf[Array[AnyRef]]" else ""
     def copyOf(n: String) = {
       s"Arrays.copyOf${a.tparamx}(self$cast1, $n )$cast2"
     }
@@ -54,8 +54,7 @@ object Generate{
       s"Arrays.copyOfRange${a.tparamx}(self$cast1, $start, $end )$cast2"
     }
 
-
-s"""package nobox
+    s"""package nobox
 
 import java.util.Arrays
 import scala.reflect.ClassTag
@@ -681,13 +680,11 @@ object $obj {
     new $clazz(elems.toArray)
   }
 
-  ${
-    if(a == REF){
-      s"def empty${withTag}: $clazz = new $clazz(new Array[$a](0))"
-    }else{
-      s"val empty: $clazz = new $clazz(new Array[$a](0))"
-    }
-  }
+  ${if (a == REF) {
+        s"def empty${withTag}: $clazz = new $clazz(new Array[$a](0))"
+      } else {
+        s"val empty: $clazz = new $clazz(new Array[$a](0))"
+      }}
 
   def iterate${withTag}(start: $a, len: Int)(f: $a => $a): $clazz = {
     if(len == 0){
@@ -750,7 +747,8 @@ object $obj {
     new $clazz(array)
   }
 
-  def unfold[@specialized B ${if(a == REF) ",X <: AnyRef: reflect.ClassTag" else ""}](z: B)(f: B => Option[(B, $a)]): $clazz = {
+  def unfold[@specialized B ${if (a == REF) ",X <: AnyRef: reflect.ClassTag"
+      else ""}](z: B)(f: B => Option[(B, $a)]): $clazz = {
     val builder = new ArrayBuilder.$clazz()
     @annotation.tailrec
     def loop(next: Option[(B, $a)]): Unit = next match {
@@ -767,4 +765,3 @@ object $obj {
 """
   }
 }
-

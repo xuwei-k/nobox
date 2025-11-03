@@ -1,6 +1,6 @@
 package nobox
 
-object RefBenchmark extends Benchmark{
+object RefBenchmark extends Benchmark {
 
   def defaultSize = 10000000
   type Array1 = Array[Integer]
@@ -13,7 +13,7 @@ object RefBenchmark extends Benchmark{
 
   def run(): Unit = {
     val a = args
-    import a._
+    import a.*
 
     benchmark("foreach")(_.foreach(_ + 1), _.foreach(_ + 1))
 
@@ -36,15 +36,15 @@ object RefBenchmark extends Benchmark{
     benchmark("flatMap")(_.flatMap(n => Array(n, n, n)), _.flatMap(n => Array(n, n, n)))
 
     benchmark("collect")(
-      _.collect{case n if n > 10 => n + 1},
-      _.collect{case n if n > 10 => n + 1}
+      _.collect { case n if n > 10 => n + 1 },
+      _.collect { case n if n > 10 => n + 1 }
     )
 
     val IntOne = Integer.valueOf(1)
 
     benchmark("collectFirst")(
-      _.collectFirst{case IntOne => 2},
-      _.collectFirstInt{case IntOne => 2}
+      _.collectFirst { case IntOne => 2 },
+      _.collectFirstInt { case IntOne => 2 }
     )
 
     benchmark("takeWhile")(_.takeWhile(_ > 1), _.takeWhile(_ > 1))
@@ -105,7 +105,7 @@ object RefBenchmark extends Benchmark{
 
     benchmark("initOption")(_.init, _.initOption)
 
-    List(50, 10000, 2000000).foreach{ n =>
+    List(50, 10000, 2000000).foreach { n =>
       benchmark("grouped " + n, 0.2)(_.grouped(n).size, _.grouped(n).size)
     }
 
@@ -117,15 +117,15 @@ object RefBenchmark extends Benchmark{
 
     benchmark("endsWith")(a => a.endsWith(a), a => a.endsWith(a.self))
 
-    List(50, 2000, 50000).foreach{ n =>
+    List(50, 2000, 50000).foreach { n =>
       benchmark("groupBy")(_.groupBy(_ % n), _.groupBy(_ % n))
     }
 
-    List(50, 10000, 2000000).foreach{ n =>
+    List(50, 10000, 2000000).foreach { n =>
       val x: Array[Array[Integer]] = array2.sliding(n, n).map(_.self).toArray
       val a: ofRef[Array[Int]] = new ofRef(x.map(_.map(_.toInt)))
       _exec("flatten", x.flatten, ofRef.flatten(x))
-      _exec("flatten", Array.concat(x : _*), ofRef.flatten(x))
+      _exec("flatten", Array.concat(x*), ofRef.flatten(x))
       _exec("flatten", a.self.flatten, a.flatten)
       _exec("flatten", x.flatten, new ofRef(x).flatten)
     }
