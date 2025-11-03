@@ -5,8 +5,8 @@ import scalaprops.Scalaprops
 abstract class TestBase extends Scalaprops {
   import scalaprops.Gen
 
-  implicit final def ofRefGen[A <: AnyRef : Gen: reflect.ClassTag]: Gen[ofRef[A]] =
-    Gen[List[A]].map(xs => ofRef[A](xs: _*))
+  implicit final def ofRefGen[A <: AnyRef: Gen: reflect.ClassTag]: Gen[ofRef[A]] =
+    Gen[List[A]].map(xs => ofRef[A](xs*))
 
   protected final def fail(message: String) =
     throw new AssertionError(message)
@@ -28,7 +28,7 @@ abstract class TestBase extends Scalaprops {
 
     def must_==(that: A): Boolean = {
       val self = actual
-      if(self == that) true
+      if (self == that) true
       else {
         fail(self.toString + " is not equal to " + that)
       }
@@ -37,9 +37,9 @@ abstract class TestBase extends Scalaprops {
 
   implicit final class ArrayOps[A](val self: Array[A]) {
     def must_===(that: Array[A]): Boolean = {
-      if(self sameElements that) true
+      if (self sameElements that) true
       else {
-        val msg = self.mkString("Array(",",",")") + " is not equal " + that.mkString("Array(",",",")")
+        val msg = self.mkString("Array(", ",", ")") + " is not equal " + that.mkString("Array(", ",", ")")
         fail(msg)
       }
     }
@@ -48,13 +48,13 @@ abstract class TestBase extends Scalaprops {
   implicit val stringGen: Gen[String] = scalaprops.Gen.alphaNumString
 
   protected[this] implicit val onInt1Gen: Gen[ofInt1] =
-    Gen[(Int, Array[Int])].map{ case (h, t) => ofInt1(h, t: _*) }
+    Gen[(Int, Array[Int])].map { case (h, t) => ofInt1(h, t*) }
 
   protected[this] implicit val onByteGen: Gen[ofByte] =
-    Gen[Array[Byte]].map{ xs => ofByte(xs: _*) }
+    Gen[Array[Byte]].map { xs => ofByte(xs*) }
 
   protected[this] implicit val onIntGen: Gen[ofInt] =
-    Gen[Array[Int]].map{ xs => ofInt(xs: _*) }
+    Gen[Array[Int]].map { xs => ofInt(xs*) }
 
   protected[this] implicit val onFloatGen: Gen[ofFloat] = {
     implicit val scalaFloatGen: Gen[Float] =
@@ -65,10 +65,10 @@ abstract class TestBase extends Scalaprops {
         }
       }
 
-    Gen[Array[Float]].map{ xs => ofFloat(xs: _*) }
+    Gen[Array[Float]].map { xs => ofFloat(xs*) }
   }
 
-  type Tagged[T] = {type Tag = T}
+  type Tagged[T] = { type Tag = T }
 
   type @@[+T, Tag] = T with Tagged[Tag]
 
@@ -79,10 +79,12 @@ abstract class TestBase extends Scalaprops {
   }
 
   sealed trait Unsigned8
+
   /** unsigned 8bit integer. 0 to 255 */
   type UInt8 = Int @@ Unsigned8
 
   sealed trait Positive8
+
   /** positive 8bit integer. 1 to 256 */
   type PInt8 = Int @@ Positive8
 

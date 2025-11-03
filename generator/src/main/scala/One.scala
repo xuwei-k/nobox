@@ -371,16 +371,16 @@ final class ${clazz} private(val self: Array[${a}]) extends AnyVal {
   }
 
   ${a match {
-      case Type.BOOL | Type.REF => ""
-      case _ =>
-        s"""
+        case Type.BOOL | Type.REF => ""
+        case _ =>
+          s"""
   def sorted: $clazz = {
     val array = self.clone
     Arrays.sort(array)
     new $clazz(array)
   }
 """
-   }}
+      }}
 }
 
 object $obj {

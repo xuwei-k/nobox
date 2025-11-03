@@ -1,6 +1,6 @@
 package nobox
 
-object IntBenchmark extends Benchmark{
+object IntBenchmark extends Benchmark {
 
   def defaultSize = 20000000
   type Array1 = Array[Int]
@@ -13,7 +13,7 @@ object IntBenchmark extends Benchmark{
 
   def run(): Unit = {
     val a = args
-    import a._
+    import a.*
 
     benchmark("foreach")(_.foreach(_ + 1), _.foreach(_ + 1))
 
@@ -42,14 +42,16 @@ object IntBenchmark extends Benchmark{
       val f1: Int => Boolean = _ % 4 != 0
       val f2: Int => Boolean = _ % 7 != 0
 
-      _exec("withFilter_vs_filter",
+      _exec(
+        "withFilter_vs_filter",
         array2.filter(f0).filter(f1).filter(f2).map(_ + 1),
         array2.withFilter(f0).withFilter(f1).withFilter(f2).map(_ + 1)
       )
     }
 
-    _exec("withFilter_vs_collect",
-      array2.collect{case i if i % 3 != 0 => i + 1},
+    _exec(
+      "withFilter_vs_collect",
+      array2.collect { case i if i % 3 != 0 => i + 1 },
       array2.withFilter(_ % 3 != 0).map(_ + 1)
     )
 
@@ -64,18 +66,18 @@ object IntBenchmark extends Benchmark{
     benchmark("flatMap", 0.2)(_.flatMap(n => Array(n, n, n)), _.flatMap(n => Array(n, n, n)))
 
     benchmark("collectInt")(
-      _.collect{case n if n > 10 => n + 1},
-      _.collectInt{case n if n > 10 => n + 1}
+      _.collect { case n if n > 10 => n + 1 },
+      _.collectInt { case n if n > 10 => n + 1 }
     )
 
     benchmark("collect")(
-      _.collect{case n if n > 10 => n + 1},
-      _.collect{case n if n > 10 => n + 1}
+      _.collect { case n if n > 10 => n + 1 },
+      _.collect { case n if n > 10 => n + 1 }
     )
 
     benchmark("collectFirst")(
-      _.collect{case 1 => 2},
-      _.collectInt{case 1 => 2}
+      _.collect { case 1 => 2 },
+      _.collectInt { case 1 => 2 }
     )
 
     benchmark("takeWhile")(_.takeWhile(_ > 1), _.takeWhile(_ > 1))
@@ -160,7 +162,7 @@ object IntBenchmark extends Benchmark{
 
     benchmark("initOption")(_.init, _.initOption)
 
-    List(50, 10000, 2000000).foreach{ n =>
+    List(50, 10000, 2000000).foreach { n =>
       benchmark("grouped " + n, 0.2)(_.grouped(n).size, _.grouped(n).size)
     }
 
@@ -175,7 +177,7 @@ object IntBenchmark extends Benchmark{
 
     benchmark("min")(_.min, _.min)
 
-    _exec("minmax", {array2.min; array2.max}, array2.minmax)
+    _exec("minmax", { array2.min; array2.max }, array2.minmax)
 
     benchmark("scanLeft")(_.scanLeft(0)(_ + _), _.scanLeft(0)(_ + _))
 
@@ -193,14 +195,14 @@ object IntBenchmark extends Benchmark{
 
     benchmark("tabulate")(_ => Array.tabulate(size)(_ + 1), _ => ofInt.tabulate(size)(_ + 1))
 
-    List(100, 1000, 10000).foreach{ n =>
+    List(100, 1000, 10000).foreach { n =>
       benchmark("groupBy")(_.groupBy(_ % n), _.groupBy(_ % n))
     }
 
-    List(50, 10000, 2000000).foreach{ n =>
+    List(50, 10000, 2000000).foreach { n =>
       lazy val x = array2.sliding(n, n).map(_.self).toArray
       _exec("flatten", x.flatten, ofInt.flatten(x))
-      _exec("flatten", Array.concat(x : _*), ofInt.flatten(x))
+      _exec("flatten", Array.concat(x*), ofInt.flatten(x))
     }
 
     _exec("reverse_:::", array2.reverse ++ array2, array2 reverse_::: array2)

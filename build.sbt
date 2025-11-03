@@ -1,7 +1,7 @@
+import Common.isScala3
+import java.lang.management.ManagementFactory
 import sbtcrossproject.CrossType
 import scala.collection.JavaConverters._
-import java.lang.management.ManagementFactory
-import Common.isScala3
 
 lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CustomCrossType)
@@ -12,7 +12,7 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     scalapropsCoreSettings,
     libraryDependencies ++= (
       ("com.github.scalaprops" %%% "scalaprops" % "0.10.0" % "test") ::
-      Nil
+        Nil
     ),
     (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
     name := "nobox",
@@ -40,7 +40,7 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
       val srcs = (Compile / scalaSource).value
       val files = (srcs ** "*.scala").get.map(f => f -> IO.readLines(f)).sortBy(_._1)
       println("all lines " + files.map(_._2.size).sum)
-      files.foreach{ case (file, lines) =>
+      files.foreach { case (file, lines) =>
         println(file.getName + " " + lines.size)
       }
       (Test / runMain).fullInput(" nobox.Info").evaluated
@@ -82,14 +82,21 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
         (generateDir.value ** "*.scala").get
       }
     ),
-    (Compile / packageSrc / mappings) ++= (Compile / managedSources).value.map{ f =>
+    (Compile / packageSrc / mappings) ++= (Compile / managedSources).value.map { f =>
       // to merge generated sources into sources.jar as well
-      (f, f.relativeTo((Compile / sourceManaged).value).get.getPath.replace(generateDirName, "nobox").replace("sbt-buildinfo", "nobox"))
+      (
+        f,
+        f.relativeTo((Compile / sourceManaged).value)
+          .get
+          .getPath
+          .replace(generateDirName, "nobox")
+          .replace("sbt-buildinfo", "nobox")
+      )
     },
     checkPackage := {
       println(IO.read(makePom.value))
       println()
-      IO.withTemporaryDirectory{ dir =>
+      IO.withTemporaryDirectory { dir =>
         IO.unzip((Compile / packageSrc).value, dir).map(f => f.getName -> f.length) foreach println
       }
     },
@@ -98,22 +105,24 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
       val ((classes, names), sizes) = args
       val cp = (Test / fullClasspath).value
       val r = (Test / runner).value
-      classes.foreach{ clazz =>
+      classes.foreach { clazz =>
         def run(s: Option[String]) = r.run(
-          "nobox."+clazz,
+          "nobox." + clazz,
           Attributed.data(cp),
           s.toList ++ names,
           streams.value.log
         )
-        if(sizes.isEmpty) run(None)
+        if (sizes.isEmpty) run(None)
         else sizes.foreach(run)
       }
     }
-  ).platformsSettings(JVMPlatform, JSPlatform)(
+  )
+  .platformsSettings(JVMPlatform, JSPlatform)(
     (Test / unmanagedSourceDirectories) += {
       baseDirectory.value.getParentFile / "jvm_js/src/test/scala/"
     }
-  ).jsSettings(
+  )
+  .jsSettings(
     scalacOptions ++= {
       val a = (LocalRootProject / baseDirectory).value.toURI.toString
       val g = "https://raw.githubusercontent.com/xuwei-k/nobox/" + gitTagOrHash.value
@@ -123,11 +132,12 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
         Seq(s"-P:scalajs:mapSourceURI:$a->$g/")
       }
     }
-  ).jvmSettings(
-    javaOptions ++= "-Djava.awt.headless=true" +: ManagementFactory.getRuntimeMXBean.getInputArguments.asScala.toList.filter(
-      a => Seq("-Xmx","-Xms","-XX").exists(a.startsWith)
-    )
-  ).nativeSettings(
+  )
+  .jvmSettings(
+    javaOptions ++= "-Djava.awt.headless=true" +: ManagementFactory.getRuntimeMXBean.getInputArguments.asScala.toList
+      .filter(a => Seq("-Xmx", "-Xms", "-XX").exists(a.startsWith))
+  )
+  .nativeSettings(
     scalapropsNativeSettings,
   )
 
@@ -143,17 +153,21 @@ lazy val notPublish = Seq(
   PgpKeys.publishLocalSigned := {}
 )
 
-lazy val root = project.in(file(".")).aggregate(
-  noboxJVM, noboxJS // exclude noboxNative on purpose
-).settings(
-  Common.commonSettings,
-  notPublish,
-  Compile / scalaSource := baseDirectory.value / "dummy",
-  Test / scalaSource := baseDirectory.value / "dummy"
-)
+lazy val root = project
+  .in(file("."))
+  .aggregate(
+    noboxJVM,
+    noboxJS // exclude noboxNative on purpose
+  )
+  .settings(
+    Common.commonSettings,
+    notPublish,
+    Compile / scalaSource := baseDirectory.value / "dummy",
+    Test / scalaSource := baseDirectory.value / "dummy"
+  )
 
 lazy val gitTagOrHash = Def.setting {
-  if(isSnapshot.value) {
+  if (isSnapshot.value) {
     sys.process.Process("git rev-parse HEAD").lineStream_!.head
   } else {
     "v" + version.value
@@ -164,14 +178,15 @@ lazy val benchmark = inputKey[Unit]("benchmark")
 
 lazy val benchmarkClasses = Set("IntBenchmark", "RefBenchmark")
 
-lazy val seqMethods = classOf[Seq[_]].getMethods.map(_.getName).filterNot(_ contains '$').toSet
+lazy val seqMethods = classOf[Seq[?]].getMethods.map(_.getName).filterNot(_ contains '$').toSet
 
 lazy val benchmarkArgsParser = {
   import sbt.complete.Parser._
   import sbt.complete.Parsers._
-  val classes0 = (token(Space) ~> benchmarkClasses.map(token(_)).reduceLeft(_ | _)).* !!! "please input Benchmark classes"
+  val classes0 =
+    (token(Space) ~> benchmarkClasses.map(token(_)).reduceLeft(_ | _)).* !!! "please input Benchmark classes"
   // run all benchmark when does not specified any benchmark class name
-  val classes = classes0.map(c => if(c.isEmpty) benchmarkClasses else c)
+  val classes = classes0.map(c => if (c.isEmpty) benchmarkClasses else c)
   val names = (token(Space) ~> ScalaID.examples(seqMethods)).* !!! "please input method names"
   val size = (token(Space) ~> NatBasic.examples().map(s => Option(s.toString))).* !!! "please input array size"
   (classes ~ names ~ size)

@@ -1,12 +1,12 @@
 package nobox
 
 /* typeclass */
-trait Take[A]{
+trait Take[A] {
   def resize(a: A, n: Int): A
 }
 
-object Take{
-  private def apply[A](f: (A, Int) => A): Take[A] = new Take[A]{
+object Take {
+  private def apply[A](f: (A, Int) => A): Take[A] = new Take[A] {
     def resize(a: A, n: Int) = f(a, n)
   }
 
@@ -39,9 +39,9 @@ trait Benchmark {
     val a = 1000000.0
     println((x / a, y / a))
     val n = x.toDouble / y.toDouble
-    if(n > 1){
+    if (n > 1) {
       println(n)
-    }else{
+    } else {
       println(Console.RED + n + Console.RESET)
     }
     println()
@@ -62,17 +62,19 @@ trait Benchmark {
   def createSampleArray(size: Int): (Array1, Array2)
 
   def _exec[A](name: String, f1: => A, f2: => A): Unit = {
-    if(args.test(name)){
+    if (args.test(name)) {
       exec(name, f1, f2)
     }
   }
 
-  def benchmark(name: String, n: Double = 1.0)(f1: Array1 => Unit, f2: Array2 => Unit)(
-    implicit A1: Take[Array1], A2: Take[Array2] ): Unit = {
-    val (a1, a2) = if(n != 1.0){
+  def benchmark(name: String, n: Double = 1.0)(f1: Array1 => Unit, f2: Array2 => Unit)(implicit
+    A1: Take[Array1],
+    A2: Take[Array2]
+  ): Unit = {
+    val (a1, a2) = if (n != 1.0) {
       val nn = (args.size * n).toInt
       (A1.resize(args.array1, nn), A2.resize(args.array2, nn))
-    }else{
+    } else {
       (args.array1, args.array2)
     }
     _exec(name, f1(a1), f2(a2))

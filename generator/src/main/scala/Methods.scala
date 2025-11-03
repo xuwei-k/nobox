@@ -1,8 +1,8 @@
 package nobox
 
-import nobox.Type._
+import nobox.Type.*
 
-object Methods{
+object Methods {
 
   def apply(a: Type): String = {
 
@@ -10,7 +10,7 @@ object Methods{
 
     val sum: String = a match {
       case BYTE | CHAR | SHORT | INT =>
-s"""
+        s"""
   def sum: Int = {
     var i, n = 0
     while(i < self.length){
@@ -22,7 +22,7 @@ s"""
 """
       case BOOL => ""
       case REF =>
-s"""
+        s"""
   def sum(implicit X: Numeric[X]): $a = {
     var i = 0
     var n = X.zero
@@ -34,7 +34,7 @@ s"""
   }
 """
       case DOUBLE | FLOAT | LONG =>
-s"""
+        s"""
   def sum: $a = {
     var i = 0
     var n: $a = 0
@@ -49,7 +49,7 @@ s"""
 
     val sumLong: String = a match {
       case INT =>
-s"""
+        s"""
   def sumLong: Long = {
     var i = 0
     var n: Long = 0L
@@ -65,7 +65,7 @@ s"""
 
     val product: String = a match {
       case BYTE | CHAR | SHORT | INT =>
-s"""
+        s"""
   def product: Int = {
     var i = 0
     var n = 1
@@ -78,7 +78,7 @@ s"""
 """
       case BOOL | REF => "" // TODO Ref
       case DOUBLE | FLOAT | LONG =>
-s"""
+        s"""
   def product: $a = {
     var i = 0
     var n: $a = 1
@@ -93,7 +93,7 @@ s"""
 
     val productLong: String = a match {
       case BYTE | CHAR | SHORT | INT =>
-s"""
+        s"""
   def productLong: Long = {
     var i = 0
     var n: Long = 1L
@@ -109,7 +109,7 @@ s"""
 
     val productDouble: String = a match {
       case BYTE | CHAR | SHORT | INT | LONG | FLOAT =>
-s"""
+        s"""
   def productDouble: Double = {
     var i = 0
     var n: Double = 1.0
@@ -126,7 +126,7 @@ s"""
     val sorted: String = a match {
       case BOOL => ""
       case REF =>
-s"""
+        s"""
   def sorted(implicit ord: Ordering[X]): $clazz = {
     val array = self.clone
     Arrays.sort(array.asInstanceOf[Array[Object]], ord.asInstanceOf[Ordering[Object]])
@@ -134,7 +134,7 @@ s"""
   }
 """
       case _ =>
-s"""
+        s"""
   def sorted: $clazz = {
     val array = self.clone
     Arrays.sort(array)
@@ -144,8 +144,8 @@ s"""
     }
 
     val maxAndMin: String = {
-      if(a == REF){
-s"""
+      if (a == REF) {
+        s"""
   def max[B >: X](implicit O: Ordering[B]): Option[$a] = {
     if(self.length == 0){
       None
@@ -199,8 +199,8 @@ s"""
     }
   }
 """
-      }else{
-s"""
+      } else {
+        s"""
   def max: Option[$a] = {
     if(self.length == 0){
       None
@@ -258,12 +258,12 @@ s"""
     }
 
     val flatten: String = {
-      if(a != REF){ ""
-      }else{
-        val cases: String = Generate.list.map{ b =>
+      if (a != REF) { "" }
+      else {
+        val cases: String = Generate.list.map { b =>
           s"      case Clazz.$b => of$b.flatten(self.asInstanceOf[Array[Array[$b]]]).self"
         }.mkString("\n")
-s"""
+        s"""
   def flatten[E](implicit E: X <:< Array[E], tag: ClassTag[E]): Array[E] =
     (self.getClass.getComponentType.getComponentType match {
 $cases
@@ -274,9 +274,15 @@ $cases
     }
 
     List[String](
-      sum, sumLong, product, productLong, productDouble, sorted, maxAndMin, flatten
+      sum,
+      sumLong,
+      product,
+      productLong,
+      productDouble,
+      sorted,
+      maxAndMin,
+      flatten
     ).mkString("\n\n")
 
   }
 }
-

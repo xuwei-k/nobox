@@ -1,6 +1,6 @@
 package nobox
 
-sealed abstract class Type(val name: String){
+sealed abstract class Type(val name: String) {
   override def toString = name
   def tparamx = ""
   def tparamy = name
@@ -11,15 +11,15 @@ sealed abstract class Type(val name: String){
 }
 
 object Type {
-  object BOOL   extends Type("Boolean")
-  object BYTE   extends Type("Byte")
-  object CHAR   extends Type("Char")
-  object SHORT  extends Type("Short")
-  object INT    extends Type("Int")
-  object LONG   extends Type("Long")
-  object FLOAT  extends Type("Float")
+  object BOOL extends Type("Boolean")
+  object BYTE extends Type("Byte")
+  object CHAR extends Type("Char")
+  object SHORT extends Type("Short")
+  object INT extends Type("Int")
+  object LONG extends Type("Long")
+  object FLOAT extends Type("Float")
   object DOUBLE extends Type("Double")
-  object REF    extends Type("Ref"){
+  object REF extends Type("Ref") {
     override def tparamx = "[X]"
     override def tparamy = "Ref[Y]"
     override def yWithTag = "Ref[Y <: AnyRef :reflect.ClassTag]"
@@ -29,4 +29,3 @@ object Type {
     override def toString = "X"
   }
 }
-
