@@ -57,7 +57,7 @@ object Common {
 
   val commonSettings: Seq[Def.Setting[?]] = Seq(
     scalaVersion := Scala212,
-    crossScalaVersions := "3.3.7" :: "2.13.18" :: Scala212 :: Nil,
+    crossScalaVersions := "3.3.7" :: "3.8.1" :: Scala212 :: Nil,
     organization := "com.github.xuwei-k",
     commands += Command.command("updateReadme")(updateReadme),
     publishTo := (if (isSnapshot.value) None else localStaging.value),
