@@ -25,7 +25,7 @@ jobs:
         java-version: "${{ matrix.java }}"
         distribution: zulu
     - uses: sbt/setup-sbt@v1
-    - uses: coursier/cache-action@v7
+    - uses: coursier/cache-action@v8
     - run: sbt
            -v
            -J-Xss10m
