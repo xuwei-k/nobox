@@ -16,8 +16,8 @@ object Common {
 
   val updateReadme: State => State = { state =>
     val extracted = Project.extract(state)
-    val v = extracted get version
-    val org = extracted get organization
+    val v = extracted.get(version)
+    val org = extracted.get(organization)
     val n = "nobox"
     val readme = "README.md"
     val readmeFile = file(readme)
@@ -36,7 +36,7 @@ object Common {
       }
       .mkString("", "\n", "\n")
     IO.write(readmeFile, newReadme)
-    val git = new Git(extracted get baseDirectory)
+    val git = new Git(extracted.get(baseDirectory))
     git.add(readme) ! state.log
     git.commit(message = "update " + readme, sign = false, signOff = false) ! state.log
     sys.process.Process("git diff HEAD^") ! state.log
@@ -47,7 +47,7 @@ object Common {
 
   def releaseStepCross[A](key: TaskKey[A]) = ReleaseStep(
     action = { state =>
-      val extracted = Project extract state
+      val extracted = Project.extract(state)
       extracted.runAggregated(extracted.get(thisProjectRef) / (Global / key), state)
     },
     enableCrossBuild = true
