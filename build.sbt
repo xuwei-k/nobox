@@ -96,7 +96,7 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
       println(IO.read(makePom.value))
       println()
       IO.withTemporaryDirectory { dir =>
-        IO.unzip((Compile / packageSrc).value, dir).map(f => f.getName -> f.length) foreach println
+        IO.unzip((Compile / packageSrc).value, dir).map(f => f.getName -> f.length).foreach(println)
       }
     },
     benchmark := {
@@ -180,7 +180,7 @@ lazy val benchmark = inputKey[Unit]("benchmark")
 
 lazy val benchmarkClasses = Set("IntBenchmark", "RefBenchmark")
 
-lazy val seqMethods = classOf[Seq[?]].getMethods.map(_.getName).filterNot(_ contains '$').toSet
+lazy val seqMethods = classOf[Seq[?]].getMethods.map(_.getName).filterNot(_.contains('$')).toSet
 
 lazy val benchmarkArgsParser = {
   import sbt.complete.Parser._
@@ -204,10 +204,12 @@ lazy val generateDir = Def.setting {
   (Compile / sourceManaged).value / generateDirName
 }
 
-lazy val generator = (project in file("generator")).settings(
-  Common.commonSettings,
-  notPublish
-)
+lazy val generator = project
+  .in(file("generator"))
+  .settings(
+    Common.commonSettings,
+    notPublish
+  )
 
 lazy val CustomCrossType = new sbtcrossproject.CrossType {
   override def projectDir(crossBase: File, projectType: String) =
