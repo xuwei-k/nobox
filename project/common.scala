@@ -10,8 +10,17 @@ object Common {
     CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3)
   )
 
-  private[this] val unusedWarnings = Seq(
-    "-Ywarn-unused",
+  private[this] val unusedWarnings = Def.setting(
+    scalaBinaryVersion.value match {
+      case "2.12" =>
+        Seq(
+          "-Ywarn-unused",
+        )
+      case _ =>
+        Seq(
+          "-Wunused:imports",
+        )
+    }
   )
 
   val updateReadme: State => State = { state =>
@@ -89,7 +98,7 @@ object Common {
           Nil
       }
     },
-    scalacOptions ++= unusedWarnings,
+    scalacOptions ++= unusedWarnings.value,
     releaseCrossBuild := true,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
@@ -108,6 +117,6 @@ object Common {
       pushChanges
     ),
     trapExit := false
-  ) ++ Seq(Compile, Test).flatMap(c => c / console / scalacOptions --= unusedWarnings)
+  ) ++ Seq(Compile, Test).flatMap(c => c / console / scalacOptions --= unusedWarnings.value)
 
 }
