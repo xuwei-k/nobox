@@ -16,7 +16,7 @@ jobs:
           - '"+noboxJS/test"'
           - '"+noboxNative/test"'
         java:
-          - 8
+          - 11
           - 25
     steps:
     - uses: actions/checkout@v6

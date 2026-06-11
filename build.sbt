@@ -117,6 +117,16 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     }
   )
   .platformsSettings(JVMPlatform, JSPlatform)(
+    scalacOptions ++= {
+      if (scalaVersion.value.startsWith("3.3.")) {
+        Seq(
+          "-Yfuture-lazy-vals",
+          "-release:11"
+        )
+      } else {
+        Nil
+      }
+    },
     (Test / unmanagedSourceDirectories) += {
       baseDirectory.value.getParentFile / "jvm_js/src/test/scala/"
     }
