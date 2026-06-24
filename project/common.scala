@@ -10,7 +10,7 @@ object Common {
     CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3)
   )
 
-  private[this] val unusedWarnings = Def.setting(
+  private val unusedWarnings = Def.setting(
     scalaBinaryVersion.value match {
       case "2.12" =>
         Seq(
