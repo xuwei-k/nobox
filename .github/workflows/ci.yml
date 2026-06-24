@@ -11,10 +11,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        args:
-          - '"+noboxJVM/test"'
-          - '"+noboxJS/test"'
-          - '"+noboxNative/test"'
         java:
           - 11
           - 25
@@ -30,6 +26,5 @@ jobs:
            -v
            -J-Xss10m
            scalafmtSbtCheck
-           "+ scalafmtCheckAll"
-           "generator/scalafmtCheckAll"
-           ${{ matrix.args }}
+           scalafmtCheckAll
+           testSequential
