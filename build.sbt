@@ -37,7 +37,7 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     printInfo := printInfo.dependsOn(compile).evaluated,
     printInfo := {
       val srcs = (Compile / scalaSource).value
-      val files = (srcs ** "*.scala").get.map(f => f -> IO.readLines(f)).sortBy(_._1)
+      val files = (srcs ** "*.scala").get().map(f => f -> IO.readLines(f)).sortBy(_._1)
       println("all lines " + files.map(_._2.size).sum)
       files.foreach { case (file, lines) =>
         println(file.getName + " " + lines.size)
@@ -78,7 +78,7 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
         )
       },
       Def.task {
-        (generateDir.value ** "*.scala").get
+        (generateDir.value ** "*.scala").get()
       }
     ),
     checkPackage := {
