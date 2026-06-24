@@ -5,34 +5,30 @@ import java.nio.charset.Charset
 import java.nio.file.Files
 import nobox.Type.*
 
+class Generate {
+  def main(dir: File): Array[File] = {
+    Generate.apply(dir).toArray
+  }
+}
+
 object Generate {
-
-  private def deleteDir(file: File): Unit = {
-    if (!file.delete() && file.isDirectory) {
-      Option(file.listFiles).toList.flatten.foreach(deleteDir)
-      file.delete
-    }
-  }
-
-  def main(args: Array[String]): Unit = {
-    val dir = new File(args.headOption.getOrElse(sys.error("invalid args " + args.mkString(", "))))
-    deleteDir(dir)
-    apply(dir)
-  }
-
   val list = List(INT, LONG, FLOAT, DOUBLE, BYTE, CHAR, SHORT, BOOL)
   val withRef = list :+ REF
 
-  def apply(dir: File): Unit = {
+  def apply(dir: File): Seq[File] = {
     dir.mkdir
-    withRef.foreach { t =>
-      val f = new File(dir, "of" + t.name + ".scala").toPath
-      Files.write(f, java.util.Collections.singletonList(src(t)), Charset.forName("UTF-8"))
-    }
-    list.foreach { t =>
-      val f = new File(dir, "of" + t.name + "1.scala").toPath
-      Files.write(f, java.util.Collections.singletonList(One.src(t)), Charset.forName("UTF-8"))
-    }
+    Seq(
+      withRef.map { t =>
+        val f = new File(dir, "of" + t.name + ".scala").toPath
+        Files.write(f, java.util.Collections.singletonList(src(t)), Charset.forName("UTF-8"))
+        f
+      },
+      list.map { t =>
+        val f = new File(dir, "of" + t.name + "1.scala").toPath
+        Files.write(f, java.util.Collections.singletonList(One.src(t)), Charset.forName("UTF-8"))
+        f
+      }
+    ).flatten.map(_.toFile)
   }
 
   def src(a: Type): String = {

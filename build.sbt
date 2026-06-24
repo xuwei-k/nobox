@@ -1,12 +1,29 @@
 import Common.isScala3
 import java.lang.management.ManagementFactory
-import sbtcrossproject.CrossType
 import scala.collection.JavaConverters._
 
-lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
-  .crossType(CustomCrossType)
+val scalaVersions = Seq("3.3.8", "2.13.18", "2.12.21")
+
+val jvmAndJsSetting = Def.settings(
+  scalacOptions ++= {
+    if (scalaVersion.value.startsWith("3.3.")) {
+      Seq(
+        "-Yfuture-lazy-vals",
+        "-release:11"
+      )
+    } else {
+      Nil
+    }
+  },
+  (Test / unmanagedSourceDirectories) += {
+    (projectMatrixBaseDirectory.value / "src/test/jvm_js").getAbsoluteFile
+  }
+)
+
+lazy val nobox = projectMatrix
   .in(file("."))
   .enablePlugins(BuildInfoPlugin)
+  .defaultAxes()
   .settings(
     Common.commonSettings,
     scalapropsCoreSettings,
@@ -64,23 +81,25 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     ),
     buildInfoPackage := "nobox",
     buildInfoObject := "BuildInfoNobox",
-    (Compile / sourceGenerators) += Def.sequential(
-      Def.task {
-        IO.delete(generateDir.value)
-      },
-      Def.task {
-        val cp = (generator / Compile / fullClasspath).value
-        val _ = (generator / Compile / runner).value.run(
-          mainClass = "nobox.Generate",
-          classpath = Attributed.data(cp),
-          options = Seq(generateDir.value.toString),
-          log = streams.value.log
-        )
-      },
-      Def.task {
-        (generateDir.value ** "*.scala").get()
+    (Compile / sourceGenerators) += Def.task {
+      val dir = generateDir.value
+      scala.util.Using.resource(
+        new java.net.URLClassLoader(
+          (generator / Compile / fullClasspath).value.map(_.data.toURI.toURL).toArray,
+          ClassLoader.getPlatformClassLoader
+        ),
+      ) { loader =>
+        loader
+          .loadClass("nobox.Generate")
+          .getConstructor()
+          .newInstance()
+          .asInstanceOf[
+            { def main(dir: File): Array[File] }
+          ]
+          .main(dir)
+          .toSeq
       }
-    ),
+    },
     checkPackage := {
       println(IO.read(makePom.value))
       println()
@@ -105,43 +124,35 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
       }
     }
   )
-  .platformsSettings(JVMPlatform, JSPlatform)(
-    scalacOptions ++= {
-      if (scalaVersion.value.startsWith("3.3.")) {
-        Seq(
-          "-Yfuture-lazy-vals",
-          "-release:11"
-        )
-      } else {
-        Nil
+  .jsPlatform(
+    scalaVersions,
+    Def.settings(
+      jvmAndJsSetting,
+      scalacOptions ++= {
+        val a = (LocalRootProject / baseDirectory).value.toURI.toString
+        val g = "https://raw.githubusercontent.com/xuwei-k/nobox/" + gitTagOrHash.value
+        if (isScala3.value) {
+          Seq(s"-scalajs-mapSourceURI:$a->$g/")
+        } else {
+          Seq(s"-P:scalajs:mapSourceURI:$a->$g/")
+        }
       }
-    },
-    (Test / unmanagedSourceDirectories) += {
-      baseDirectory.value.getParentFile / "jvm_js/src/test/scala/"
-    }
+    ),
   )
-  .jsSettings(
-    scalacOptions ++= {
-      val a = (LocalRootProject / baseDirectory).value.toURI.toString
-      val g = "https://raw.githubusercontent.com/xuwei-k/nobox/" + gitTagOrHash.value
-      if (isScala3.value) {
-        Seq(s"-scalajs-mapSourceURI:$a->$g/")
-      } else {
-        Seq(s"-P:scalajs:mapSourceURI:$a->$g/")
-      }
-    }
+  .jvmPlatform(
+    scalaVersions,
+    Def.settings(
+      jvmAndJsSetting,
+      javaOptions ++= "-Djava.awt.headless=true" +: ManagementFactory.getRuntimeMXBean.getInputArguments.asScala.toList
+        .filter(a => Seq("-Xmx", "-Xms", "-XX").exists(a.startsWith))
+    ),
   )
-  .jvmSettings(
-    javaOptions ++= "-Djava.awt.headless=true" +: ManagementFactory.getRuntimeMXBean.getInputArguments.asScala.toList
-      .filter(a => Seq("-Xmx", "-Xms", "-XX").exists(a.startsWith))
+  .nativePlatform(
+    scalaVersions,
+    Def.settings(
+      scalapropsNativeSettings,
+    ),
   )
-  .nativeSettings(
-    scalapropsNativeSettings,
-  )
-
-lazy val noboxJVM = nobox.jvm
-lazy val noboxJS = nobox.js
-lazy val noboxNative = nobox.native
 
 lazy val notPublish = Seq(
   publish / skip := true,
@@ -156,13 +167,19 @@ lazy val root = project
   .in(file("."))
   .aggregate(
     generator,
-    noboxJVM,
-    noboxJS,
-    noboxNative,
+  )
+  .aggregate(
+    nobox.projectRefs *,
   )
   .settings(
     Common.commonSettings,
     notPublish,
+    TaskKey[Unit]("testSequential") :=
+      Def
+        .sequential(
+          nobox.projectRefs.map(_ / Test / test)
+        )
+        .value,
     Compile / scalaSource := baseDirectory.value / "dummy",
     Test / scalaSource := baseDirectory.value / "dummy"
   )
@@ -209,23 +226,3 @@ lazy val generator = project
     Common.commonSettings,
     notPublish
   )
-
-lazy val CustomCrossType = new sbtcrossproject.CrossType {
-  override def projectDir(crossBase: File, projectType: String) =
-    crossBase / projectType
-
-  override def projectDir(crossBase: File, projectType: sbtcrossproject.Platform) = {
-    val dir = projectType match {
-      case JVMPlatform => "jvm"
-      case JSPlatform => "js"
-      case NativePlatform => "native"
-    }
-    crossBase / dir
-  }
-
-  def shared(projectBase: File, conf: String) =
-    projectBase.getParentFile / "src" / conf / "scala"
-
-  override def sharedSrcDir(projectBase: File, conf: String) =
-    Some(shared(projectBase, conf))
-}

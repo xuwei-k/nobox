@@ -53,19 +53,7 @@ object Common {
 
   val updateReadmeProcess: ReleaseStep = Common.updateReadme
 
-  def releaseStepCross[A](key: TaskKey[A]) = ReleaseStep(
-    action = { state =>
-      val extracted = Project.extract(state)
-      extracted.runAggregated(extracted.get(thisProjectRef) / (Global / key), state)
-    },
-    enableCrossBuild = true
-  )
-
-  def Scala212 = "2.12.21"
-
   val commonSettings: Seq[Def.Setting[?]] = Seq(
-    scalaVersion := Scala212,
-    crossScalaVersions := "3.3.8" :: "2.13.18" :: Scala212 :: Nil,
     organization := "com.github.xuwei-k",
     commands += Command.command("updateReadme")(updateReadme),
     publishTo := (if (isSnapshot.value) None else localStaging.value),
@@ -99,7 +87,6 @@ object Common {
       }
     },
     scalacOptions ++= unusedWarnings.value,
-    releaseCrossBuild := true,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
@@ -109,7 +96,7 @@ object Common {
       commitReleaseVersion,
       updateReadmeProcess,
       tagRelease,
-      releaseStepCross(PgpKeys.publishSigned),
+      releaseStepCommandAndRemaining(PgpKeys.publishSigned.key.label),
       releaseStepCommandAndRemaining("sonaRelease"),
       setNextVersion,
       commitNextVersion,
