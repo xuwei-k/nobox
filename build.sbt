@@ -81,17 +81,6 @@ lazy val nobox = crossProject(JSPlatform, JVMPlatform, NativePlatform)
         (generateDir.value ** "*.scala").get
       }
     ),
-    (Compile / packageSrc / mappings) ++= (Compile / managedSources).value.map { f =>
-      // to merge generated sources into sources.jar as well
-      (
-        f,
-        f.relativeTo((Compile / sourceManaged).value)
-          .get
-          .getPath
-          .replace(generateDirName, "nobox")
-          .replace("sbt-buildinfo", "nobox")
-      )
-    },
     checkPackage := {
       println(IO.read(makePom.value))
       println()
