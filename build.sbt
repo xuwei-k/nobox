@@ -211,7 +211,7 @@ lazy val benchmarkArgsParser = {
 @transient
 lazy val checkPackage = taskKey[Unit]("show pom.xml and sources.jar")
 
-lazy val generateDirName = "generate"
+lazy val generateDirName = "nobox"
 
 lazy val generateDir = Def.setting {
   (Compile / sourceManaged).value / generateDirName
