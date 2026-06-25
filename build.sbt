@@ -51,16 +51,6 @@ lazy val nobox = projectMatrix
         <tag>{gitTagOrHash.value}</tag>
       </scm>
     ),
-    printInfo := printInfo.dependsOn(compile).evaluated,
-    printInfo := {
-      val srcs = (Compile / scalaSource).value
-      val files = (srcs ** "*.scala").get().map(f => f -> IO.readLines(f)).sortBy(_._1)
-      println("all lines " + files.map(_._2.size).sum)
-      files.foreach { case (file, lines) =>
-        println(file.getName + " " + lines.size)
-      }
-      (Test / runMain).fullInput(" nobox.Info").evaluated
-    },
     pomPostProcess := { node =>
       import scala.xml._
       import scala.xml.transform._
@@ -209,8 +199,6 @@ lazy val benchmarkArgsParser = {
   val size = (token(Space) ~> NatBasic.examples().map(s => Option(s.toString))).* !!! "please input array size"
   (classes ~ names ~ size)
 }
-
-lazy val printInfo = inputKey[Unit]("print each file line counts")
 
 lazy val checkPackage = taskKey[Unit]("show pom.xml and sources.jar")
 
