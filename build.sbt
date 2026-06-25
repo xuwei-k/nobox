@@ -1,6 +1,6 @@
 import Common.isScala3
 import java.lang.management.ManagementFactory
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 val scalaVersions = Seq("3.3.8", "2.13.18", "2.12.21")
 
@@ -28,7 +28,7 @@ lazy val nobox = projectMatrix
     Common.commonSettings,
     scalapropsCoreSettings,
     libraryDependencies ++= Seq(
-      "com.github.scalaprops" %%% "scalaprops" % "0.11.0" % "test",
+      "com.github.scalaprops" %% "scalaprops" % "0.11.0" % "test",
     ),
     (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
     name := "nobox",
@@ -75,10 +75,15 @@ lazy val nobox = projectMatrix
       val dir = generateDir.value
       scala.util.Using.resource(
         new java.net.URLClassLoader(
-          (generator / Compile / fullClasspath).value.map(_.data.toURI.toURL).toArray,
+          (generator / Compile / fullClasspath).value
+            .map(_.data)
+            .map(fileConverter.value.toPath)
+            .map(_.toFile.toURI.toURL)
+            .toArray,
           ClassLoader.getPlatformClassLoader
         ),
       ) { loader =>
+        import scala.reflect.Selectable.reflectiveSelectable
         loader
           .loadClass("nobox.Generate")
           .getConstructor()
@@ -91,16 +96,18 @@ lazy val nobox = projectMatrix
       }
     },
     checkPackage := {
-      println(IO.read(makePom.value))
+      println(IO.read(fileConverter.value.toPath(makePom.value).toFile))
       println()
       IO.withTemporaryDirectory { dir =>
-        IO.unzip((Compile / packageSrc).value, dir).map(f => f.getName -> f.length).foreach(println)
+        IO.unzip(fileConverter.value.toPath((Compile / packageSrc).value).toFile, dir)
+          .map(f => f.getName -> f.length)
+          .foreach(println)
       }
     },
     benchmark := {
       val args = benchmarkArgsParser.parsed
       val ((classes, names), sizes) = args
-      val cp = (Test / fullClasspath).value
+      val cp = (Test / fullClasspath).value.map(_.data).map(fileConverter.value.toPath).map(Attributed.blank)
       val r = (Test / runner).value
       classes.foreach { clazz =>
         def run(s: Option[String]) = r.run(
@@ -164,19 +171,20 @@ lazy val root = project
   .settings(
     Common.commonSettings,
     notPublish,
-    TaskKey[Unit]("testSequential") :=
+    TaskKey[Unit]("testSequential") := Def.uncached(
       Def
         .sequential(
-          nobox.projectRefs.map(_ / Test / test)
+          nobox.projectRefs.map(_ / Test / testFull)
         )
-        .value,
+        .value
+    ),
     Compile / scalaSource := baseDirectory.value / "dummy",
     Test / scalaSource := baseDirectory.value / "dummy"
   )
 
 lazy val gitTagOrHash = Def.setting {
   if (isSnapshot.value) {
-    sys.process.Process("git rev-parse HEAD").lineStream_!.head
+    sys.process.Process("git rev-parse HEAD").lazyLines_!.head
   } else {
     "v" + version.value
   }
@@ -200,6 +208,7 @@ lazy val benchmarkArgsParser = {
   (classes ~ names ~ size)
 }
 
+@transient
 lazy val checkPackage = taskKey[Unit]("show pom.xml and sources.jar")
 
 lazy val generateDirName = "generate"

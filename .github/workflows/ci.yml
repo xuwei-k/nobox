@@ -24,6 +24,7 @@ jobs:
     - uses: coursier/cache-action@v8
     - run: sbt
            -v
+           --server
            -J-Xss10m
            scalafmtSbtCheck
            scalafmtCheckAll
