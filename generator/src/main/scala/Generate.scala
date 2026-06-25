@@ -1,7 +1,6 @@
 package nobox
 
 import java.io.File
-import java.nio.charset.Charset
 import java.nio.file.Files
 import nobox.Type.*
 
@@ -20,12 +19,12 @@ object Generate {
     Seq(
       withRef.map { t =>
         val f = new File(dir, "of" + t.name + ".scala").toPath
-        Files.write(f, java.util.Collections.singletonList(src(t)), Charset.forName("UTF-8"))
+        Files.writeString(f, src(t))
         f
       },
       list.map { t =>
         val f = new File(dir, "of" + t.name + "1.scala").toPath
-        Files.write(f, java.util.Collections.singletonList(One.src(t)), Charset.forName("UTF-8"))
+        Files.writeString(f, One.src(t))
         f
       }
     ).flatten.map(_.toFile)
