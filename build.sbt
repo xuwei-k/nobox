@@ -2,7 +2,7 @@ import Common.isScala3
 import java.lang.management.ManagementFactory
 import scala.jdk.CollectionConverters._
 
-val scalaVersions = Seq("3.3.8", "2.13.18", "2.12.21")
+val scalaVersions = Seq("3.9.0", "2.13.18", "2.12.21")
 
 val jvmAndJsSetting = Def.settings(
   scalacOptions ++= {
