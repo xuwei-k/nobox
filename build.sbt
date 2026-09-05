@@ -160,27 +160,19 @@ lazy val notPublish = Seq(
   PgpKeys.publishLocalSigned := {}
 )
 
-lazy val root = project
-  .in(file("."))
-  .aggregate(
-    generator,
-  )
-  .aggregate(
-    nobox.projectRefs *,
-  )
-  .settings(
-    Common.commonSettings,
-    notPublish,
-    TaskKey[Unit]("testSequential") := Def.uncached(
-      Def
-        .sequential(
-          nobox.projectRefs.map(_ / Test / testFull)
-        )
-        .value
-    ),
-    Compile / scalaSource := baseDirectory.value / "dummy",
-    Test / scalaSource := baseDirectory.value / "dummy"
-  )
+lazy val noboxRoot = rootProject.autoAggregate.settings(
+  Common.commonSettings,
+  notPublish,
+  TaskKey[Unit]("testSequential") := Def.uncached(
+    Def
+      .sequential(
+        nobox.projectRefs.map(_ / Test / testFull)
+      )
+      .value
+  ),
+  Compile / scalaSource := baseDirectory.value / "dummy",
+  Test / scalaSource := baseDirectory.value / "dummy"
+)
 
 lazy val gitTagOrHash = Def.setting {
   if (isSnapshot.value) {
