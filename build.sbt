@@ -5,16 +5,6 @@ import scala.jdk.CollectionConverters._
 val scalaVersions = Seq("3.9.0", "2.13.18", "2.12.21")
 
 val jvmAndJsSetting = Def.settings(
-  scalacOptions ++= {
-    if (scalaVersion.value.startsWith("3.3.")) {
-      Seq(
-        "-Yfuture-lazy-vals",
-        "-release:11"
-      )
-    } else {
-      Nil
-    }
-  },
   (Test / unmanagedSourceDirectories) += {
     (projectMatrixBaseDirectory.value / "src/test/jvm_js").getAbsoluteFile
   }
