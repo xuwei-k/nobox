@@ -32,7 +32,7 @@ lazy val nobox = projectMatrix
     ),
     (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
     name := "nobox",
-    licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+    licenses := Seq("MIT" -> uri("https://opensource.org/license/MIT")),
     console / initialCommands := "import nobox._",
     startYear := Some(2013),
     description := "immutable primitive array wrapper for Scala",
