@@ -9,7 +9,7 @@ scalacOptions ++= Seq(
 
 addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.3.2")
 
-addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.13.1")
+addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.13.2")
 
 addSbtPlugin("com.github.scalaprops" % "sbt-scalaprops" % "0.5.3")
 
