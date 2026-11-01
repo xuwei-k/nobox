@@ -5,6 +5,8 @@ import scalaprops.Scalaprops
 abstract class TestBase extends Scalaprops {
   import scalaprops.Gen
 
+  protected final def isScalaJS(): Boolean = 1.0.toString == "1"
+
   implicit final def ofRefGen[A <: AnyRef: Gen: reflect.ClassTag]: Gen[ofRef[A]] =
     Gen[List[A]].map(xs => ofRef[A](xs*))
 
