@@ -72,7 +72,7 @@ abstract class TestBase extends Scalaprops {
 
   type Tagged[T] = { type Tag = T }
 
-  type @@[+T, Tag] = T with Tagged[Tag]
+  type @@[+T, Tag] = T & Tagged[Tag]
 
   object Tag {
     def apply[A, T](a: A): A @@ T = a.asInstanceOf[A @@ T]
