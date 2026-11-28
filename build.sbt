@@ -18,7 +18,7 @@ lazy val nobox = projectMatrix
     Common.commonSettings,
     scalapropsCoreSettings,
     libraryDependencies ++= Seq(
-      "com.github.scalaprops" %% "scalaprops" % "0.12.0" % "test",
+      "com.github.scalaprops" %% "scalaprops" % "0.12.1" % "test",
     ),
     (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
     name := "nobox",
